@@ -1,0 +1,6 @@
+DirectoryIndex dispatch.fcgi
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) dispatch.fcgi?action=$1

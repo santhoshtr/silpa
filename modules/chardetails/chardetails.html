@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title></title>
+    <style></style>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/pure.js"></script>
+	<script type="text/javascript">
+	function chardetails(form)
+	{
+	$('#progress') .html("Checking. Please Wait..");
+	$('#result').html("");
+	var character= form.character.value;
+	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+	try {
+	   var result = service.modules.CharDetails.getdetails(character);
+		$('#errormessage').html("");
+	}
+	catch(e){
+		$('#errormessage').html(e.message);
+	}
+	$('#progress').html("");
+	// Render it
+	$('#result').html("<b>"+ result + "</b>");
+	return false;
+	}
+	</script>
+
+  </head>
+  <body>
+		<h2>Unicode Character Details</h2></hr>
+		<p>Enter a character to get the unicode details
+		</p>
+		<form action="" method="post" onsubmit="return chardetails(this);" >
+		 <p align="center">
+		Character : <input type="text"  name="character" style="width:3em;"/>
+		<input type="hidden" name="action" value="CharDetails">
+		<input  type="submit" id="Char_Details" value="Get Details"  style="width:12em;"/>
+		</br>
+		</p>
+		</form>
+  </body>
+</html>

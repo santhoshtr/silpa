@@ -1,0 +1,61 @@
+<html>
+  <head>
+
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+	function fetch(form)
+	{
+	$('#progress') .html("Please Wait...");
+	var text= form.text.value;
+	var n= form.n.value;
+	var type= form.ntype.value;
+	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+	try {
+		if (type == "word")
+	   		var result = service.modules.Ngram.wordNgram(text,n);
+	   if (type == "letter")
+	   		var result = service.modules.Ngram.letterNgram(text,n);
+		if (type == "syllable")
+	   		var result = service.modules.Ngram.syllableNgram(text,n);
+	   $('#errormessage').html("");
+	}
+	catch(e){
+		$('#errormessage').html(e.message);
+	}
+	$('#progress').html("");
+	$('#result').html(result);
+	return false;
+	}
+	</script>
+  </head>
+  <body>
+		<h2>Indic Ngram Library</h2></hr>
+		<h4>What is Ngram?</h4>
+		<p>
+		An n-gram model is a type of probabilistic model for predicting the next item in a sequence. n-grams are used in various areas of statistical natural language processing and genetic sequence analysis.
+		An n-gram is a subsequence of n items from a given sequence. The items in question can be phonemes, syllables, letters, words or base pairs according to the application.
+		An n-gram of size 1 is referred to as a "unigram"; size 2 is a "bigram" (or, less commonly, a "digram"); size 3 is a "trigram"; and size 4 or more is simply called an "n-gram".
+		</p>
+		<p>If you want to use this library in your program , you may refer the JSON-RPC based <a href="apis.html#NGram">API documentation.</a></p>
+		<a href="http://en.wikipedia.org/wiki/N-gram">Read more about N-gram</a>
+		<h4>Supported Languages</h4>
+		<p>English, Hindi, Malayalam, Kannada,  Bengali</p>
+		<p>Enter the text for  getting the n-gram below. For Word Ngram type enter  a sentence.
+		 Language of each  word will be detected. 	 You can give the text in any language and even with mixed language.
+		</p>
+		<form action="" method="post"  onsubmit="return fetch(this); " >
+		<p align="center">
+		<input type="text"  name='text' id='text' style="width:25em;"></textarea>
+		</p><p align="center">
+		N-Gram type<select id="ntype" name="ntype" style="width:12em;">
+		<option value="word">Word Ngram</option>
+		<option value="syllable">Syllable Ngram</option>
+		<option value="letter">Letter Ngram</option>
+		</select>
+		N : <input type="text"  name='n' id='n' value ="2" style="width:5em;"></textarea>
+		<input  type="submit" id="ngram" value="Submit"  name="action" style="width:12em;"/>
+		</p>
+		</form>
+  </body>
+</html>

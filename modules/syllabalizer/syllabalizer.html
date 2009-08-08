@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <style></style>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/pure.js"></script>
+	<script type="text/javascript">
+	function syllabalise(form)
+	{
+		var text= form.word.value;
+		$('#progress') .html("Processing. Please Wait...");
+		$('#result').html("");
+		var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+		try {
+		 var result = service.modules.Syllabalizer.syllabalize(text);
+		 $('#errormessage').html("");
+		}
+		catch(e){
+			$('#errormessage').html(e.message);
+		}
+		$('#progress').html("");
+		// Render it
+		$('#result') .html("<p>"+ result + "</p>");
+		return false;
+	}
+	</script>
+  </head>
+  <body>
+	<h2>Syllabalizer</h2></hr>
+		<p>Enter the text for syllabalization.		 Language of each  word will be detected. 
+		</p>
+		<form action="" method="post" onsubmit="return syllabalise(this);">
+		<input  type="text" id='word' name='word'></textarea>
+		<input  type="submit" id="Syllabalize" value="Syllabalize"  name="action" style="width:12em;"/>
+		</br>
+		</form> 
+	 </body>
+</html>

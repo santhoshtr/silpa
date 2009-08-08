@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/!svn/ver/19/trunk/python-jsonrpc/jsonrpc/_tests
+END
+test_json.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/19/trunk/python-jsonrpc/jsonrpc/_tests/test_json.py
+END
+test_modpywrapper.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/15/trunk/python-jsonrpc/jsonrpc/_tests/test_modpywrapper.py
+END
+test_serviceHandler.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/14/trunk/python-jsonrpc/jsonrpc/_tests/test_serviceHandler.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/14/trunk/python-jsonrpc/jsonrpc/_tests/__init__.py
+END
+test_proxy.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/16/trunk/python-jsonrpc/jsonrpc/_tests/test_proxy.py
+END
+test_cgiwrapper.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/14/trunk/python-jsonrpc/jsonrpc/_tests/test_cgiwrapper.py
+END

@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <style></style>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/pure.js"></script>
+	<script type="text/javascript">
+	function fetchmeaning(form)
+	{
+		$('#progress') .html("Searching. Please Wait..");
+		$('#result').html("");
+		var word= form.word.value;
+		var dictionary= form.dictionary.value;
+		var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+		try {
+		   var result = service.modules.Dictionary.getdef(word, dictionary);
+		}
+		catch(e){
+			$('#errormessage').html("");
+		}
+		$('#progress').html("");
+		// Render it
+		$('#result') .html("<pre>"+ result + "</pre>");
+		return false;
+	}
+	</script>
+  </head>
+  <body>
+  		<h2>Dictionary</h2></hr>
+		<p>Enter the word to lookup in the dictionary
+		</p>
+		<form action="" method="post" onsubmit="return fetchmeaning(this); ">
+		 <p align="center">
+		Word : <input type="text" id="word" name="word"/>
+		Dictionary :<select id="dictionary" name="dictionary" style="width:12em;">
+		  <option value="freedict-eng-hin">English-Hindi</option>
+		  <option value="freedict-eng-mal">English-Malayalam</option>
+		</select>
+		<input type="hidden" name="action" value="Dictionary">
+		</br>
+		<input  type="submit" id="Find_Meaning" value="Find Meaning"  style="width:12em;"/>
+		</br>
+		</p>
+		</form>
+
+  </body>
+</html>

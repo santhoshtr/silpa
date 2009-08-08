@@ -1,0 +1,69 @@
+<html>
+  <head>
+ 	<style type="text/css">
+	.multiplecolumns {
+		-moz-column-width: 200px;;
+		-webkit-column-width: 130px;
+		-moz-column-gap: 20px;
+		-webkit-column-gap: 20px;
+		-moz-column-rule: 1px solid #111111;
+		-moz-column-rule-color: #ddccb5;
+		-moz-column-rule-style: ridge
+		-webkit-column-rule: 1px solid #ddccb5;
+	}
+	</style>
+
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+	function dohyphenate(form)
+	{
+	$('#progress') .html("Hyphenating Please Wait...");
+	$('#hyphresult').html("");
+	var text= form.text.value;
+	var hyphChar= form.hyphChar.value;
+	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+	try {
+	   var result = service.modules.Hyphenator.hyphenate(text,hyphChar);
+	   
+	   $('#errormessage').html("");
+	}
+	catch(e){
+		$('#errormessage').html(e.message);
+	}
+	$('#progress').html("");
+	$('#hyphresult').html("<p align='justify'>"+ result+ "</p>");
+	return false;
+	}
+	</script>
+  </head>
+  <body>
+
+		<h2>Hyphenate Text</h2></hr>
+		<h4>What is hyphenation?</h4>
+		Hyphenation is the process inserting hyphens in between the syllables of a word so that when the text is justified, maximum space is utilized. <a href="http://thottingal.in/blog/2008/12/16/hyphenation-of-indian-languages-in-webpages/">Read more</a> about hyphenation
+		<a href="http://ftp.twaren.net/Unix/NonGNU/smc/hyphenation/web/example.html">This is a webpage</a> with hyphenated indian language content
+		<h4>Supported Languages</h4>
+		<p>English, Hindi, Malayalam, Tamil, Telugu, Kannada, Oriya, Bengali, Gujarati, Panjabi, Zulu, Afrikaans
+		,German, French, Croatian, Hungarian, Italian, Lithuanian,Polish, Serbian, Slovenian</p>
+		<p>Enter the text for  hyphenation in the below text area.
+		 Language of each  word will be detected. 
+		 You can give the text in any language and even with mixed language
+		</p>
+		<form action="" method="post"  onsubmit="return dohyphenate(this); " >
+		<textarea  name='text' id='id1'></textarea>
+		<p align="center">
+		Select hyphenation character: <select id="hyphChar" name="direction" style="width:12em;">
+		<option value="">Soft Hyphen (&amp;shy;)</option>
+		<option value="-">Hyphen (-)</option>
+		<option value="|">Vertical Bar (|)</option>
+		<option value="/">Forward Slash (/)</option>
+		</select>
+		<input  type="submit" id="Hyphenate" value="Hyphenate"  name="action" style="width:12em;"/>
+		</p>
+		</br>
+		</form>
+		<div class="multiplecolumns" id="hyphresult">
+		</div>
+  </body>
+</html>
