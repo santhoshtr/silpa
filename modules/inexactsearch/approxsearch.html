@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="Fortune">
+    <style></style>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+	function trim(s)
+{
+	var l=0; var r=s.length -1;
+	while(l < s.length && s[l] == ' ')
+	{	l++; }
+	while(r > l && s[r] == ' ')
+	{	r-=1;	}
+	return s.substring(l, r+1);
+	}
+
+	function search(form)
+	{
+	$('#progress') .html("Searching. Please Wait..");
+	$('#result').html("");
+	var text= form.input_text.value;
+	var key= form.key.value;
+	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+	var words = text.split(" ");
+	var highlighted_text= "";
+	for(var i=0; i<words.length; i++) {
+		try {
+			if( trim(words[i]).length ==0 ) {
+				highlighted_text+=" ";
+				continue;
+			}
+			if( trim(words[i]) =="\n" ) {
+				highlighted_text+="<br/>";
+				continue;
+			}
+			
+		   var result = service.modules.InexactSearch.compare(words[i],key);
+		   if (result > 0.6 ) {
+			   highlighted_text+="<SPAN style='BACKGROUND-COLOR: #ffff00' title='"+ result + "'>" + words[i] + "</SPAN> ";
+		   }
+		   else{
+			   highlighted_text+="<SPAN title='"+ result + "'>" + words[i] + "</SPAN> ";
+		  }  
+		   $('#errormessage').html("");
+		}
+		catch(e){
+			$('#errormessage').html(e.message);
+		}
+		$('#result').html(highlighted_text);
+	}
+	$('#progress').html("");
+	// Render it
+	return false;
+	};
+
+	</script>
+
+  </head>
+  <body>
+  		<h3>Approximate String Search</h3>
+		<form id="searchform" action="" method="post" onsubmit="return search(this);">
+		<textarea  name='input_text' id='input_text'></textarea>
+		<br/>
+		<input type="text" id="key" name="key"/>
+		<input  type="submit" id="Search" value="Search"/>
+		</form>
+  </body>
+</html>
