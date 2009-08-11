@@ -540,6 +540,7 @@ class LangGuess(SilpaModule):
 		if lang ==  'UNKNOWN':
 			firstWord = text.split()[0]	
 			lang = detect_lang(firstWord)[firstWord]
+			lang = _getName(lang.split("_")[0])
 		return lang	
 	@ServiceMethod			
 	def getScriptName(self,text):
