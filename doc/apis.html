@@ -1,7 +1,7 @@
 <h2>SILPA Webservice APIs</h2>
 <h3>Introduction</h3>
 <p>Silpa provides a set of webservice APIs over json-rpc protocol. Silpa services can be used from any programming language which
-has an RPC implementation. The request and response formats of APIs are in json. It is recommended to read the <a href="<a href="http://json-rpc.org">json-rpc documentation</a> if you are not familiar with that.
+has an RPC implementation. The request and response formats of APIs are in json. It is recommended to read the <a href="http://json-rpc.org">json-rpc documentation</a> if you are not familiar with that.
 </p>
 <p>This page explains the available usage and sample usage from python application. Implementing this in other programming languages should not be difficult and should be a matter of changing the programming language syntax
 For further assistance, see the <a href="#RelatedLinks">related links section</a> of this page
@@ -95,8 +95,8 @@ Response will be the string containing the definition of the given word
 <h3><a name="spellcheck">Spellcheck</a></h3>
 Spellcheck API provides langauge independent spellchecking service across Indian languages and English
 <ul>
-<li>Method: modules.Spellchecker.check</li>
-<li>
+<li>Method: modules.Spellchecker.check
+
 <ul>
 	<li>arg1 : the word</li>
 	<li>arg2 : the language for the word(optional)</li>
@@ -104,8 +104,8 @@ Spellcheck API provides langauge independent spellchecking service across Indian
 </ul></li>
 
 
-<li>Method: modules.Spellchecker.suggest </li>
-<li><ul>
+<li>Method: modules.Spellchecker.suggest
+<ul>
 	<li>arg1 : the word</li>
 	<li>arg2 : the language for the word(optional)</li>
 	<li>Return : List of string containing spelling suggestions</li>
@@ -127,16 +127,16 @@ The language parameter is optional. If not provided the language of the input wo
 <h3><a name="soundex">Soundex</a></h3>
 This service provides indic soundex algorithm based soundex codes for a word
 <ul>
-<li>Method: modules.Soundex.soundex</li>
-<li>
+<li>Method: modules.Soundex.soundex
+
 <ul>
 	<li>arg1 : the word</li>
 	<li>Return : The soundex code for the word</li>
 </ul></li>
 
 
-<li>Method: modules.Soundex.compare</li>
-<li><ul>
+<li>Method: modules.Soundex.compare
+<ul>
 	<li>arg1 : first word</li>
 	<li>arg2 : second word</li>
 	<li>Return : 0 if both strings are same, 1 if both strngs sounds alike and from same language, 2 if strings are from different langauges but sounds alike</li>
@@ -153,33 +153,29 @@ Sample usage is given below.
 <h3><a name="NGram">Ngram</a></h3>
 This service provides indic ngram libraries
 <ul>
-<li>Method: modules.Ngram.wordNgram</li>
-<li>
+<li>Method: modules.Ngram.wordNgram
 <ul>
 	<li>arg1 : the  sentence</li>
 	<li>n :  n of n-gram (Optional)</li>
 	<li>Return : The ngram for the sentence</li>
-</ul></li>
+</ul>
+</li>
 
-
-<ul>
-<li>Method: modules.Ngram.letterNgram</li>
-<li>
+<li>Method: modules.Ngram.letterNgram
 <ul>
 	<li>arg1 : the word</li>
 	<li>n :  n of n-gram (Optional)</li>
 	<li>Return : The ngram for the word</li>
 </ul></li>
 
-<ul>
-
-<li>Method: modules.Ngram.syllableNgram</li>
-<li>
+<li>Method: modules.Ngram.syllableNgram
 <ul>
 	<li>arg1 : the word</li>
 	<li>n :  n of n-gram (Optional)</li>
 	<li>Return : The ngram for the word, the letters being splitted at syllable level</li>
-</ul></li>
+</ul>
+</li>
+</ul>
 
 
 <div id="footer">
