@@ -167,11 +167,12 @@ class Hyphenator(SilpaModule):
 	right = 2
 	def __init__(self):
 		self.template=os.path.join(os.path.dirname(__file__), 'hyphenator.html')
+		self.hd=None
 	def loadHyphDict(self,lang, cache=True):
 		filename="./modules/hyphenator/rules/hyph_"+lang+".dic"
 		if not cache or filename not in hdcache:
 			hdcache[filename] = Hyph_dict(filename)
-			self.hd = hdcache[filename]
+		self.hd = hdcache[filename]
 	def positions(self, word):
 		"""
 		Returns a list of positions where the word can be hyphenated.
