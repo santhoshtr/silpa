@@ -1,5 +1,5 @@
 UTF-8
-%  Hyphenation for Telugu
+%  Hyphenation for Malayalam
 %  Copyright (C) 2008-2009 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 %
 %  This library is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ UTF-8
 1మ1
 1య1
 1ర1
-1ఱ1
+1ఱ1 % can occur in Sanskrit?
 1ల1
 1ళ1
 1వ1
