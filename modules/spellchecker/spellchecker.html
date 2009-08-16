@@ -33,7 +33,12 @@
 		$('#errormessage').html(e.message);
 	}
 	$('#progress').html("");
-	$('#result').html("<b>"+ result+ "</b>");
+	$('#result').html("<b>Wrong Spelling. Suggestions </b><ul id='list'></ul>");
+	var resultobj=eval(result);
+	$.each(resultobj,function(index, item)
+    {
+       $('#list').append($( "<li>" + item +"</li>" ));
+    });
 	return false;
 	}
 	</script>

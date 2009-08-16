@@ -4,8 +4,7 @@
     <style></style>
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/pure.js"></script>
-	<script type="text/javascript">
+    <script type="text/javascript">
 	function chardetails(form)
 	{
 	$('#progress') .html("Checking. Please Wait..");
@@ -21,7 +20,12 @@
 	}
 	$('#progress').html("");
 	// Render it
-	$('#result').html("<b>"+ result + "</b>");
+	$('#result').html("<b>Character Details :  </b> <ul id='list'></ul>");
+	var resultobj=eval( '(' + result + ')');
+	for (var key in resultobj) 
+    {
+       $('#list').append($( "<li>" + key+ " : " + resultobj[key] +"</li>" ));
+    };
 	return false;
 	}
 	</script>

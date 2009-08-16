@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import tempfile 
-from subprocess import Popen
-from subprocess import PIPE
 from common import *
 class Sort(SilpaModule):
 	def sort(self,  text_list, lang="en_US"):
