@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title></title>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+	function dosort(form)
+	{
+	$('#progress') .html("Sorting. Please Wait..");
+	$('#result').html("");
+	var text= form.input_text.value;
+	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+	try {
+	   var result = service.modules.Sort.sort(text);
+	    $('#errormessage').html("");
+	}
+	catch(e){
+		$('#errormessage').html(e.message);
+	}
+	$('#progress').html("");
+	$('#result').html("<b>Sorted List </b><ul id='list'></ul>");
+	var resultobj=eval(result);
+	$.each(resultobj,function(index, item)
+    {
+       $('#list').append($( "<li>" + item +"</li>" ));
+    });
+
+	return false;
+	}
+	</script>
+  </head>
+  <body>
+		<h2>Sort</h2></hr>
+		<p>Sorting(Collation) as per language rules. Supports all languages defined in Unicode. Uses Unicode Collation Algorithm. The collation weights used in this application is a modified version of <a href="http://www.unicode.org/Public/UCA/latest/allkeys.txt">Default Unicode Collation Element Table (DUCET)</a>
+		</p>
+		<form action="" method="post" onsubmit="return dosort(this); " >
+		<p align="center">
+		<textarea  name='input_text' id='input_text'></textarea></br> 
+		<input  type="submit" id="sort" value="Sort"  style="width:12em;"/>
+		</br>
+		</p>
+		</form>
+  </body>
+</html>
+
