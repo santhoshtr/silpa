@@ -31,12 +31,12 @@
   </head>
   <body>
 		<h2>Sort</h2></hr>
-		<p>Sorting(Collation) as per language rules. Supports all languages defined in Unicode. Uses Unicode Collation Algorithm. The collation weights used in this application is a modified version of <a href="http://www.unicode.org/Public/UCA/latest/allkeys.txt">Default Unicode Collation Element Table (DUCET)</a>
+		<p><a href="http://unicode.org/reports/tr10/">Unicode Collation Algorithm(UCA)</a>based sorting for all languages defined in Unicode. The collation weights used in this application is a modified version of <a href="http://www.unicode.org/Public/UCA/latest/allkeys.txt">Default Unicode Collation Element Table (DUCET)</a>. You can download the modified version from <a href="http://smc.org.in/silpa/modules/sort/allkeys.txt">here(1 MB)</a>. The current version is modified only for Malayalam language. For other languages,it use the default weights defined by Unicode. Malayalam sorting is compatible with GNU C library collation definition.
 		</p>
 		<form action="" method="post" onsubmit="return dosort(this); " >
 		<p align="center">
 		<textarea  name='input_text' id='input_text'></textarea></br> 
-		<input  type="submit" id="sort" value="Sort"  style="width:12em;"/>
+		<input  type="submit" id="sort" value="Sort"/>
 		</br>
 		</p>
 		</form>
