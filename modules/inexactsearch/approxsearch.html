@@ -23,6 +23,8 @@
 	var text= form.input_text.value;
 	var key= form.key.value;
 	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+	var result = service.modules.InexactSearch.search(text,key);
+	var resultobj=eval( '(' + result + ')');
 	var words = text.split(" ");
 	var highlighted_text= "";
 	for(var i=0; i<words.length; i++) {
@@ -36,12 +38,12 @@
 				continue;
 			}
 			
-		   var result = service.modules.InexactSearch.compare(words[i],key);
-		   if (result > 0.6 ) {
-			   highlighted_text+="<SPAN style='BACKGROUND-COLOR: #ffff00' title='"+ result + "'>" + words[i] + "</SPAN> ";
+		   var weight = resultobj[words[i]];
+		   if (weight > 0.6 ) {
+			   highlighted_text+="<SPAN style='BACKGROUND-COLOR: #ffff00' title='"+ weight + "'>" + words[i] + "</SPAN> ";
 		   }
 		   else{
-			   highlighted_text+="<SPAN title='"+ result + "'>" + words[i] + "</SPAN> ";
+			   highlighted_text+="<SPAN title='"+ weight + "'>" + words[i] + "</SPAN> ";
 		  }  
 		   $('#errormessage').html("");
 		}
