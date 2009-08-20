@@ -20,11 +20,11 @@
 	}
 	$('#progress').html("");
 	// Render it
-	$('#result').html("<b>Character Details :  </b> <ul id='list'></ul>");
+	$('#result').html("<table id='resulttable' class='table1'><tr><th>Property</th><th>Value</th></tr></table>");
 	var resultobj=eval( '(' + result + ')');
 	for (var key in resultobj) 
     {
-       $('#list').append($( "<li>" + key+ " : " + resultobj[key] +"</li>" ));
+	   $('#resulttable tr:last').after("<tr><td>" + key +"</td><td>" + resultobj[key] +"</td></tr>" );
     };
 	return false;
 	}
