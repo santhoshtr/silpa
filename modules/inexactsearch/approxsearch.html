@@ -3,8 +3,6 @@
     <title></title>
     <meta content="Fortune">
     <style></style>
-    <script type="text/javascript" src="js/rpc.js"></script>
-    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
 	function trim(s)
 {
@@ -56,17 +54,27 @@
 	// Render it
 	return false;
 	};
-
 	</script>
 
   </head>
   <body>
+    	<div class="featurebox">
   		<h3>Approximate String Search</h3>
+		<p>This is a <a href="http://en.wikipedia.org/wiki/Fuzzy_string_searching">Fuzzy string search</a> application. This application illustrates the combined use of 
+		<a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Edit distance</a> and <a href="Soundex">Indic Soundex
+		</a> algorithm.</p>
+		<p>By mixing both written like(edit distance) and sounds like(soundex), we achieve an efficient aproximate string searching. This application is capable of cross language string search too. That means, you can search Hindi words in Malayalam text. If there is any Malayalam word, which is approximate transliteration of hindi word, or sounds alike the hindi words, it will be returned as an approximate match. The "written like" algorithm used here is a bigram average algorithm. The ratio of common bigrams in two strings and average number of bigrams will give a factor which is greater than zero and less than 1. Similarly the soundex algorithm also gives a weight. By selecting words which has comparison weight more than
+		the threshold weight(which 0.6), we get the search results. </p>
+		</div>
 		<form id="searchform" action="" method="post" onsubmit="return search(this);">
+		<p>Enter the text in the below textarea</p>
 		<textarea  name='input_text' id='input_text'></textarea>
 		<br/>
-		<input type="text" id="key" name="key"/>
+		Search for :<input type="text" id="key" name="key"/>
 		<input  type="submit" id="Search" value="Search"/>
 		</form>
+		<p>In the search result. move your mouse over the words to get the comparison weight.</p>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
   </body>
 </html>
