@@ -38,7 +38,7 @@
 	$('#result').html("");
 	var word1= form.word1.value;
 	var word2= form.word2.value;
-	var service = new rpc.ServiceProxy("services.py", {asynchronous:false});
+	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
 	try {
 	   var result = service.modules.Soundex.compare(word1,word2);
 	   $('#errormessage').html("");

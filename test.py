@@ -23,4 +23,8 @@ json=jsonrpc.dumps({"version":"1.1","method":"modules.CharDetails.getdetails","i
 print handler.handleRequest(json)
 json=jsonrpc.dumps({"version":"1.1","method":"modules.InexactSearch.compare","id":2,"params":[u"സന്തോഷ്", u"സന്തോഷിന്റെ"]})
 print handler.handleRequest(json)
+json=jsonrpc.dumps({"version":"1.1","method":"modules.InexactSearch.compare","id":2,"params":[u"സന്തോഷ്", u"ஸந்தௌஷ்"]})
+print handler.handleRequest(json)
+json=jsonrpc.dumps({"version":"1.1","method":"modules.InexactSearch.compare","id":2,"params":[u"weigt", u"and"]})
+print handler.handleRequest(json)
 
