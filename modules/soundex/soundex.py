@@ -73,6 +73,8 @@ class Soundex(SilpaModule):
 		soundex2=	self.soundex(string2)
 		if soundex1 == soundex2	: #Both sounds alike
 			return 1
+		if	language(string1[0]) == "en_US": 
+			return -1 #need not check for crosslanguage for English
 		#Check whether the first letters are phonetically same from different languages
 		if self.soundexCode( string1[0]) == self.soundexCode(string2[0]):
 			if soundex1[1:] == soundex2[1:]	: #Both sounds alike
