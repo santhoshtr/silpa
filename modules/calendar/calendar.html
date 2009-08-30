@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title></title>
+    <style></style>
+    <script type="text/javascript" src="js/rpc.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+    function go(form)
+    {
+    $('#progress') .html("Processing. Please Wait...");
+    $('#result').html("");
+    var from = form.from.value;
+    var to = form.to.value;
+    var day = form.day.value;
+    var month = form.month.value;
+    var year = form.year.value;
+    if(from == "Kollavarsham" || from == "Tamil"){
+        $('#progress').html("");
+        // Render it
+        $('#result').html("Not implemented now.");
+        return false;
+    }
+    if(to == "Kollavarsham" || to == "Tamil"){
+        $('#progress').html("");
+        // Render it
+        $('#result').html("Not implemented now.");
+        return false;
+    }
+    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+    try {
+       var result = service.modules.Calendar.convert(from, to, year, month, day);
+        $('#errormessage').html("");
+    }
+    catch(e){
+        $('#errormessage').html(e.message);
+    }
+    $('#progress').html("");
+    // Render it
+    $('#result').html(result);
+    return false;
+    }
+    </script>
+
+  </head>
+  <body>
+        <h2>Indic Calendar System</h2></hr>
+        <p>Enter the Date
+        </p>
+        <form action="" method="post" onsubmit="return go(this);" >
+         <p align="center">
+         Year(yyyy) : <input type="text"  name="year" style="width:5em;"/>
+         Month(mm): <input type="text"  name="month" style="width:3em;"/>
+         Day(dd): <input type="text"  name="day" style="width:3em;"/>
+          From <select id="from" name="from" style="width:12em;">
+          <option value="Gregorian">Gregorian</option>
+          <option value="Saka">Saka</option>
+          <option value="Kollavarsham">Kollavarsham(Malayalam)</option>
+          <option value="Tamil">Tamil</option>
+          </select>
+          To <select id="to" name="to" style="width:12em;">
+          <option value="Saka">Saka</option>
+          <option value="Gregorian">Gregorian</option>
+          <option value="Kollavarsham">Kollavarsham(Malayalam)</option>
+          <option value="Tamil">Tamil</option>
+        </select>
+        <input  type="submit" id="cc" value="Convert"  style="width:12em;"/>
+        </br>
+        </p>
+        </form>
+  </body>
+</html>
