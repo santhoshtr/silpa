@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-# Dictionary
+# Unicode Character Details
 # Copyright 2008 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 # http://www.smc.org.in
 #
@@ -24,39 +24,39 @@ from common import *
 import os,sys
 from unicodedata import *
 class CharDetails(SilpaModule):
-	def __init__(self):
-		self.template=os.path.join(os.path.dirname(__file__), 'chardetails.html')
-	
-	@ServiceMethod			
-	def getdetails(self, character):
-		details={}
-		details['Name']= name(character) 
-		details['HTML Entity']=str( ord(character)) 
-		details['Code point']= repr(character)
-		try:
-			details['Numeric Value'] = numeric (character)
-		except:
-			pass	
-		try:		
-			details['Decimal Value']=decimal (character)
-		except:
-			pass	
-		try:		
-			details['Digit']=digit(mychar)
-		except:
-			pass	
-		details['Alphabet']=str(character.isalpha())
-		details['Digit']=str(character.isdigit())
-		details['AlphaNumeric']=str(character.isalnum())
-		details['Canonical Decomposition']=  decomposition(character)
-		return dumps(details)
-	
-	def get_module_name(self):
-		return "Unicode Character Details"
-	def get_info(self):
-		return 	"Shows the Unicode Character Details of a given character"	
-		
+    def __init__(self):
+        self.template=os.path.join(os.path.dirname(__file__), 'chardetails.html')
+    
+    @ServiceMethod          
+    def getdetails(self, character):
+        details={}
+        details['Name']= name(character) 
+        details['HTML Entity']=str( ord(character)) 
+        details['Code point']= repr(character)
+        try:
+            details['Numeric Value'] = numeric (character)
+        except:
+            pass    
+        try:        
+            details['Decimal Value']=decimal (character)
+        except:
+            pass    
+        try:        
+            details['Digit']=digit(mychar)
+        except:
+            pass    
+        details['Alphabet']=str(character.isalpha())
+        details['Digit']=str(character.isdigit())
+        details['AlphaNumeric']=str(character.isalnum())
+        details['Canonical Decomposition']=  decomposition(character)
+        return dumps(details)
+    
+    def get_module_name(self):
+        return "Unicode Character Details"
+    def get_info(self):
+        return  "Shows the Unicode Character Details of a given character"  
+        
 def getInstance():
-	return CharDetails()
+    return CharDetails()
 
-	
+    
