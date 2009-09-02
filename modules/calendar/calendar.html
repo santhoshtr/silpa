@@ -34,9 +34,10 @@
     catch(e){
         $('#errormessage').html(e.message);
     }
+    var resultobj=eval( '(' + result + ')');
     $('#progress').html("");
     // Render it
-    $('#result').html(result);
+    $('#result').html("Date in "+to+" System: <b>" + resultobj[0]+"-"+resultobj[1]+"-"+resultobj[2] + "</b>");
     return false;
     }
     </script>
