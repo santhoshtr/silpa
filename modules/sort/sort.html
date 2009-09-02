@@ -3,45 +3,59 @@
     <title></title>
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript">
-	function dosort(form)
-	{
-	$('#progress') .html("Sorting. Please Wait..");
-	$('#result').html("");
-	var text= form.input_text.value;
-	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-	try {
-	   var result = service.modules.Sort.sort(text);
-	    $('#errormessage').html("");
-	}
-	catch(e){
-		$('#errormessage').html(e.message);
-	}
-	$('#progress').html("");
-	$('#result').html("<table id='sortedtable' class='table1'><tr><th>Unicode Rules</th><th>Silpa Rules</th></tr></table>");
-	var resultobj=eval( '(' + result + ')');
-	var silparesult = resultobj['SILPA'];
-	var ucaresult = resultobj['UCA'];
-	$.each(silparesult,function(index, item)
+    <script type="text/javascript">
+    function dosort(form)
+    {
+    $('#progress') .html("Sorting. Please Wait..");
+    $('#result').html("");
+    var text= form.input_text.value;
+    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+    try {
+       var result = service.modules.Sort.sort(text);
+        $('#errormessage').html("");
+    }
+    catch(e){
+        $('#errormessage').html(e.message);
+    }
+    $('#progress').html("");
+    $('#result').html("<table id='sortedtable' class='table1'><tr><th>Unicode Rules</th><th>Silpa Rules</th></tr></table>");
+    var resultobj=eval( '(' + result + ')');
+    var silparesult = resultobj['SILPA'];
+    var ucaresult = resultobj['UCA'];
+    $.each(silparesult,function(index, item)
     {
        $('#sortedtable tr:last').after("<tr><td>" + ucaresult[index] +"</td><td>" + silparesult[index] +"</td></tr>" );
     });
 
-	return false;
-	}
-	</script>
+    return false;
+    }
+    </script>
   </head>
   <body>
-		<h2>Sort</h2></hr>
-		<p><a href="http://unicode.org/reports/tr10/"> Unicode Collation Algorithm(UCA)</a>based sorting for all languages defined in Unicode. The collation weights used in this application is a modified version of <a href="http://www.unicode.org/Public/UCA/latest/allkeys.txt">Default Unicode Collation Element Table (DUCET)</a>. You can download the modified version from <a href="http://smc.org.in/silpa/modules/sort/allkeys-silpa.txt">here (1 MB)</a>. The current version is modified only for Malayalam language. For other languages,it use the default weights defined by Unicode. Malayalam sorting is compatible with GNU C library collation definition.
-		</p>
-		<form action="" method="post" onsubmit="return dosort(this); " >
-		<p align="center">
-		<textarea  name='input_text' id='input_text'></textarea></br> 
-		<input  type="submit" id="sort" value="Sort"  style="width:10em;"/>
-		</br>
-		</p>
-		</form>
+        <h2>Sort</h2></hr>
+        <p><a href="http://unicode.org/reports/tr10/"> Unicode Collation
+         Algorithm(UCA)</a> 
+        based sorting for all languages defined in Unicode. 
+        The collation weights used in this application is a 
+        modified version of 
+        <a href="http://www.unicode.org/Public/UCA/latest/allkeys.txt">
+        Default Unicode Collation Element Table (DUCET)</a>. 
+        You can download the modified version from 
+        <a href="http://smc.org.in/silpa/modules/sort/allkeys-silpa.txt"> 
+        here (1 MB)</a>. The current version is modified only for
+        Tamil and Malayalam language. For other languages,it use the 
+        default weights defined by Unicode.
+        Tamil and Malayalam sorting is compatible with GNU C library
+        collation definition.
+        </p>
+        <form action="" method="post" onsubmit="return dosort(this); " >
+        Enter the words to sort in the below textbox. Words will be splitted at 'space'. You can enter the text in any language. Text may contain multiple scripts too.
+        <p align="center">
+        <textarea  name='input_text' id='input_text'></textarea></br> 
+        <input  type="submit" id="sort" value="Sort"  style="width:10em;"/>
+        </br>
+        </p>
+        </form>
   </body>
 </html>
 
