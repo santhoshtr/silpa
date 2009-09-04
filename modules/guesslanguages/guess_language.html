@@ -6,37 +6,37 @@
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/pure.js"></script>
-	<script type="text/javascript">
-	function guesslanguage(form)
-	{
-	$('#progress') .html("Detecting Language. Please Wait...");
-	$('#result').html("");
-	var text= form.input_text.value;
-	var service = new rpc.ServiceProxy("services.py", {asynchronous:false});
-	try {
-	   var result = service.modules.LangGuess.guessLanguage(text);
-	}
-	catch(e){
-		$('#errormessage').html("");
-	}
-	$('#progress').html("");
-	// Render it
-	$('#result') .html("<b>"+ result + "</b>");
-	return false;
-	}
-	</script>
+    <script type="text/javascript">
+    function guesslanguage(form)
+    {
+    $('#progress') .html("Detecting Language. Please Wait...");
+    $('#result').html("");
+    var text= form.input_text.value;
+    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+    try {
+       var result = service.modules.LangGuess.guessLanguage(text);
+    }
+    catch(e){
+        $('#errormessage').html("");
+    }
+    $('#progress').html("");
+    // Render it
+    $('#result') .html("<b>"+ result + "</b>");
+    return false;
+    }
+    </script>
 
   </head>
   <body>
-  		<h2>Guess the language</h2></hr>
-		<p>Enter the text for guessing the language in the below text area.
-		 You can give the text in any language and even with mixed language
-		</p>
-		<form action="" method="post" onsubmit="return guesslanguage(this);">
-		<textarea cols='100' rows='25' name='input_text' id='id1'></textarea>
-		<input  type="submit" id="Guess Language" value="Guess Language"  name="action" style="width:12em;"/>
-		</br>
-		</form>
-		
+        <h2>Guess the language</h2></hr>
+        <p>Enter the text for guessing the language in the below text area.
+         You can give the text in any language and even with mixed language
+        </p>
+        <form action="" method="post" onsubmit="return guesslanguage(this);">
+        <textarea cols='100' rows='25' name='input_text' id='id1'></textarea>
+        <input  type="submit" id="Guess Language" value="Guess Language"  name="action" style="width:12em;"/>
+        </br>
+        </form>
+        
   </body>
 </html>
