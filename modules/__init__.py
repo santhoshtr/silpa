@@ -1,18 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-from payyans import *
-from transliterator import *
-from syllabalizer import *
-from guesslanguages import *
-from hyphenator import *
-from fortune import *
-from inexactsearch import *
-from dictionary import *
-from anagram import *
-from ngram import *
-from spellchecker import *
-from sort import *
-from chardetails import *
-from calendar import *
-from soundex import *
-
+import os
+import sys
+sys.path.append(os.path.dirname(__file__))
+dirs = os.listdir(os.path.dirname(__file__))
+for dir in dirs:
+    if os.path.isdir(os.path.join(os.path.dirname(__file__),dir)):
+        try:
+            __import__(dir)
+        except:
+            print "Loading Module " + dir + " Failed"

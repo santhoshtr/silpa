@@ -7,13 +7,13 @@ class ModuleManager:
         try:
             obj= sys.modules[name]
         except KeyError:
-            obj  = __import__(".".join(parts[:-1]))
+            obj  = __import__(name)
         if(len(parts)>1):   
             for part in parts[1:]:
                 try:
                     obj = getattr(obj,part)
                 except:
-                    obj = None  
+                    pass
         return obj
 
     def getModuleInstance(self,action):
@@ -23,8 +23,11 @@ class ModuleManager:
             return self
         module_name = self.find_module(action)
         if(module_name):
-            return self.import_module(module_name).getInstance()
-        
+            try:
+                return self.import_module(module_name).getInstance()
+            except:
+                #print dir(self.import_module(module_name))
+                print "Failed to get instance for " +  module_name
             
     def find_module(self,action):
         if action == 'AllModules':
