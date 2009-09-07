@@ -3,6 +3,7 @@ import codecs
 import os
 def getTemplate():
     return open(os.path.dirname(__file__)+"/../"+getTemplateName()).read()
+    
 def getTemplateName():
     return loadConfiguration()["SILPA_TEMPLATE"]    
 def getCopyrightInfo():
@@ -16,8 +17,8 @@ def getModulesList():
     return  action_dict 
 def getStaticContent(page):
     try:
-        #FIXME : Unicode content reading fails for static pages.
-        return open(os.path.dirname(__file__)+"/../static/"+page).read()
+        #return open(os.path.dirname(__file__)+"/../static/"+page).read()
+        return codecs.open(os.path.dirname(__file__)+"/../static/"+page,encoding='utf-8', errors='ignore').read()
     except:
         return "Could not find the requested page "+    page
 def handleStats():
