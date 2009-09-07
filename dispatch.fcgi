@@ -4,6 +4,7 @@ import traceback
 import sys,os
 import cgitb
 import cgi
+from jsonrpc import handleCGI
 sys.path.append(os.path.dirname(__file__))
 cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
 from silpa import Silpa
