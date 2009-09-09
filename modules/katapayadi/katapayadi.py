@@ -71,6 +71,7 @@ class Katapayadi(SilpaModule):
         melakartha_number = number%100
         quotient = (melakartha_number-1)/6
         remainder = (melakartha_number-1)%6
+        quotient = quotient%6
         if quotient == 0 : 
             swarasthans.append("Ri1")
             swarasthans.append("Ga1")
