@@ -4,9 +4,9 @@ import traceback
 import sys,os
 import cgitb
 import cgi
-from common import *
 sys.path.append(os.path.dirname(__file__))
 cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
+from common import *
 from silpa import Silpa
 def application(environ, start_response):
     silpa = Silpa()
