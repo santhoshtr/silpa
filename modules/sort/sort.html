@@ -18,7 +18,7 @@
         $('#errormessage').html(e.message);
     }
     $('#progress').html("");
-    $('#result').html("<table id='sortedtable' class='table1'><tr><th>Unicode Rules</th><th>Silpa Rules</th></tr></table>");
+    $('#result').html("<table id='sortedtable' class='table1'><tr><th>UCA 5.2 Result</th><th>Modified UCA 5.2 Result</th></tr></table>");
     var resultobj=eval( '(' + result + ')');
     var silparesult = resultobj['SILPA'];
     var ucaresult = resultobj['UCA'];
@@ -38,14 +38,14 @@
         based sorting for all languages defined in Unicode. 
         The collation weights used in this application is a 
         modified version of 
-        <a href="http://www.unicode.org/Public/UCA/latest/allkeys.txt">
+        <a href="http://www.unicode.org/Public/UCA/5.2.0/allkeys-5.2.0d9.txt">
         Default Unicode Collation Element Table (DUCET)</a>. 
         You can download the modified version from 
-        <a href="http://smc.org.in/silpa/modules/sort/allkeys-silpa.txt"> 
+        <a href="http://smc.org.in/silpa/modules/sort/allkeys-5.2-silpa.txt"> 
         here (1 MB)</a>. The current version is modified only for
-        Tamil and Malayalam language. For other languages,it use the 
+        Malayalam language. For other languages,it use the 
         default weights defined by Unicode.
-        Tamil and Malayalam sorting is compatible with GNU C library
+        Malayalam sorting is compatible with GNU C library
         collation definition.
         </p>
         <form action="" method="post" onsubmit="return dosort(this); " >
