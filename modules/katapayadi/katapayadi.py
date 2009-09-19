@@ -30,13 +30,13 @@ class Katapayadi(SilpaModule):
     
     @ServiceMethod
     def get_number(self, word):
+        word = word.strip()
+        word = word.split(" ")[0]
         lang_ka_bases = {'hi_IN': 0x0915,'bn_IN': 0x0995, 'pa_IN':0x0A15,'gu_IN':0x0A95 , 'or_IN': 0x0B15,'ta_IN': 0x0B95,'te_IN' : 0x0C15,    'ka_IN' :0x0C95 ,'ml_IN': 0x0D15}        
         from modules import syllabalizer
         syllablizer_handle = syllabalizer.getInstance()
         syllables = syllablizer_handle.syllabalize(word)
         number = ""
-        word = word.strip()
-        word = word.split(" ")[0]
         src_lang_code = detect_lang(word)[word]
         base =  lang_ka_bases[src_lang_code]
         for cluster in syllables:
@@ -96,22 +96,22 @@ class Katapayadi(SilpaModule):
             swarasthans.append("Ma2")                    
         swarasthans.append("Pa")                         
         if remainder == 0 : 
-            swarasthans.append("Di1")
+            swarasthans.append("Da1")
             swarasthans.append("Ni1")                  
         if remainder == 1 : 
-            swarasthans.append("Di1")
+            swarasthans.append("Da1")
             swarasthans.append("Ni2")                  
         if remainder == 2 : 
-            swarasthans.append("Di1")
+            swarasthans.append("Da1")
             swarasthans.append("Ni3")                  
         if remainder == 3 : 
-            swarasthans.append("Di2")
+            swarasthans.append("Da2")
             swarasthans.append("Ni2")                  
         if remainder == 4 : 
-            swarasthans.append("Di2")
+            swarasthans.append("Da2")
             swarasthans.append("Ni3")                  
         if remainder == 5 : 
-            swarasthans.append("Di3")
+            swarasthans.append("Da3")
             swarasthans.append("Ni3")                                      
         swarasthans.append("Sa")                  
         return dumps(swarasthans)

@@ -49,11 +49,14 @@
   </head>
   <body>
         <h2>Katapayadi writing method</h2></hr>
-        <p>Katapayadi sankhya is a simplification of <a href="http://en.wikipedia.org/wiki/Aryabhata">Aryabhata's</a> 
+        <p><a href="http://en.wikipedia.org/wiki/Katapayadi_sankhya">Katapayadi sankhya</a> is a simplification of <a href="http://en.wikipedia.org/wiki/Aryabhata">Aryabhata's</a> 
         <a href="http://en.wikipedia.org/wiki/Sanskrit_numerals">Sanskrit numerals</a>, due
         probably to <a href="http://www.google.com/search?hl=en&q=Haridatta&btnG=Google+Search">Haridatta</a> from
-        Kerala.
+        Kerala. In Malayalam it is also known as 'Paralperu'
         </p>
+        <p>For eg: &#3354;&#3363;&#3405;&#3361;&#3390;&#3330;&#3382;&#3393;&#3354;&#3368;&#3405;&#3366;&#3405;&#3376;&#3390;&#3367;&#3374;&#3349;&#3393;&#3330;&#3373;&#3391;&#3370;&#3390;&#3378;
+        represents 31415926536 which is &#960;*1000000000000000</p>
+        <p>More examples in Malayalam are given in <a href="http://ml.wikipedia.org/wiki/Paralperu">this page</a></p> 
         <form id="katapayadiform" action="" method="post" >
          <p align="center">
         Word in Katapayadi form : <input type="text"  name="word" style="width:12em;"/>
@@ -63,9 +66,10 @@
         </form>
         <div id="numberprogress"></div>
         <div id="numberresult"></div>
+                <h2>Swarasthana of Melakartha Raga</h2></hr>
     <p>The Katapayadi sankhya is a way of determining the number of a
-    melakarta <a href="http://en.wikipedia.org/wiki/Melakarta"> Melakarta raga </a> from the first two
-    syllables of the name of the raga <a href="http://en.wikipedia.org/wiki/Raga">Raga</a>.</p>
+    <a href="http://en.wikipedia.org/wiki/Melakarta"> Melakarta raga </a> from the first two
+    syllables of the name of the  <a href="http://en.wikipedia.org/wiki/Raga">Raga</a>.</p>
     <form id="ragaform" action="" method="post" >
     Select a Melakarta Raga : <select id="raga" name="raga" style="width:12em;">
         <option value="1">Kanagangi</option>
@@ -143,5 +147,6 @@
         </select>
           <input  type="submit" id="details" value="Get Details"  style="width:12em;" onclick="return getragadetails();"/>
         </form>
+        <p>The algorithm used in this is explained in detail here:  <a href="http://en.wikipedia.org/wiki/Katapayadi_sankhya#An_Algorithm_to_derive_the_Swarasthanas">An Algorithm to derive the Swarasthanas</a></p>
   </body>
 </html>
