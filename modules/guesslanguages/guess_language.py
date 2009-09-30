@@ -33,6 +33,8 @@
 import codecs, os, re, sys, unicodedata
 from common import *
 from utils import *
+__all__ = ["LangGuess", "getInstance"]
+
 try:
     from collections import defaultdict
 except:
@@ -71,7 +73,7 @@ except:
             return 'defaultdict(%s, %s)' % (self.default_factory,
                                             dict.__repr__(self))
 
-from blocks import unicodeBlock
+
 
 
 MIN_LENGTH = 20
@@ -306,7 +308,6 @@ IANA_MAP = {
 def _load_models():
     modelsDir = os.path.join(os.path.dirname(__file__), 'trigrams')
     modelsList = os.listdir(modelsDir)
-    
     lineRe = re.compile(r"(.{3})\s+(.*)")
     for modelFile in modelsList:
         modelPath = os.path.join(modelsDir, modelFile)
@@ -320,7 +321,8 @@ def _load_models():
                 model[m.group(1)] = int(m.group(2))
                 
         models[modelFile.lower()] = model
-_load_models()    
+    
+
 
 def guessLanguage(text):
     ''' Returns the language code, i.e. 'en' '''
@@ -381,7 +383,7 @@ def find_runs(text):
     run_types = defaultdict(int)
 
     totalCount = 0
-
+    from blocks import unicodeBlock
     for c in text:
         if c.isalpha():
             block = unicodeBlock(c)
@@ -517,13 +519,14 @@ def _makeNonAlphaRe():
     return re.compile(nonAlpha)
 
 
-nonAlphaRe = _makeNonAlphaRe()
+
 spaceRe = re.compile('\s+', re.UNICODE)
     
 def normalize(u):
     ''' Convert to normalized unicode.
         Remove non-alpha chars and compress runs of spaces.
     '''
+    nonAlphaRe = _makeNonAlphaRe()
     u = unicodedata.normalize('NFC', u)
     u = nonAlphaRe.sub(' ', u)
     u = spaceRe.sub(' ', u)
@@ -531,6 +534,7 @@ def normalize(u):
 class LangGuess(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'guess_language.html')
+        _load_models()    
         
     @ServiceMethod          
     def guessLanguage(self,text):
