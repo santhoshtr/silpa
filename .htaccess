@@ -1,6 +1,7 @@
 DirectoryIndex dispatch.fcgi
 
 RewriteEngine on
+RewriteRule ^.git - [F,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) dispatch.fcgi?action=$1
