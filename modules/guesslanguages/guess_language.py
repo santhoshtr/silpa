@@ -157,6 +157,7 @@ NAME_MAP = {
     "ja" : "Japanese",
     "ka" : "Georgian",
     "kk" : "Kazakh",
+    "kn" : "Kannada",
     "km" : "Cambodian",
     "ko" : "Korean",
     "ku" : "Kurdish",
