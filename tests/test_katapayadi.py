@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 import sys,os
+import unittest
 sys.path.append("../../")
 from silpa.modules import katapayadi
-k = katapayadi.getInstance()
-print k.get_number(u"സൌഖ്യം")  
-print k.get_number(u"ധീരശങ്കരാഭരണം")  
-print k.get_number(u"കനഗാംഗി")
-print k.get_number(u"കമല")
-print k.get_number(u"സ്വച്ഛന്ദം")
-print k.get_number(u"ചഡാംശു")
-print k.get_number(u"ചണ്ഡാംശുചന്ദ്രാധമകുംഭിപാല")
-print k.get_number(u"അനൂനനൂന്നാനനനുന്നനിത്യം")
-print k.get_number(u"ആയുരാരോഗ്യസൗഖ്യം")
-print k.get_swarasthanas(u"ധീരശങ്കരാഭരണം")  
-print k.get_swarasthanas(16)  
+class TestGuessLangauge(unittest.TestCase):
+	def setUp(self):
+		self.katapayadi = katapayadi.getInstance()
+	def  testKatapayadi(self):
+		self.assertEqual(self.katapayadi.get_number(u"ചണ്ഡാംശുചന്ദ്രാധമകുംഭിപാല"),31415926536L)
+		self.assertEqual(self.katapayadi.get_number(u"അനൂനനൂന്നാനനനുന്നനിത്യം"),10000000000L)
+		self.assertEqual(self.katapayadi.get_number(u"ആയുരാരോഗ്യസൗഖ്യം"),1712210)
+	def testSwarasthanas(self):
+		self.assertEqual(self.katapayadi.get_swarasthanas(u"ധീരശങ്കരാഭരണം"),u'["Sa","Ri2","Ga3","Ma1","Pa","Da2","Ni3","Sa"]')
+if __name__ == '__main__':
+    unittest.main()
+ 
