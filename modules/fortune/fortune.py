@@ -19,7 +19,6 @@ class Fortune(SilpaModule):
             if line == "%\n":
                 quotes.append(quote)
                 quote = ''
-                continue
             else:
                 quote+=line
         if(pattern!=None):
