@@ -34,13 +34,16 @@
         <p>Enter the text for getting a random quote with the given string in the below text area.
         </p>
         <form action="" method="post" onsubmit="return fortune(this); ">
-        <input type="text" cols='100' name='input_text' id='input_text'  />
+        <p align='center'>
+        Search word(optional)<input type="text" cols='100' name='input_text' id='input_text'  />
         Collection :<select id="database" name="dictionary" style="width:12em;">
           <option value="malayalam_proverbs">Malayalam Proverbs</option>
           <option value="thirukkural">Thirukkural</option>
         </select>
-
-        <input  type="submit" id="Fortune" value="Fortune"  name="action" style="width:12em;"/>
+        </p>
+        <p align="center">
+        <input  type="submit" id="Fortune" value="Get the quote"  name="action" style="width:12em;"/>
+        </p>
         </br>
         </form>
         
