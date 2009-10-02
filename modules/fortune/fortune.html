@@ -6,37 +6,43 @@
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/pure.js"></script>
-	<script type="text/javascript">
-	function fortune(form)
-	{
-	$('#progress') .html("Processing. Please Wait..");
-	$('#result').html("");
-	 var result = "Error while processing";
-	var pattern= form.input_text.value;
-	try {
-	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-     	result = service.modules.Fortune.fortune_ml(pattern);
-	}
-	catch(err){
-		$('#errormessage').html(err.message);
-	}
-	$('#progress').html("");
-	// Render it
-	$('#result') .html("<b>"+ result + "</b>");
-	return false;
-	}
-	</script>
+    <script type="text/javascript">
+    function fortune(form)
+    {
+    $('#progress') .html("Processing. Please Wait..");
+    $('#result').html("");
+     var result = "Error while processing";
+    var pattern= form.input_text.value;
+    var collection = form.database.value;
+    try {
+    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+        result = service.modules.Fortune.fortune(collection,pattern);
+    }
+    catch(err){
+        $('#errormessage').html(err.message);
+    }
+    $('#progress').html("");
+    // Render it
+    $('#result') .html("<b>"+ result + "</b>");
+    return false;
+    }
+    </script>
 
   </head>
   <body>
-  	<h2>Fortune Malayalam</h2></hr>
-		<p>Enter the text for getting a random quote with the given string in the below text area.
-		</p>
-		<form action="" method="post" onsubmit="return fortune(this); ">
-		<input type="text" cols='100' name='input_text' id='input_text'  />
-		<input  type="submit" id="Fortune" value="Fortune"  name="action" style="width:12em;"/>
-		</br>
-		</form>
-		
+    <h2>Fortune Cookies (Radom Quotes)</h2></hr>
+        <p>Enter the text for getting a random quote with the given string in the below text area.
+        </p>
+        <form action="" method="post" onsubmit="return fortune(this); ">
+        <input type="text" cols='100' name='input_text' id='input_text'  />
+        Collection :<select id="database" name="dictionary" style="width:12em;">
+          <option value="malayalam_proverbs">Malayalam Proverbs</option>
+          <option value="thirukkural">Thirukkural</option>
+        </select>
+
+        <input  type="submit" id="Fortune" value="Fortune"  name="action" style="width:12em;"/>
+        </br>
+        </form>
+        
   </body>
 </html>
