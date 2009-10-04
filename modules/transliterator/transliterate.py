@@ -23,6 +23,7 @@
 
 from common import *
 from utils import *
+import string
 import os
 class Transliterator(SilpaModule):
     def __init__(self):
@@ -68,6 +69,14 @@ class Transliterator(SilpaModule):
                 tx_string=tx_string+ word[index]
             index=index+1   
         return  tx_string
+    def _malayalam_fixes(self, text):
+        text = text.replace(u"മ് ",u"ം ")
+        text = text.replace(u"മ്,",u"ം,")
+        text = text.replace(u"മ്.",u"ം.")
+        text = text.replace(u"മ്)",u"ം)")
+        text = text.replace(u"ഩ",u"ന")          
+        text = text.replace(u"൤",u".")   #danda by fullstop
+        return text 
         
     @ServiceMethod
     def transliterate(self,text, target_lang_code):
@@ -78,17 +87,25 @@ class Transliterator(SilpaModule):
                 try:
                     src_lang_code=detect_lang(word)[word]
                 except:
+                    print "error in lang detection"
                     continue #FIXME 
                 if((target_lang_code=="en_US") and (src_lang_code=="ml_IN")):
                     tx_str=tx_str + self.transliterate_ml_en(word)
                     continue    
+                print   src_lang_code, target_lang_code
                 for chr in word:
+                    if chr in string.punctuation or chr<='z':
+                        tx_str=tx_str + chr 
+                        continue
                     offset=ord(chr) + self.getOffset(src_lang_code, target_lang_code) 
                     if(offset>0):
                         tx_str=tx_str + unichr (offset) 
                 tx_str=tx_str   + " "
             else:
                 tx_str=tx_str   + word
+        # Language specific fixes
+        if target_lang_code == "ml_IN":
+            tx_str = self._malayalam_fixes(tx_str)      
         return  tx_str
 
     def getOffset(self,src,target):
