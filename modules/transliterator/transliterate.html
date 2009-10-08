@@ -6,50 +6,50 @@
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/pure.js"></script>
-	<script type="text/javascript">
-	function trans(form)
-	{
-		$('#progress') .html("Transliterating. Please Wait...");
-		$('#result').html("");
-		var text= form.input_text.value;
-		var targetlang= form.translang.value;
-		var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-		try {
-		   var result = service.modules.Transliterator.transliterate(text, targetlang);
-		   $('#errormessage').html("");
-		}
-		catch(e){
-			$('#errormessage').html(e.message);
-		}
-		$('#progress').html("");
-		// Render it
-		$('#result') .html("<p>"+ result + "</p>");
-		return false;
-	}
-	</script>
+    <script type="text/javascript">
+    function trans(form)
+    {
+        $('#progress') .html("Transliterating. Please Wait...");
+        $('#result').html("");
+        var text= form.input_text.value;
+        var targetlang= form.translang.value;
+        var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+        try {
+           var result = service.modules.Transliterator.transliterate(text, targetlang);
+           $('#errormessage').html("");
+        }
+        catch(e){
+            $('#errormessage').html(e.message);
+        }
+        $('#progress').html("");
+        // Render it
+        $('#result') .html("<textarea>"+ result + "</textarea>");
+        return false;
+    }
+    </script>
   </head>
   <body>
-  		<h2>Transliterator</h2></hr>
-		<p>Enter the text for transliteration in the below text area.
-		 Language of each  word will be detected. 
-		 You can give the text in any language and even with mixed language
-		</p>
-		<form action="" method="post" onsubmit="return trans(this); ">
-		<textarea  name='input_text' id='input_text'></textarea></br> 
-		Transliterate To : <select id="translang" name="translang" style="width:12em;">
-		  <option value="hi_IN">Hindi</option>
-		  <option value="ml_IN">Malayalam</option>
-		  <option value="bn_IN">Bengali</option>
-		  <option value="ta_IN">Tamil</option>
-		  <option value="te_IN">Telugu</option>
-		  <option value="or_IN">Oriya</option>
-		  <option value="gu_IN">Gujarai</option>
-		  <option value="pa_IN">Panjabi</option>
-		  <option value="ka_IN">Kannada</option>
-		  <option value="en_US">English</option>
-		</select>
-		<input  type="submit" id="Transliterate" value="Transliterate"  name="action" style="width:12em;"/>
-		</br>
-		</form>
+        <h2>Transliterator</h2></hr>
+        <p>Enter the text for transliteration in the below text area.
+         Language of each  word will be detected. 
+         You can give the text in any language and even with mixed language
+        </p>
+        <form action="" method="post" onsubmit="return trans(this); ">
+        <textarea  name='input_text' id='input_text'></textarea></br> 
+        Transliterate To : <select id="translang" name="translang" style="width:12em;">
+          <option value="hi_IN">Hindi</option>
+          <option value="ml_IN">Malayalam</option>
+          <option value="bn_IN">Bengali</option>
+          <option value="ta_IN">Tamil</option>
+          <option value="te_IN">Telugu</option>
+          <option value="or_IN">Oriya</option>
+          <option value="gu_IN">Gujarai</option>
+          <option value="pa_IN">Panjabi</option>
+          <option value="ka_IN">Kannada</option>
+          <option value="en_US">English</option>
+        </select>
+        <input  type="submit" id="Transliterate" value="Transliterate"  name="action" style="width:12em;"/>
+        </br>
+        </form>
   </body>
 </html>
