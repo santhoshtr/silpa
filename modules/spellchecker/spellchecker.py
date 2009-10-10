@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys,os,string
+import sys
+import os
+import string
 import codecs
-import re, collections
-import codecs
-from common import *
-from utils import *
+from common import SilpaModule,ServiceMethod,dumps
+from utils import detect_lang
 class Spellchecker(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'spellchecker.html')
-        self.alphabets = None#'abcdefghijklmnopqrstuvwxyz'
         self.NWORDS = None
         self.lang = None
         self.dictionaries = {}
@@ -19,69 +18,67 @@ class Spellchecker(SilpaModule):
             text = text.replace(punct,"")
         words = text.split()
         return words
-        #return re.findall('[a-z]+', text.lower()) 
+        
 
     def train(self,features=None):
         if not self.dictionaries.has_key(self.lang) :
             dictionary = os.path.join(os.path.dirname(__file__), 'dicts/'+self.lang+'.dic')
             self.dictionaries[self.lang] = self.words(codecs.open(dictionary,'r',encoding='utf-8', errors='ignore').read())#, errors='ignore'
-            print "loaded "  + self.lang +" dictionary"
+            #print "loaded "  + self.lang +" dictionary"
         return self.dictionaries[self.lang]
-    def edits1(self,word):
-        """
-        Get the words by edit distance 1
-        """
-        s = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-        deletes    = [a + b[1:] for a, b in s if b]
-        transposes = [a + b[1] + b[0] + b[2:] for a, b in s if len(b)>1]
-        replaces   = [a + c + b[1:] for a, b in s for c in self.alphabets if b]
-        inserts    = [a + c + b     for a, b in s for c in self.alphabets]
-        edits1 =  set(deletes + transposes + replaces + inserts)
-        print len(edits1)
-        return edits1
+    def levenshtein(self,s1, s2):
+        if len(s1) < len(s2):
+            return self.levenshtein(s2, s1)
+        if not s1:
+            return len(s2)
+        
+        previous_row = xrange(len(s2) + 1)
+        for i, c1 in enumerate(s1):
+            current_row = [i + 1]
+            for j, c2 in enumerate(s2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (c1 != c2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+        return previous_row[-1]
 
-    def known_edits2(self,edits1):
-        """
-        Get the words by edit distance 2
-        """
-        edits2 = set(e2 for e1 in edits1 for e2 in self.edits1(e1) if e2 in self.NWORDS)
-        print len(edits2)
-        return edits2
-
-    def known(self,words): 
-        """
-        Check whether the word is present in the dictionary
-        """
-        return set(w for w in words if w in self.NWORDS)
     @ServiceMethod
-    def suggest(self,word, lang=None):
+    def suggest(self,word, language=None, distance=2):
         word=word.strip()
-        if self.lang != lang :
+        if word=="": 
+            return None
+        if self.lang != language:
             self.NWORDS = None
-        if lang==None :
+        if language==None :
             self.lang = detect_lang(word)[word]
         else :
-            self.lang = lang
-        self.alphabets =  charmap[self.lang]
+            self.lang = language
         if self.NWORDS == None:
             self.NWORDS = self.train() 
         if self.check(word):
             return word        
-        edits1 =    self.edits1(word)
-        candidates = self.known(edits1) or self.known_edits2(edits1) 
-        return dumps(list(candidates))
+        candidates = []
+        for candidate in self.NWORDS:
+            #Dont check if the first letter is different
+            if candidate[0] != word[0]:
+                continue
+            if len(candidate) - len(word)  > distance or len(word) - len(candidate)  >    distance :
+                continue
+            if not self.levenshtein(candidate, word) > distance :
+                candidates.append(candidate)
+        return dumps(candidates)
         #return max(candidates, key=self.NWORDS.get)
     
     @ServiceMethod                  
-    def check(self, word, lang=None):
+    def check(self, word, language=None):
         word=word.strip()
-        if self.lang != lang :
+        if self.lang != language:
             self.NWORDS = None
-        if lang==None :
+        if language==None :
             self.lang = detect_lang(word)[word]
         else :
-            self.lang = lang
-        self.alphabets =  charmap[self.lang]
+            self.lang = language
         if word=="": return True
         if self.NWORDS==None: 
             self.NWORDS = self.train()  
@@ -89,6 +86,7 @@ class Spellchecker(SilpaModule):
             if word == unicode(w) :
                 return True
         return False    
+
     def get_module_name(self):
         return "Spellchecker"
     def get_info(self):
