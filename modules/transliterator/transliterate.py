@@ -87,29 +87,28 @@ class Transliterator(SilpaModule):
                 try:
                     src_lang_code=detect_lang(word)[word]
                 except:
-                    print "error in lang detection"
+                    tx_str = tx_str + " " + word 
                     continue #FIXME 
                 if((target_lang_code=="en_US") and (src_lang_code=="ml_IN")):
                     tx_str=tx_str + self.transliterate_ml_en(word)
                     continue    
-                print   src_lang_code, target_lang_code
                 for chr in word:
                     if chr in string.punctuation or chr<='z':
-                        tx_str=tx_str + chr 
+                        tx_str = tx_str + chr 
                         continue
-                    offset=ord(chr) + self.getOffset(src_lang_code, target_lang_code) 
+                    offset = ord(chr) + self.getOffset(src_lang_code, target_lang_code) 
                     if(offset>0):
-                        tx_str=tx_str + unichr (offset) 
-                tx_str=tx_str   + " "
+                        tx_str = tx_str + unichr (offset) 
+                tx_str = tx_str   + " "
             else:
-                tx_str=tx_str   + word
+                tx_str = tx_str   +  word
         # Language specific fixes
         if target_lang_code == "ml_IN":
             tx_str = self._malayalam_fixes(tx_str)      
         return  tx_str
 
     def getOffset(self,src,target):
-        lang_bases={'en_US':0,'hi_IN': 0x0901,'bn_IN': 0x0981, 'pa_IN':0x0A01,'gu_IN':0x0A81 , 'or_IN': 0x0B01,'ta_IN': 0x0B81,'te_IN' : 0x0C01,    'ka_IN' :0x0C81 ,'ml_IN': 0x0D01}
+        lang_bases={'en_US':0,'hi_IN': 0x0901,'bn_IN': 0x0981, 'pa_IN':0x0A01,'gu_IN':0x0A81 , 'or_IN': 0x0B01,'ta_IN': 0x0B81,'te_IN' : 0x0C01,    'kn_IN' :0x0C81 ,'ml_IN': 0x0D01}
         src_id=0
         target_id=0
         try:
