@@ -7,6 +7,7 @@ import codecs
 from common import SilpaModule,ServiceMethod,dumps
 from utils import detect_lang
 class Spellchecker(SilpaModule):
+    
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'spellchecker.html')
         self.NWORDS = None
@@ -18,14 +19,17 @@ class Spellchecker(SilpaModule):
             text = text.replace(punct,"")
         words = text.split()
         return words
-        
 
     def train(self,features=None):
         if not self.dictionaries.has_key(self.lang) :
-            dictionary = os.path.join(os.path.dirname(__file__), 'dicts/'+self.lang+'.dic')
-            self.dictionaries[self.lang] = self.words(codecs.open(dictionary,'r',encoding='utf-8', errors='ignore').read())#, errors='ignore'
+            try:
+                dictionary = os.path.join(os.path.dirname(__file__), 'dicts/'+self.lang+'.dic')
+                self.dictionaries[self.lang] = self.words(codecs.open(dictionary,'r',encoding='utf-8', errors='ignore').read())#, errors='ignore'
+            except:
+                self.dictionaries[self.lang] =None  
             #print "loaded "  + self.lang +" dictionary"
         return self.dictionaries[self.lang]
+        
     def levenshtein(self,s1, s2):
         if len(s1) < len(s2):
             return self.levenshtein(s2, s1)
@@ -68,8 +72,7 @@ class Spellchecker(SilpaModule):
             if not self.levenshtein(candidate, word) > distance :
                 candidates.append(candidate)
         return dumps(candidates)
-        #return max(candidates, key=self.NWORDS.get)
-    
+            
     @ServiceMethod                  
     def check(self, word, language=None):
         word=word.strip()
@@ -82,6 +85,9 @@ class Spellchecker(SilpaModule):
         if word=="": return True
         if self.NWORDS==None: 
             self.NWORDS = self.train()  
+        if self.NWORDS==None:           
+            # Dictionary not found
+            return False
         for w in self.NWORDS :
             if word == unicode(w) :
                 return True
@@ -92,6 +98,5 @@ class Spellchecker(SilpaModule):
     def get_info(self):
         return  "Spellchecker module"
 
-        
 def getInstance():
         return Spellchecker()
