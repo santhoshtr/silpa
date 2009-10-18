@@ -16,44 +16,52 @@ class Silpa():
         self._response=None
         self._jsonrpc_handler=ServiceHandler(self) 
     def serve(self,environ, start_response):
-        action=None
-        headers = [('Content-Type', 'text/html')]
+        """
+        The method to serve all the requests.
+        """
         try:
-            requesturi = environ['REQUEST_URI']
+            request_uri = environ['REQUEST_URI']
+            # TODO there should be a better way to handle the below line
+            request_uri  = request_uri .replace("/silpa/","") #remove app name from uri . 
         except:
-            requesturi = None
+            # To handle the python -m silpa server instances.
+            request_uri = environ.get('PATH_INFO', '').lstrip('/')
         #JSON RPC requests
-        if requesturi == "/silpa/JSONRPC":
+        if request_uri == "JSONRPC":
             try:
-                content_length= int(environ['CONTENT_LENGTH'])
+                content_length = int(environ['CONTENT_LENGTH'])
             except: 
                 content_length = 0
             if  content_length > 0 :
                 data = environ['wsgi.input'].read(content_length).decode("utf-8")
-                start_response('200 OK', headers)
-                headers = [('Content-Type', 'application/json')]
+                start_response('200 OK', [('Content-Type', 'application/json')])
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
                 return [jsonreponse.encode('utf-8')]
-        request=SilpaRequest(environ)
-        action = request.get('action')  
+        if  request_uri == None or request_uri .strip()=='': 
+            request = SilpaRequest(environ)
+            request_uri = request.get('action')  
         from common.silparesponse import SilpaResponse
         self._response=SilpaResponse()
-        if action :
-            action=action.replace(" ","_")
+        if request_uri :
             #Check if the action is defined.
-            if self._module_manager.find_module(action):
-                module_instance =  self._module_manager.getModuleInstance(action)
+            if self._module_manager.find_module(request_uri ):
+                module_instance =  self._module_manager.getModuleInstance(request_uri )
                 if(module_instance):
-                    #handleStats()  
                     self._response.setForm(module_instance.get_form())
-                    start_response('200 OK', headers)
+                    start_response('200 OK', [('Content-Type', 'text/html')])
                     return [self._response.toString().encode('utf-8')]
             #It is a static content request.
-            self._response.setContent(getStaticContent(action))
-            start_response('200 OK', headers)
-            return [self._response.toString().encode('utf-8')]
+            # Content type depends on the mimetype
+            start_response('200 OK', [('Content-Type', getMimetype(request_uri))])
+            if request_uri .endswith(".html"):
+                # HTML pages need to be embedded inside the content area
+                self._response.setContent(getStaticContent("doc/"+request_uri))
+                return [self._response.toString().encode('utf-8')]
+            else: 
+                # Images, css, javascript etc..
+                return [getStaticContent(request_uri)]
         else: #No action. Show home page
-            self._response.setContent(getStaticContent('home.html'))
-            start_response('200 OK', headers)
+            self._response.setContent(getStaticContent('index.html'))
+            start_response('200 OK', [('Content-Type', 'text/html')])
             return [self._response.toString().encode('utf-8')]
 
