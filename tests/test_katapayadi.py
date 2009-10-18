@@ -2,7 +2,7 @@
 import sys,os
 sys.path.append("../../")
 from silpa.modules import katapayadi
-k=katapayadi.getInstance()
+k = katapayadi.getInstance()
 print k.get_number(u"സൌഖ്യം")  
 print k.get_number(u"ധീരശങ്കരാഭരണം")  
 print k.get_number(u"കനഗാംഗി")

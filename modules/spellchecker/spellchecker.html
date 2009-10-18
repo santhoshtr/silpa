@@ -3,60 +3,60 @@
     <title></title>
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript">
-	function docheck(form)
-	{
-	$('#progress') .html("Checking. Please Wait..");
-	$('#result').html("");
-	var word= form.word.value;
-	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-	try {
-	   var result = service.modules.Spellchecker.check(word);
-	   
-	   $('#errormessage').html("");
-	}
-	catch(e){
-		$('#errormessage').html(e.message);
-	}
-	$('#progress').html("");
-	if(result){
-		$('#result').html("<b>  Correct Spelling.</b>");
-		return false;
-	}
-	$('#result').html("<b> Wrong Spelling</b>");
-	$('#progress').html("Fetching suggestions. Please wait...");
-	try {
-	   var result = service.modules.Spellchecker.suggest(word);
-	   $('#errormessage').html("");
-	}
-	catch(e){
-		$('#errormessage').html(e.message);
-	}
-	$('#progress').html("");
-	$('#result').html("<b>Wrong Spelling. Suggestions </b><ul id='list'></ul>");
-	var resultobj=eval(result);
-	$.each(resultobj,function(index, item)
+    <script type="text/javascript">
+    function docheck(form)
+    {
+    $('#progress') .html("Checking. Please Wait..");
+    $('#result').html("");
+    var word= form.word.value;
+    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
+    try {
+       var result = service.modules.Spellchecker.check(word);
+       
+       $('#errormessage').html("");
+    }
+    catch(e){
+        $('#errormessage').html(e.message);
+    }
+    $('#progress').html("");
+    if(result){
+        $('#result').html("<b>  Correct Spelling.</b>");
+        return false;
+    }
+    $('#result').html("<b> Wrong Spelling</b>");
+    $('#progress').html("Fetching suggestions. Please wait...");
+    try {
+       var result = service.modules.Spellchecker.suggest(word);
+       $('#errormessage').html("");
+    }
+    catch(e){
+        $('#errormessage').html(e.message);
+    }
+    $('#progress').html("");
+    $('#result').html("<b>Wrong Spelling. Suggestions :</b><ul id='list'></ul>");
+    var resultobj=eval(result);
+    $.each(resultobj,function(index, item)
     {
        $('#list').append($( "<li>" + item +"</li>" ));
     });
-	return false;
-	}
-	</script>
+    return false;
+    }
+    </script>
   </head>
   <body>
-		<h2>Spellchecker</h2></hr>
-		
-		<p>This is a demo of spellcheck service of silpa. In this page, you can enter a word for checking the spelling and just get the result.
-		</p>
-		<p>For using Silpa spellcheck service in your web or desktop applications, read the <a href="apis.html#spellcheck">API documentation</a>. This page itself is an example for using silpa spellcheck APIs in a webpage.
-		</p>
-		<form action="" method="post" onsubmit="return docheck(this); " >
-		<p align="center">
-		Word : <input type="text"  name="word" style="width:12em;"/>
-		<input  type="submit" id="spellcheck" value="Spellcheck"  style="width:12em;"/>
-		</br>
-		</p>
-		</form>
+        <h2>Spellchecker</h2></hr>
+        
+        <p>This is a demo of spellcheck service of silpa. In this page, you can enter a word for checking the spelling and just get the result.
+        </p>
+        <p>For using Silpa spellcheck service in your web or desktop applications, read the <a href="apis.html#spellcheck">API documentation</a>. This page itself is an example for using silpa spellcheck APIs in a webpage.
+        </p>
+        <form action="" method="post" onsubmit="return docheck(this); " >
+        <p align="center">
+        Word : <input type="text"  name="word" style="width:12em;"/>
+        <input  type="submit" id="spellcheck" value="Spellcheck"  style="width:12em;"/>
+        </br>
+        </p>
+        </form>
   </body>
 </html>
 

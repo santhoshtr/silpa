@@ -80,6 +80,7 @@ class Transliterator(SilpaModule):
         
     @ServiceMethod
     def transliterate(self,text, target_lang_code):
+        text =  normalize(text)
         tx_str=""
         words=text.split(" ")
         for word in words:

@@ -2,3 +2,4 @@
 # -*- coding: utf-8 -*-
 from  silpautils import *
 from langdetect import *
+from normalizer import *
