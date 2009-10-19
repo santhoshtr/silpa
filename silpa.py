@@ -61,7 +61,7 @@ class Silpa():
                 # Images, css, javascript etc..
                 return [getStaticContent(request_uri)]
         else: #No action. Show home page
-            self._response.setContent(getStaticContent('index.html'))
+            self._response.setContent(getStaticContent('doc/index.html'))
             start_response('200 OK', [('Content-Type', 'text/html')])
             return [self._response.toString().encode('utf-8')]
 
