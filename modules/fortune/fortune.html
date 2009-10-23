@@ -14,17 +14,25 @@
      var result = "Error while processing";
     var pattern= form.input_text.value;
     var collection = form.database.value;
-    try {
-    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-        result = service.modules.Fortune.fortune(collection,pattern);
-    }
-    catch(err){
-        $('#errormessage').html(err.message);
-    }
-     
-    $('#progress').html("");
-    // Render it
-    $('#result') .html("<b>"+ result + "</b>");
+    var jsonRequest = {
+        "method" :  "modules.Fortune.fortune",
+         "params" : [collection,pattern], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            $('#progress').html("");
+            // Render it
+              $('#result') .html("<b>"+ msg.result + "</b>");
+        },
+        error: function(msg) { alert(msg); }
+    });
+   
     return false;
     }
     </script>

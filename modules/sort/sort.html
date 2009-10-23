@@ -1,7 +1,6 @@
 <html>
   <head>
     <title></title>
-    <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
     function dosort(form)
@@ -9,24 +8,30 @@
     $('#progress') .html("Sorting. Please Wait..");
     $('#result').html("");
     var text= form.input_text.value;
-    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-    try {
-       var result = service.modules.Sort.sort(text);
-        $('#errormessage').html("");
-    }
-    catch(e){
-        $('#errormessage').html(e.message);
-    }
-    $('#progress').html("");
-    $('#result').html("<table id='sortedtable' class='table1'><tr><th>UCA 5.2 Result</th><th>Modified UCA 5.2 Result</th></tr></table>");
-    var resultobj=eval( '(' + result + ')');
-    var silparesult = resultobj['SILPA'];
-    var ucaresult = resultobj['UCA'];
-    $.each(silparesult,function(index, item)
-    {
-       $('#sortedtable tr:last').after("<tr><td>" + ucaresult[index] +"</td><td>" + silparesult[index] +"</td></tr>" );
+    var jsonRequest = {
+        "method" :  "modules.Sort.sort",
+         "params" : [text], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            var resultobj =eval( '(' + msg.result + ')');
+            $('#progress').html("");
+            $('#result').html("<table id='sortedtable' class='table1'><tr><th>UCA 5.2 Result</th><th>Modified UCA 5.2 Result</th></tr></table>");
+            var silparesult = resultobj['SILPA'];
+            var ucaresult = resultobj['UCA'];
+            $.each(silparesult,function(index, item)
+            {
+               $('#sortedtable tr:last').after("<tr><td>" + ucaresult[index] +"</td><td>" + silparesult[index] +"</td></tr>" );
+            });
+        },
+        error: function(msg) { alert(msg); }
     });
-
     return false;
     }
     </script>

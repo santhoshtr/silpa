@@ -2,7 +2,6 @@
   <head>
     <title></title>
     <style></style>
-    <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
     function go(form)
@@ -26,18 +25,26 @@
         $('#result').html("Not implemented now.");
         return false;
     }
-    var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-    try {
-       var result = service.modules.Calendar.convert(from, to, year, month, day);
-        $('#errormessage').html("");
-    }
-    catch(e){
-        $('#errormessage').html(e.message);
-    }
-    var resultobj=eval( '(' + result + ')');
-    $('#progress').html("");
-    // Render it
-    $('#result').html("Date in "+to+" System: <b>" + resultobj[0]+"-"+resultobj[1]+"-"+resultobj[2] + "</b>");
+    var jsonRequest = {
+        "method" :  "modules.Calendar.convert",
+         "params" : [from, to, year, month, day], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            var resultobj =eval( '(' + msg.result + ')');
+            $('#progress').html("");
+            // Render it
+            $('#result').html("Date in "+to+" System: <b>" + resultobj[0]+"-"+resultobj[1]+"-"+resultobj[2] + "</b>");
+        },
+        error: function(msg) { alert(msg); }
+    });
+    
     return false;
     }
     </script>
