@@ -35,40 +35,37 @@ class Transliterator(SilpaModule):
         #existing transliterate.py can be used?
         #idea2: Have dictionaries for each language like english_xx_dict ?
         #TODO: complete this
-        english_ml_dict={u'അ':'a',u'ആ':'a',u'ഇ':'a',u'ഈ':'a',u'ഉ':'a',u'ഊ':'a',u'ഋ':'a',\
-                u'എ':'a',u'ഏ':'a',u'ഐ':'a',u'ഒ':'a',u'ഓ':'a',u'ഔ':'a',\
-                u'ക':'k',u'ഖ':'kh',u'ഗ':'g',u'ഘ':'gh',u'ങ്ങ':'ng',\
+        malayalam_english_dict={u'അ':'a',u'ആ':'aa',u'ഇ':'i',u'ഈ':'ee',u'ഉ':'u',u'ഊ':'oo',u'ഋ':'ri',\
+                u'എ':'e',u'ഏ':'e',u'ഐ':'ai',u'ഒ':'o',u'ഓ':'o',u'ഔ':'au',\
+                u'ക':'k',u'ഖ':'kh',u'ഗ':'g',u'ഘ':'gh',u'ങ്ങ':'ng',u'ങ':'ng',\
                 u'ച':'ch',u'ഛ':'chh',u'ജ':'j',u'ഝ':'jhh',u'ഞ':'nj',\
                 u'ട':'t',u'ഠ':'th',u'ഡ':'d',u'ഢ':'dh',u'ണ':'n',\
                 u'ത':'th',u'ഥ':'th',u'ദ':'d',u'ധ':'dh',u'ന':'n',\
                 u'പ':'p',u'ഫ':'ph',u'ബ':'b',u'ഭ':'bh',u'മ':'m',\
                 u'യ':'y',u'ര':'r',u'ല':'l', u'വ':'v', u'റ':'r',\
-                u'ശ':'sa',u'ഷ':'sh',u'സ':'s', u'ഹ':'h',u'ള':'l',u'ഴ':'zh',\
-                u'ാ':'a',u'ി':'i' ,u'ീ':'ee' ,u'ു':'u',\
-                u'ൂ':'uu',u'ൃ':'ri' ,u'െ':'e' ,u'േ':'e',\
-                u'ൈ':'ai',u'ൊ':'o' ,u'ോ':'oo' ,u'ൗ':'au'}
-        word_length =len(word)
-        index=0
-        tx_string=""
-        while index<word_length:
-            a_vowel=""
+                u'ശ':'s',u'ഷ':'sh',u'സ':'s', u'ഹ':'h',u'ള':'l',u'ഴ':'zh',\
+                u'്':'',u'ം':'m',u'ാ':'aa',u'ി':'i' ,u'ീ':'ee' ,u'ു':'u',\
+                u'ൂ':'oo',u'ൃ':'ri' ,u'െ':'e' ,u'േ':'e',\
+                u'ൈ':'ai',u'ൊ':'o' ,u'ോ':'oo' ,u'ൗ':'au',  u'ൌ':'ou'}
+        ml_vowels = [u'അ',u'ആ',u'ഇ',u'ഈ',u'ഉ' ,u'ഊ',u'ഋ', u'എ',u'ഏ',u'ഐ',u'ഒ',u'ഓ',u'ഔ']                        
+        ml_vowel_signs = [u'്',u'ം',u'ാ',u'ി',u'ീ',u'ു', u'ൂ',u'ൃ' ,u'െ' ,u'േ',u'ൈ',u'ൊ' ,u'ോ' ,u'ൗ' , u'ൌ',u'‍']        
+        word_length = len(word)
+        index = 0
+        tx_string = ""
+        while index < word_length:
+            if word[index] == u'്':
+                index+=1
+                continue;
             try:
-                if(index+1<word_length):
-                    if(word[index+1]==virama):
-                        a_vowel=""      
-                else:
-                    if(index+1<word_length):
-                        if (english_ml_dict[word[index+1]] in ['a','e','i','o','u']):
-                            a_vowel=""              
-                    else:   
-                        a_vowel="a"     
-                    if (english_ml_dict[word[index]] in ['a','e','i','o','u']): 
-                        a_vowel=""              
-                    tx_string=tx_string+ english_ml_dict[word[index]] + a_vowel
-            except:     
-                tx_string=tx_string+ word[index]
-            index=index+1   
-        return  tx_string
+                tx_string += malayalam_english_dict[word[index]]
+            except KeyError:
+                tx_string += word[index]
+            if index+1 < word_length and not word[index+1] in ml_vowel_signs and word[index+1] in malayalam_english_dict and not word[index] in ml_vowels and not word[index] in ml_vowel_signs :
+                tx_string +='a'
+            if index+1 == word_length and not word[index] in ml_vowel_signs and word[index] in malayalam_english_dict:
+                tx_string +='a'
+            index+=1
+        return tx_string       
     def _malayalam_fixes(self, text):
         text = text.replace(u"മ് ",u"ം ")
         text = text.replace(u"മ്,",u"ം,")
@@ -90,9 +87,16 @@ class Transliterator(SilpaModule):
                 except:
                     tx_str = tx_str + " " + word 
                     continue #FIXME 
-                if((target_lang_code=="en_US") and (src_lang_code=="ml_IN")):
-                    tx_str=tx_str + self.transliterate_ml_en(word)
-                    continue    
+                if src_lang_code=="en_US" :    
+                    tx_str="Not implemented now."
+                    break    
+                if target_lang_code=="en_US" :
+                    if src_lang_code=="ml_IN" :
+                        tx_str=tx_str + self.transliterate_ml_en(word)   + " "
+                        continue    
+                    else:    
+                        tx_str="Not implemented now."
+                        break    
                 for chr in word:
                     if chr in string.punctuation or chr<='z':
                         tx_str = tx_str + chr 
@@ -122,9 +126,8 @@ class Transliterator(SilpaModule):
     def get_module_name(self):
         return "Transliterator"
     def get_info(self):
-        return  "Transliterated the text between any Indian Language"   
-        
-        
+        return  "Transliterat the text between any Indian Language"   
+
 def getInstance():
     return Transliterator()     
         
