@@ -2,7 +2,6 @@
   <head>
     <title></title>
     <style></style>
-    <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
     function dosubmit(form)
@@ -11,17 +10,25 @@
         $('#numberresult').html("");
         var form=document.getElementById('katapayadiform'); 
         var word= form.word.value;
-        var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-        try {
-           var result = service.modules.Katapayadi.get_number(word);
-            $('#errormessage').html("");
-        }
-        catch(e){
-            $('#errormessage').html(e.message);
-        }
-        $('#numberprogress').html("");
-        // Render it
-        $('#numberresult').html("The decoded number is: <b>" + result + "</b>");
+        var jsonRequest = {
+        "method" :  "modules.Katapayadi.get_number",
+         "params" : [word], 
+         "id" : ""
+         };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "JSONRPC",
+            data: $.toJSON(jsonRequest), 
+            dataType: "json",
+            success: function(msg) {
+                $('#progress').html("");
+                $('#numberprogress') .html("");
+                // Render it
+                $('#numberresult').html("The decoded number is: <b>" + msg.result + "</b>");
+            },
+            error: function(msg) { alert(msg); }
+        });
         return false;
     }
     function getragadetails(form)
@@ -31,18 +38,26 @@
         var form=document.getElementById('ragaform'); 
         var number= form.raga.value;
         var resulthtml = "Selected Raga is Melakarta Raga Number <b>" +number+ "</b>.<br/>"
-        var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-        try {
-           var result = service.modules.Katapayadi.get_swarasthanas(number);
-            $('#errormessage').html("");
-        }
-        catch(e){
-            $('#errormessage').html(e.message);
-        }
-        $('#progress').html("");
-        resulthtml += "Swarasthanas: <b>" + eval( '(' + result + ')')  + "</b>";
-        // Render it
-        $('#result').html(resulthtml);
+        var jsonRequest = {
+        "method" :  "modules.Katapayadi.get_swarasthanas",
+         "params" : [number], 
+         "id" : ""
+         };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "JSONRPC",
+            data: $.toJSON(jsonRequest), 
+            dataType: "json",
+            success: function(msg) {
+                $('#progress').html("");
+                resulthtml += "Swarasthanas: <b>" + eval( '(' + msg.result + ')')  + "</b>";
+                // Render it
+                $('#result').html(resulthtml);
+            },
+            error: function(msg) { alert(msg); }
+        });
+        
         return false;
     }
     </script>

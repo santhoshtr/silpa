@@ -3,7 +3,6 @@
     <title></title>
     <meta content="">
     <style></style>
-    <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
     function fetchmeaning(form)
@@ -12,16 +11,24 @@
         $('#result').html("");
         var word= form.word.value;
         var dictionary= form.dictionary.value;
-        var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-        try {
-           var result = service.modules.Dictionary.getdef(word, dictionary);
-        }
-        catch(e){
-            $('#errormessage').html("");
-        }
-        $('#progress').html("");
-        // Render it
-        $('#result') .html("<pre>"+ result + "</pre>");
+        var jsonRequest = {
+        "method" :  "modules.Dictionary.getdef",
+         "params" : [word,dictionary], 
+         "id" : ""
+         };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "JSONRPC",
+            data: $.toJSON(jsonRequest), 
+            dataType: "json",
+            success: function(msg) {
+                $('#progress').html("");
+                // Render it
+                $('#result') .html("<pre>"+ msg.result + "</pre>");
+            },
+            error: function(msg) { alert(msg); }
+        });
         return false;
     }
     </script>
