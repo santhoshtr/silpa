@@ -1,83 +1,92 @@
 <html>
   <head>
     <title></title>
-    <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
-	function trim(s)
-	{
-		var l=0; var r=s.length -1;
-		while(l < s.length && s[l] == ' ')
-		{	
-			l++; 
-		}
-		while(r > l && s[r] == ' ')
-		{
-			r-=1;	
-		}
-		return s.substring(l, r+1);
-	}
+    function trim(s)
+    {
+        var l=0; var r=s.length -1;
+        while(l < s.length && s[l] == ' ')
+        {   
+            l++; 
+        }
+        while(r > l && s[r] == ' ')
+        {
+            r-=1;   
+        }
+        return s.substring(l, r+1);
+    }
 
-	function search(form)
-	{
-	$('#progress') .html("Searching. Please Wait...");
-	$('#result').html("");
-	var text= form.input_text.value;
-	var key= form.key.value;
-	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-	var result = service.modules.InexactSearch.search(text,key);
-	var resultobj=eval( '(' + result + ')');
-	var words = text.split(" ");
-	var highlighted_text= "";
-	for(var i=0; i<words.length; i++) {
-		try {
-			if( trim(words[i]).length ==0 ) {
-				highlighted_text += " ";
-				continue;
-			}
-			if( trim(words[i]) == "\n" ) {
-				highlighted_text += "<br/>";
-				continue;
-			}
-			
-		   var weight = resultobj[words[i]];
-		   if (weight >= 0.6 ) {
-			   highlighted_text += "<SPAN style='BACKGROUND-COLOR: #ffff00' title='"+ weight + "'>" + words[i] + "</SPAN> ";
-		   }
-		   else{
-			   highlighted_text += "<SPAN title='"+ weight + "'>" + words[i] + "</SPAN> ";
-		  }  
-		   $('#errormessage').html("");
-		}
-		catch(e){
-			$('#errormessage').html(e.message);
-		}
-	}
-	$('#result').html(highlighted_text);
-	$('#progress').html("");
-	// Render it
-	return false;
-	};
-	</script>
+    function search(form)
+    {
+    $('#progress') .html("Searching. Please Wait...");
+    $('#result').html("");
+    var text= form.input_text.value;
+    var key= form.key.value;
+    var jsonRequest = {
+    "method" :  "modules.InexactSearch.search",
+     "params" : [text, key], 
+     "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            $('#progress').html("");
+            var resultobj=eval( '(' + msg.result + ')');
+            var words = text.split(" ");
+            var highlighted_text= "";
+            for(var i=0; i<words.length; i++) {
+                    if( trim(words[i]).length ==0 ) {
+                        highlighted_text += " ";
+                        continue;
+                    }
+                    if( trim(words[i]) == "\n" ) {
+                        highlighted_text += "<br/>";
+                        continue;
+                    }
+                   var weight = resultobj[words[i]];
+                   if (weight >= 0.6 ) {
+                       highlighted_text += "<SPAN style='BACKGROUND-COLOR: #ffff00' title='"+ weight + "'>" + words[i] + "</SPAN> ";
+                   }
+                   else{
+                       highlighted_text += "<SPAN title='"+ weight + "'>" + words[i] + "</SPAN> ";
+                  }  
+                }  
+                  $('#errormessage').html("");
+                $('#result').html(highlighted_text);        
+        },
+        error: function(msg) { alert(msg); }
+    });
+    
+    
+    
+    // Render it
+    return false;
+    };
+    </script>
 
   </head>
   <body>
-    	<div class="featurebox">
-  		<h3>Approximate String Search</h3>
-		<p>This is a <a href="http://en.wikipedia.org/wiki/Fuzzy_string_searching">Fuzzy string search</a> application. This application illustrates the combined use of 
-		<a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Edit distance</a> and <a href="Soundex">Indic Soundex
-		</a> algorithm.</p>
-		<p>By mixing both written like(edit distance) and sounds like(soundex), we achieve an efficient aproximate string searching. This application is capable of cross language string search too. That means, you can search Hindi words in Malayalam text. If there is any Malayalam word, which is approximate transliteration of hindi word, or sounds alike the hindi words, it will be returned as an approximate match. The "written like" algorithm used here is a bigram average algorithm. The ratio of common bigrams in two strings and average number of bigrams will give a factor which is greater than zero and less than 1. Similarly the soundex algorithm also gives a weight. By selecting words which has comparison weight more than
-		the threshold weight(which 0.6), we get the search results. </p>
-		</div>
-		<form id="searchform" action="" method="post" onsubmit="return search(this);">
-		<p>Enter the text in the below textarea</p>
-		<textarea  name='input_text' id='input_text'></textarea>
-		<br/>
-		Search for :<input type="text" id="key" name="key"/>
-		<input  type="submit" id="Search" value="Search"/>
-		</form>
-		<p>In the search result. move your mouse over the words to get the comparison weight.</p>
+        <div class="featurebox">
+        <h3>Approximate String Search</h3>
+        <p>This is a <a href="http://en.wikipedia.org/wiki/Fuzzy_string_searching">Fuzzy string search</a> application. This application illustrates the combined use of 
+        <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Edit distance</a> and <a href="Soundex">Indic Soundex
+        </a> algorithm.</p>
+        <p>By mixing both written like(edit distance) and sounds like(soundex), we achieve an efficient aproximate string searching. This application is capable of cross language string search too. That means, you can search Hindi words in Malayalam text. If there is any Malayalam word, which is approximate transliteration of hindi word, or sounds alike the hindi words, it will be returned as an approximate match. The "written like" algorithm used here is a bigram average algorithm. The ratio of common bigrams in two strings and average number of bigrams will give a factor which is greater than zero and less than 1. Similarly the soundex algorithm also gives a weight. By selecting words which has comparison weight more than
+        the threshold weight(which 0.6), we get the search results. </p>
+        </div>
+        <form id="searchform" action="" method="post" onsubmit="return search(this);">
+        <p>Enter the text in the below textarea</p>
+        <textarea  name='input_text' id='input_text'></textarea>
+        <br/>
+        Search for :<input type="text" id="key" name="key"/>
+        <input  type="submit" id="Search" value="Search"/>
+        </form>
+        <p>In the search result. move your mouse over the words to get the comparison weight.</p>
     
   </body>
 </html>
