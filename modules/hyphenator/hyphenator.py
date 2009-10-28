@@ -147,115 +147,115 @@ class Hyph_dict(object):
 
 
 class Hyphenator(SilpaModule):
-	"""
-	Reads a hyph_*.dic file and stores the hyphenation patterns.
-	Provides methods to hyphenate strings in various ways.
-	Parameters:
-	-filename : filename of hyph_*.dic to read
-	-left: make the first syllabe not shorter than this
-	-right: make the last syllabe not shorter than this
-	-cache: if true (default), use a cached copy of the dic file, if possible
+    """
+    Reads a hyph_*.dic file and stores the hyphenation patterns.
+    Provides methods to hyphenate strings in various ways.
+    Parameters:
+    -filename : filename of hyph_*.dic to read
+    -left: make the first syllabe not shorter than this
+    -right: make the last syllabe not shorter than this
+    -cache: if true (default), use a cached copy of the dic file, if possible
 
-	left and right may also later be changed:
-	h = Hyphenator(file)
-	h.left = 1
-	"""
-	
-	#self.left=2
-	#def __init__(self, left=2, right=2, cache=True):
-	left  = 2
-	right = 2
-	def __init__(self):
-		self.template=os.path.join(os.path.dirname(__file__), 'hyphenator.html')
-		self.hd=None
-	def loadHyphDict(self,lang, cache=True):
-		filename="./modules/hyphenator/rules/hyph_"+lang+".dic"
-		if not cache or filename not in hdcache:
-			hdcache[filename] = Hyph_dict(filename)
-		self.hd = hdcache[filename]
-	def positions(self, word):
-		"""
-		Returns a list of positions where the word can be hyphenated.
-		See also Hyph_dict.positions. The points that are too far to
-		the left or right are removed.
-		"""
-		right = len(word) - self.right
-		return [i for i in self.hd.positions(word) if self.left <= i <= right]
+    left and right may also later be changed:
+    h = Hyphenator(file)
+    h.left = 1
+    """
+    
+    #self.left=2
+    #def __init__(self, left=2, right=2, cache=True):
+    left  = 2
+    right = 2
+    def __init__(self):
+        self.template=os.path.join(os.path.dirname(__file__), 'hyphenator.html')
+        self.hd=None
+    def loadHyphDict(self,lang, cache=True):
+        filename = os.path.join(os.path.dirname(__file__), "rules/hyph_"+lang+".dic")
+        if not cache or filename not in hdcache:
+            hdcache[filename] = Hyph_dict(filename)
+        self.hd = hdcache[filename]
+    def positions(self, word):
+        """
+        Returns a list of positions where the word can be hyphenated.
+        See also Hyph_dict.positions. The points that are too far to
+        the left or right are removed.
+        """
+        right = len(word) - self.right
+        return [i for i in self.hd.positions(word) if self.left <= i <= right]
 
-	def iterate(self, word):
-		"""
-		Iterate over all hyphenation possibilities, the longest first.
-		"""
-		if isinstance(word, str):
-			word = word.decode('latin1')
-		for p in reversed(self.positions(word)):
-			if p.data:
-				# get the nonstandard hyphenation data
-				change, index, cut = p.data
-				if word.isupper():
-					change = change.upper()
-				c1, c2 = change.split('=')
-				yield word[:p+index] + c1, c2 + word[p+index+cut:]
-			else:
-				yield word[:p], word[p:]
+    def iterate(self, word):
+        """
+        Iterate over all hyphenation possibilities, the longest first.
+        """
+        if isinstance(word, str):
+            word = word.decode('latin1')
+        for p in reversed(self.positions(word)):
+            if p.data:
+                # get the nonstandard hyphenation data
+                change, index, cut = p.data
+                if word.isupper():
+                    change = change.upper()
+                c1, c2 = change.split('=')
+                yield word[:p+index] + c1, c2 + word[p+index+cut:]
+            else:
+                yield word[:p], word[p:]
 
-	def wrap(self, word, width, hyphen='-'):
-		"""
-		Return the longest possible first part and the last part of the
-		hyphenated word. The first part has the hyphen already attached.
-		Returns None, if there is no hyphenation point before width, or
-		if the word could not be hyphenated.
-		"""
-		width -= len(hyphen)
-		for w1, w2 in self.iterate(word):
-			if len(w1) <= width:
-				return w1 + hyphen, w2
+    def wrap(self, word, width, hyphen='-'):
+        """
+        Return the longest possible first part and the last part of the
+        hyphenated word. The first part has the hyphen already attached.
+        Returns None, if there is no hyphenation point before width, or
+        if the word could not be hyphenated.
+        """
+        width -= len(hyphen)
+        for w1, w2 in self.iterate(word):
+            if len(w1) <= width:
+                return w1 + hyphen, w2
 
-	def inserted(self, word, hyphen='-'):
-		"""
-		Returns the word as a string with all the possible hyphens inserted.
-		E.g. for the dutch word 'lettergrepen' this method returns
-		the string 'let-ter-gre-pen'. The hyphen string to use can be
-		given as the second parameter, that defaults to '-'.
-		"""
-		if isinstance(word, str):
-			word = word.decode('latin1')
-		l = list(word)
-		for p in reversed(self.positions(word)):
-			if p.data:
-				# get the nonstandard hyphenation data
-				change, index, cut = p.data
-				if word.isupper():
-					change = change.upper()
-				l[p + index : p + index + cut] = change.replace('=', hyphen)
-			else:
-				l.insert(p, hyphen)
-		return ''.join(l)
-	@ServiceMethod						
-	def hyphenate(self,text, hyphen="&shy;"):
-		response=""
-		words=text.split(" ")
-		lang=None
-		for word in words:
-			word=word.strip()
-			if(word>""):
-				try:
-					lang = detect_lang(word)[word]
-				except:
-					response = response + word + " "	
-					continue
-				self.loadHyphDict(lang)
-				hyph_word = self.inserted(word, hyphen)
-				response = response + hyph_word + " "
-			else :
-				response = response+" "	
-		return response
-	def get_module_name(self):
-		return "Hyphentator"
-	def get_info(self):
-		return 	"Hyphenates each word in the text in all possible positions"	
-		
+    def inserted(self, word, hyphen='-'):
+        """
+        Returns the word as a string with all the possible hyphens inserted.
+        E.g. for the dutch word 'lettergrepen' this method returns
+        the string 'let-ter-gre-pen'. The hyphen string to use can be
+        given as the second parameter, that defaults to '-'.
+        """
+        if isinstance(word, str):
+            word = word.decode('latin1')
+        l = list(word)
+        for p in reversed(self.positions(word)):
+            if p.data:
+                # get the nonstandard hyphenation data
+                change, index, cut = p.data
+                if word.isupper():
+                    change = change.upper()
+                l[p + index : p + index + cut] = change.replace('=', hyphen)
+            else:
+                l.insert(p, hyphen)
+        return ''.join(l)
+    @ServiceMethod                      
+    def hyphenate(self,text, hyphen="&shy;"):
+        response=""
+        words=text.split(" ")
+        lang=None
+        for word in words:
+            word=word.strip()
+            if(word>""):
+                try:
+                    lang = detect_lang(word)[word]
+                except:
+                    response = response + word + " "    
+                    continue
+                self.loadHyphDict(lang)
+                hyph_word = self.inserted(word, hyphen)
+                response = response + hyph_word + " "
+            else :
+                response = response+" " 
+        return response
+    def get_module_name(self):
+        return "Hyphentator"
+    def get_info(self):
+        return  "Hyphenates each word in the text in all possible positions"    
+        
 def getInstance():
-	return Hyphenator()
+    return Hyphenator()
 
 
