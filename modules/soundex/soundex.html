@@ -6,86 +6,99 @@
     <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
-	function soundex(wordId)
-	{
-	var form=document.getElementById('soundex_form');	
-	$('#progress') .html("Processing. Please Wait..");
-	$('#result').html("");
-	var word="";
-	if(wordId==1)
-		var word= form.word1.value;
-	else
-		var word= form.word2.value;
-	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-	try {
-	   var result = service.modules.Soundex.soundex(word);
-	   $('#errormessage').html("");
-	}
-	catch(e){
-		$('#errormessage').html(e.message);
-	}
-	$('#progress').html("");
-	// Render it
-	if(wordId==1)
-		$('#soundex1') .html("<b>"+ result + "</b>");
-	else
-		$('#soundex2') .html("<b>"+ result + "</b>");
-	return false;
-	};
-	
-	function strCompare(form){
-	$('#progress') .html("Processing. Please Wait..");
-	$('#result').html("");
-	var word1= form.word1.value;
-	var word2= form.word2.value;
-	var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-	try {
-	   var result = service.modules.Soundex.compare(word1,word2);
-	   $('#errormessage').html("");
-	}
-	catch(e){
-		$('#errormessage').html(e.message);
-		return false;
-	}
-	$('#progress').html("");
-	// Render it
-	if(result==0)
-		$('#result') .html("<b>Both words are same</b>");
-	if(result<0)
-		$('#result') .html("<b>Words does not match</b>");
-	if(result==1)
-		$('#result') .html("<b>Both words are from same language and sounds alike</b>");
-	if(result==2)
-		$('#result') .html("<b>Words are from different languages but sounds alike</b>");
-	return false;
-	};
+    function soundex(wordId)
+    {
+    var form=document.getElementById('soundex_form');   
+    $('#progress') .html("Processing. Please Wait..");
+    $('#result').html("");
+    var word="";
+    if(wordId==1)
+        var word= form.word1.value;
+    else
+        var word= form.word2.value;
+    var jsonRequest = {
+                "method" :  "modules.Soundex.soundex",
+                 "params" : [word], 
+                 "id" : ""
+                 };             
 
-	</script>
+    
+     $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            $('#progress').html("");
+            // Render it
+            if(wordId==1)
+                $('#soundex1') .html("<b>"+ msg.result + "</b>");
+            else
+                $('#soundex2') .html("<b>"+ msg.result + "</b>");
+                },
+        error: function(msg) { alert(msg); }
+    });   
+    return false;
+    };
+    function strCompare(form){
+        $('#progress') .html("Processing. Please Wait..");
+        $('#result').html("");
+        var word1= form.word1.value;
+        var word2= form.word2.value;
+        var jsonRequest = {
+                "method" :  "modules.Soundex.compare",
+                 "params" : [word1,word2], 
+                 "id" : ""
+                 };         
+         $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "JSONRPC",
+                data: $.toJSON(jsonRequest), 
+                dataType: "json",
+                success: function(msg) {
+                    $('#progress').html("");
+                    if(msg.result==0)
+                        $('#result') .html("<b>Both words are same</b>");
+                    if(msg.result<0)
+                        $('#result') .html("<b>Words does not match</b>");
+                    if(msg.result==1)
+                        $('#result') .html("<b>Both words are from same language and sounds alike</b>");
+                    if(msg.result==2)
+                        $('#result') .html("<b>Words are from different languages but sounds alike</b>");
+                },
+                error: function(msg) { alert(msg); }
+            });   
+        return false;
+    };
+
+    </script>
 
   </head>
   <body>
-  		<div class="featurebox">
-		<h3>Indic Soundex</h3>
-		<p>Soundex Phonetic Code Algorithm Demo for Indian Languages. Supports all indian languages and English. Provides intra-indic string comparison</p>
-		<ul>
-		<li><a href="http://thottingal.in/blog/2009/07/26/indicsoundex/">Read More about the alogirthm </a></li>
-		<li><a href="apis.html#soundex">Read about the JSON-RPC based APIs of SILPA for this service </a></li>
-		</ul>
-		</div>
-		
-		<p>To get the soundex code for a word enter a word in the text box and press Soundex button.  </p>
-		<p>To compare two words , enter the words  in the below text boxes and press Compare button.  </p>
-		<form id="soundex_form" action="" method="post" onsubmit="return strCompare(this);">
-		<input type="text" name="word1"/>
-		<input  type="submit" id="Soundex" value="Soundex" onclick="return soundex(1);"/>
-		<div id="soundex1"></div>
-		<br/>
-		<input type="text" name="word2"/>
-		<input  type="submit" id="Soundex" value="Soundex" onclick="return soundex(2);"/>
-		<div id="soundex2"></div>
-		<br/>
-		<input  type="submit" id="compare" value="Compare"/>
-		</p>
-		</form>
+        <div class="featurebox">
+        <h3>Indic Soundex</h3>
+        <p>Soundex Phonetic Code Algorithm Demo for Indian Languages. Supports all indian languages and English. Provides intra-indic string comparison</p>
+        <ul>
+        <li><a href="http://thottingal.in/blog/2009/07/26/indicsoundex/">Read More about the alogirthm </a></li>
+        <li><a href="apis.html#soundex">Read about the JSON-RPC based APIs of SILPA for this service </a></li>
+        </ul>
+        </div>
+        
+        <p>To get the soundex code for a word enter a word in the text box and press Soundex button.  </p>
+        <p>To compare two words , enter the words  in the below text boxes and press Compare button.  </p>
+        <form id="soundex_form" action="" method="post" onsubmit="return strCompare(this);">
+        <input type="text" name="word1"/>
+        <input  type="submit" id="Soundex" value="Soundex" onclick="return soundex(1);"/>
+        <div id="soundex1"></div>
+        <br/>
+        <input type="text" name="word2"/>
+        <input  type="submit" id="Soundex" value="Soundex" onclick="return soundex(2);"/>
+        <div id="soundex2"></div>
+        <br/>
+        <input  type="submit" id="compare" value="Compare"/>
+        </p>
+        </form>
   </body>
 </html>
