@@ -113,6 +113,7 @@ class InexactSearch(SilpaModule):
 			
 	@ServiceMethod			
 	def search(self, text, key):
+		key = key.strip()
 		words = text.split()
 		search_results={}
 		for word in words:
