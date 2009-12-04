@@ -30,6 +30,7 @@ class CharDetails(SilpaModule):
     @ServiceMethod          
     def getdetails(self, character):
         details={}
+        character = character[0]
         details['Name']= name(character) 
         details['HTML Entity']=str( ord(character)) 
         details['Code point']= repr(character)
