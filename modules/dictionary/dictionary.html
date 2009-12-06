@@ -27,7 +27,7 @@
                 // Render it
                 $('#result') .html("<pre>"+ msg.result + "</pre>");
             },
-            error: function(msg) { alert(msg); }
+            error: function(msg) { alert(msg.error); }
         });
         return false;
     }
