@@ -88,15 +88,17 @@ class Transliterator(SilpaModule):
                     tx_str = tx_str + " " + word 
                     continue #FIXME 
                 if src_lang_code=="en_US" :    
-                    tx_str="Not implemented now."
-                    break    
+				    tx_str = tx_str + " " + word 
+                    #tx_str="Not implemented now."
+                    #break    
                 if target_lang_code=="en_US" :
                     if src_lang_code=="ml_IN" :
                         tx_str=tx_str + self.transliterate_ml_en(word)   + " "
                         continue    
                     else:    
-                        tx_str="Not implemented now."
-                        break    
+					    tx_str = tx_str + " " + word 
+                        #tx_str="Not implemented now."
+                        #break    
                 for chr in word:
                     if chr in string.punctuation or chr<='z':
                         tx_str = tx_str + chr 
@@ -126,7 +128,7 @@ class Transliterator(SilpaModule):
     def get_module_name(self):
         return "Transliterator"
     def get_info(self):
-        return  "Transliterat the text between any Indian Language"   
+        return  "Transliterate the text between any Indian Language"   
 
 def getInstance():
     return Transliterator()     
