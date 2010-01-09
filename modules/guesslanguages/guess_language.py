@@ -78,26 +78,26 @@ except:
 
 MIN_LENGTH = 20
 
-BASIC_LATIN = "en ceb ha so tlh id haw la sw eu nr nso zu xh ss st tn ts".split()
-EXTENDED_LATIN = "cs af pl hr ro sk sl tr hu az et sq ca es fr de nl it da is nb sv fi lv pt ve lt tl cy".split()
+BASIC_LATIN = "en_US ceb ha so tlh id haw la sw eu nr nso zu_ZA xh ss st tn ts".split()
+EXTENDED_LATIN = "cs af_ZA pl_PL hr_HR ro sk sl tr hu_HU az et sq ca es fr de nl it_IT da is nb sv fi lv pt ve lt tl cy".split()
 ALL_LATIN = BASIC_LATIN + EXTENDED_LATIN
 CYRILLIC = "ru uk kk uz mn sr mk bg ky".split()
 ARABIC = "ar fa ps ur".split()
-DEVANAGARI = "hi ne".split()
+DEVANAGARI = "hi_IN ne".split()
 
 # NOTE mn appears twice, once for mongolian script and once for CYRILLIC
 SINGLETONS = [
     ('Armenian', 'hy'),
     ('Hebrew', 'he'),
-    ('Bengali', 'bn'),
+    ('Bengali', 'bn_IN'),
     ('Gurmukhi', 'pa'),
     ('Greek', 'el'),
-    ('Gujarati', 'gu'),
-    ('Oriya', 'or'),
-    ('Tamil', 'ta'),
-    ('Telugu', 'te'),
-    ('Kannada', 'kn'),
-    ('Malayalam', 'ml'),
+    ('Gujarati', 'gu_IN'),
+    ('Oriya', 'or_IN'),
+    ('Tamil', 'ta_IN'),
+    ('Telugu', 'te_IN'),
+    ('Kannada', 'kn_IN'),
+    ('Malayalam', 'ml_IN'),
     ('Sinhala', 'si'),
     ('Thai', 'th'),
     ('Lao', 'lo'),
@@ -116,7 +116,7 @@ models = {}
 
 NAME_MAP = {
     "ab" : "Abkhazian",
-    "af" : "Afrikaans",
+    "af_ZA" : "Afrikaans",
     "ar" : "Arabic",
     "az" : "Azeri",
     "be" : "Byelorussian",
@@ -129,9 +129,9 @@ NAME_MAP = {
     "cs" : "Czech",
     "cy" : "Welsh",
     "da" : "Danish",
-    "de" : "German",
+    "de_DE" : "German",
     "el" : "Greek",
-    "en" : "English",
+    "en_US" : "English",
     "eo" : "Esperanto",
     "es" : "Spanish",
     "et" : "Estonian",
@@ -143,21 +143,21 @@ NAME_MAP = {
     "fy" : "Frisian",
     "gd" : "Scots Gaelic",
     "gl" : "Galician",
-    "gu" : "Gujarati",
+    "gu_IN" : "Gujarati",
     "ha" : "Hausa",
     "haw" : "Hawaiian",
     "he" : "Hebrew",
-    "hi" : "Hindi",
-    "hr" : "Croatian",
-    "hu" : "Hungarian",
+    "hi_IN" : "Hindi",
+    "hr_HR" : "Croatian",
+    "hu_HU" : "Hungarian",
     "hy" : "Armenian",
     "id" : "Indonesian",
     "is" : "Icelandic",
-    "it" : "Italian",
-    "ja" : "Japanese",
+    "it_IT" : "Italian",
+    "ja_JP" : "Japanese",
     "ka" : "Georgian",
     "kk" : "Kazakh",
-    "kn" : "Kannada",
+    "kn_IN" : "Kannada",
     "km" : "Cambodian",
     "ko" : "Korean",
     "ku" : "Kurdish",
@@ -167,9 +167,9 @@ NAME_MAP = {
     "lv" : "Latvian",
     "mg" : "Malagasy",
     "mk" : "Macedonian",
-    "ml" : "Malayalam",
+    "ml_IN" : "Malayalam",
     "mn" : "Mongolian",
-    "mr" : "Marathi",
+    "mr_IN" : "Marathi",
     "ms" : "Malay",
     "nd" : "Ndebele",
     "ne" : "Nepali",
@@ -177,13 +177,13 @@ NAME_MAP = {
     "nn" : "Nynorsk",
     "no" : "Norwegian",
     "nso" : "Sepedi",
-    "pa" : "Punjabi",
-    "pl" : "Polish",
+    "pa_IN" : "Punjabi",
+    "pl_PL" : "Polish",
     "ps" : "Pashto",
     "pt" : "Portuguese",
     "ro" : "Romanian",
     "ru" : "Russian",
-    "sa" : "Sanskrit",
+    "sa_IN" : "Sanskrit",
     "sh" : "Serbo-Croatian",
     "sk" : "Slovak",
     "sl" : "Slovene",
@@ -192,8 +192,8 @@ NAME_MAP = {
     "sr" : "Serbian",
     "sv" : "Swedish",
     "sw" : "Swahili",
-    "ta" : "Tamil",
-    "te" : "Telugu",
+    "ta_IN" : "Tamil",
+    "te_IN" : "Telugu",
     "th" : "Thai",
     "tl" : "Tagalog",
     "tlh" : "Klingon",
@@ -210,12 +210,12 @@ NAME_MAP = {
     "xh" : "Xhosa",
     "zh" : "Chinese",
     "zh-tw" : "Traditional Chinese (Taiwan)",
-    "zu" : "Zulu",
+    "zu_ZA" : "Zulu",
 }
 
 IANA_MAP = {
     "ab" : 12026,
-    "af" : 40,
+    "af_ZA" : 40,
     "ar" : 26020,
     "az" : 26030,
     "be" : 11890,
@@ -228,7 +228,7 @@ IANA_MAP = {
     "cs" : 26080,
     "cy" : 26560,
     "da" : 26090,
-    "de" : 26160,
+    "de_DE" : 26160,
     "el" : 26165,
     "en" : 26110,
     "eo" : 11933,
@@ -246,13 +246,13 @@ IANA_MAP = {
     "ha" : 26170,
     "haw" : 26180,
     "he" : 26592,
-    "hi" : 26190,
-    "hr" : 26070,
-    "hu" : 26200,
+    "hi_IN" : 26190,
+    "hr_HR" : 26070,
+    "hu_HU" : 26200,
     "hy" : 26597,
     "id" : 26220,
     "is" : 26210,
-    "it" : 26230,
+    "it_IT" : 26230,
     "ja" : 26235,
     "ka" : 26600,
     "kk" : 26240,
@@ -546,6 +546,14 @@ class LangGuess(SilpaModule):
             lang = detect_lang(firstWord)[firstWord]
             lang = _getName(lang.split("_")[0])
         return lang 
+    @ServiceMethod          
+    def guessLanguageId(self,text):
+        lang = guessLanguage(text)
+        if lang ==  'UNKNOWN':
+            firstWord = text.split()[0] 
+            lang = detect_lang(firstWord)[firstWord]
+        return lang 
+        
     @ServiceMethod          
     def getScriptName(self,text):
         return  dumps(detect_lang(text))
