@@ -20,6 +20,7 @@ import re
 import os
 from common import *
 from utils import *
+from modules import guesslanguages
 #__all__ = ("Hyphenator")
 
 # cache of per-file Hyph_dict objects
@@ -168,6 +169,7 @@ class Hyphenator(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'hyphenator.html')
         self.hd=None
+        self.guess_language=guesslanguages.getInstance()
     def loadHyphDict(self,lang, cache=True):
         filename = os.path.join(os.path.dirname(__file__), "rules/hyph_"+lang+".dic")
         if not cache or filename not in hdcache:
@@ -235,21 +237,13 @@ class Hyphenator(SilpaModule):
     def hyphenate(self,text, hyphen="&shy;"):
         response=""
         words=text.split(" ")
-        lang=None
+        lang=self.guess_language.guessLanguageId(text)
+        print "detected lang is " +lang
+        self.loadHyphDict(lang)
         for word in words:
-            word=word.strip()
-            if(word>""):
-                try:
-                    lang = detect_lang(word)[word]
-                except:
-                    response = response + word + " "    
-                    continue
-                self.loadHyphDict(lang)
-                hyph_word = self.inserted(word, hyphen)
-                response = response + hyph_word + " "
-            else :
-                response = response+" " 
-        return response
+             hyph_word = self.inserted(word, hyphen)
+             response = response + hyph_word + " "
+        return response   
     def get_module_name(self):
         return "Hyphentator"
     def get_info(self):
