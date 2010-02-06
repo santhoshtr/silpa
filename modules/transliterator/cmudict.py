@@ -40,6 +40,7 @@ CMU_MALAYALAM_MAP = {
 	"EY" : "എയ്",
 	"F"  : "ഫ്",
 	"G"  : "ഗ്",
+	"HH"  : "ഹ്",
 	"IH" : "ഇ",
 	"IY" : "ഈ",
 	"J"   : "ജ്",
@@ -55,6 +56,7 @@ CMU_MALAYALAM_MAP = {
 	"S"  : "സ്",
 	"SH"  : "ഷ്",
 	"T"  : "റ്റ്",
+	"TH"  : "ത്",
 	"Y"  :  "യ്",
 	"UW" : "ഉ",
 	"W"  : "വ്",
@@ -88,14 +90,12 @@ class CMUDict():
 		except KeyError:
 			print "could not find the word " + stripped_word  + " in dictionary"
 			return word
-		print cmu_pronunciation
 		pronunciation_str = ""
 		if language =="ml_IN":
 			for syl in cmu_pronunciation:
 				try:
 					pronunciation_str += CMU_MALAYALAM_MAP[syl]	
 				except KeyError:
-					print "KeyError " +  syl
 					pronunciation_str += syl
 			pronunciation_str = self._fix_vowel_signs_ml(pronunciation_str)	
 		return (pronunciation_str).decode("utf-8") +		punctuations
@@ -129,13 +129,3 @@ class CMUDict():
 		text= text.replace("റ്ര","റ്റ")
 		text= text.replace("ന്‍റ്റ","ന്റ")
 		return text
-#cmu = CMUDict()
-#print cmu.pronunciation("abandon","ml_IN")
-#print cmu.pronunciation("cat","ml_IN")
-#print cmu.pronunciation("the","ml_IN")
-#print cmu.pronunciation("great","ml_IN")
-#print cmu.pronunciation("wall","ml_IN")
-#print cmu.pronunciation("suck","ml_IN")
-#print cmu.pronunciation("pronunciation","ml_IN")
-#print cmu.pronunciation("print","ml_IN")
-#print cmu.pronunciation("queue","ml_IN")

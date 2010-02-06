@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # Any Indian Language to any other Indian language transliterator
-# Copyright 2008 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+# Copyright 2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 # http://www.smc.org.in
 #
 # This program is free software; you can redistribute it and/or modify
