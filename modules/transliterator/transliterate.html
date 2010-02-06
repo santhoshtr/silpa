@@ -27,7 +27,7 @@ $.ajax({
             // Render it
             $('#result') .html("<textarea>"+ msg.result + "</textarea>");
         },
-        error: function(msg) { alert(msg); }
+        error: function(msg) { alert(msg.message); }
     });
      return false;
     }

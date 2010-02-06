@@ -25,9 +25,13 @@ from common import *
 from utils import *
 import string
 import os
+from cmudict import CMUDict
 class Transliterator(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'transliterate.html')
+        self.cmu = CMUDict()
+    def transliterate_en_ml(self, word):   
+        return self.cmu.pronunciation(word,"ml_IN")
     def transliterate_ml_en(self, word):
         virama=u"്"
         #TODO: how to make this more generic so that more languages can be handled here?
@@ -64,15 +68,21 @@ class Transliterator(SilpaModule):
                 tx_string +='a'
             if index+1 == word_length and not word[index] in ml_vowel_signs and word[index] in malayalam_english_dict:
                 tx_string +='a'
+            #handle am sign
+            if index+1 < word_length and word[index+1] == u'ം' and  not word[index] in ml_vowel_signs:
+				tx_string +='a'
             index+=1
         return tx_string       
     def _malayalam_fixes(self, text):
-        text = text.replace(u"മ് ",u"ം ")
-        text = text.replace(u"മ്,",u"ം,")
-        text = text.replace(u"മ്.",u"ം.")
-        text = text.replace(u"മ്)",u"ം)")
-        text = text.replace(u"ഩ",u"ന")          
-        text = text.replace(u"൤",u".")   #danda by fullstop
+        try:
+            text = text.replace(u"മ് ",u"ം ")
+            text = text.replace(u"മ്,",u"ം,")
+            text = text.replace(u"മ്.",u"ം.")
+            text = text.replace(u"മ്)",u"ം)")
+            text = text.replace(u"ഩ",u"ന")          
+            text = text.replace(u"൤",u".")   #danda by fullstop
+        except:
+            pass    
         return text 
         
     @ServiceMethod
@@ -88,15 +98,18 @@ class Transliterator(SilpaModule):
                     tx_str = tx_str + " " + word 
                     continue #FIXME 
                 if src_lang_code=="en_US" :    
-				    tx_str = tx_str + " " + word 
-                    #tx_str="Not implemented now."
-                    #break    
+                    if target_lang_code=="ml_IN" :
+                        tx_str=tx_str + self.transliterate_en_ml(word)   + " "
+                        continue
+                    else:    
+                        tx_str="Not implemented now."
+                        break    
                 if target_lang_code=="en_US" :
                     if src_lang_code=="ml_IN" :
                         tx_str=tx_str + self.transliterate_ml_en(word)   + " "
                         continue    
                     else:    
-					    tx_str = tx_str + " " + word 
+                        tx_str = tx_str + " " + word 
                         #tx_str="Not implemented now."
                         #break    
                 for chr in word:
@@ -112,6 +125,7 @@ class Transliterator(SilpaModule):
         # Language specific fixes
         if target_lang_code == "ml_IN":
             tx_str = self._malayalam_fixes(tx_str)      
+        print "transliterated text = " + tx_str    
         return  tx_str
 
     def getOffset(self,src,target):
