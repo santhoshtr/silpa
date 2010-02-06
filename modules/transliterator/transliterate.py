@@ -125,7 +125,6 @@ class Transliterator(SilpaModule):
         # Language specific fixes
         if target_lang_code == "ml_IN":
             tx_str = self._malayalam_fixes(tx_str)      
-        print "transliterated text = " + tx_str    
         return  tx_str
 
     def getOffset(self,src,target):
