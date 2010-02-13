@@ -25,10 +25,17 @@
           var resultobj =eval( '(' + msg.result + ')');
           $('#progress').html("");
             // Render it
-            $('#result').html("<table id='resulttable' class='table1'><tr><th>Property</th><th>Value</th></tr></table>");
-            for (var key in resultobj) 
-            {
-               $('#resulttable tr:last').after("<tr><td>" + key +"</td><td>" + resultobj[key] +"</td></tr>" );
+            characters = resultobj['Characters']
+            
+            for (var index in characters) {
+              var character = characters[index];
+              chardetails = resultobj[character]
+              $('#result').append("<table id='resulttable' class='table1'><tr><th>Character</th><th>"+ character +" </th></tr></table>");
+              for (var property in chardetails) 
+              {
+                $('#resulttable tr:last').after("<tr><td>" + property +"</td><td>" + chardetails[property] +"</td></tr>" );
+              };
+              $('#result').append("<br/>");
             };
         },
         error: function(msg) { alert(msg); }
@@ -44,7 +51,7 @@
         </p>
         <form action="" method="post" onsubmit="return chardetails(this);" >
          <p align="center">
-        Character : <input type="text"  name="character" style="width:3em;"/>
+        Character : <input type="text"  name="character" style="width:12em;"/>
         <input type="hidden" name="action" value="CharDetails">
         <input  type="submit" id="Char_Details" value="Get Details"  style="width:12em;"/>
         </br>
