@@ -10,3 +10,4 @@ print tx.transliterate(u"ಆಧಾರವಾಗಿರುವ","ml_IN").encode("utf
 print tx.transliterate(u"தீபாவளி வாழ்த்துகள்","ml_IN").encode("utf-8")
 print tx.transliterate(u"தீபாவளி வாழ்த்துகள்","kn_IN").encode("utf-8")
 print tx.transliterate(u"ഔട്‍‍‍‍‍‍ലുക് മുകളിൽ പകർന്നുതന്ന അറിവിന്‍റെ തേൻകണം ","ml_IN").encode("utf-8")
+print tx.transliterate(u"translation", "ml_IN").encode("utf-8")
