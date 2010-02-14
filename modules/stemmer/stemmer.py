@@ -36,8 +36,8 @@ class Stemmer(SilpaModule):
 	def stem(self, text):
 		result = ""
 		text =  normalize(text)
-		#if self.rulesDict == None:
-		self.rulesDict = self.LoadRules()
+		if self.rulesDict == None:
+			self.rulesDict = self.LoadRules()
 		words=text.split(" ")
 		word_count=len(words)
 		result_dict = dict()
@@ -46,7 +46,7 @@ class Stemmer(SilpaModule):
 		while word_iter < word_count:
 			word = words[word_iter]
 			word = self.trim(word)
-			word=  word.strip('!,.?:')
+			word= word.strip('!,.?:')
 			word_length = len(word)
 			suffix_pos_itr = 2
 			word_stemmed=""
@@ -59,7 +59,6 @@ class Stemmer(SilpaModule):
 			word_iter = word_iter+1
 			if(word_stemmed==""):
 				word_stemmed=word
-			print word 	+" -> "+ word_stemmed
 			result_dict[ word ] = word_stemmed
 		return dumps(result_dict)
 					
