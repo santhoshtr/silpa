@@ -5,11 +5,15 @@ import modules
 import utils
 from silpa import Silpa
 if __name__ == '__main__':
-    print("Silpa server loading ....")
+    print("Silpa server loading ...")
+    port = 8080
+    if len(sys.argv)> 1:
+        port = int(sys.argv[1])
     try:
         from wsgiref import simple_server
         silpa = Silpa()
-        simple_server.make_server('', 8080, silpa.serve).serve_forever()
+        print("Silpa is ready for serving requests and listening on port " + str(port))
+        simple_server.make_server('', port, silpa.serve).serve_forever()
     except KeyboardInterrupt:
         print("Ctrl-C caught, Silpa server exiting...")
 
