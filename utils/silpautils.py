@@ -10,8 +10,10 @@ def getTemplateName():
 
 def getCopyrightInfo():
     return loadConfiguration()["SILPA_SITE_COPYRIGHT"]      
+    
 def getRootFolder():
-    return loadConfiguration()["SILPA_ROOT_FOLDER"]      
+    #return loadConfiguration()["SILPA_ROOT_FOLDER"]      
+    return os.path.dirname(__file__)+ "/../" 
 
 def getModulesList():
     conf_dict=loadConfiguration()
