@@ -26,12 +26,31 @@ from utils import *
 import string
 import os
 from cmudict import CMUDict
+
 class Transliterator(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'transliterate.html')
         self.cmu = CMUDict()
     def transliterate_en_ml(self, word):   
         return self.cmu.pronunciation(word,"ml_IN")
+    def transliterate_iso15919(self, word, src_language):
+        tx_str = ""
+        index=0;
+        word_length = len(word)
+        for chr in word:
+            index+=1
+            offset = ord(chr) - lang_bases[src_language]
+            #76 is the virama offset for all indian languages from its base
+            if offset >= 61  and offset <=76: 
+			    tx_str = tx_str[:-1] #remove the last 'a' 
+            if offset>0 and offset<=128:
+                tx_str = tx_str + charmap["ISO15919"][offset]
+            #delete the inherent 'a' at the end of the word from hindi    
+            if tx_str[-1:]=='a' and (src_language == "hi_IN" or src_language == "gu_IN" or src_language == "bn_IN" ) :
+				if word_length ==  index and word_length>1: #if last letter 
+				    tx_str = tx_str[:-1] #remove the last 'a' 
+        return tx_str .decode("utf-8")
+		
     def transliterate_ml_en(self, word):
         virama=u"്"
         #TODO: how to make this more generic so that more languages can be handled here?
@@ -104,6 +123,10 @@ class Transliterator(SilpaModule):
                     else:    
                         tx_str="Not implemented now."
                         break    
+                if target_lang_code=="ISO15919" :
+                    tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
+                    continue
+        
                 if target_lang_code=="en_US" :
                     if src_lang_code=="ml_IN" :
                         tx_str=tx_str + self.transliterate_ml_en(word)   + " "
@@ -128,7 +151,7 @@ class Transliterator(SilpaModule):
         return  tx_str
 
     def getOffset(self,src,target):
-        lang_bases={'en_US':0,'hi_IN': 0x0901,'bn_IN': 0x0981, 'pa_IN':0x0A01,'gu_IN':0x0A81 , 'or_IN': 0x0B01,'ta_IN': 0x0B81,'te_IN' : 0x0C01,    'kn_IN' :0x0C81 ,'ml_IN': 0x0D01}
+        
         src_id=0
         target_id=0
         try:
