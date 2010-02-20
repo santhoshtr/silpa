@@ -38,10 +38,14 @@ $.ajax({
         <p>This application helps you to transliterate text from any Indian language to any other Indian language. Enter the text for transliteration in the below text area.
          Language of each  word will be detected. 
          You can give the text in any language and even with mixed language.
+        For Malayalam alone, English->Malayalam, Malayalam->English Transliteration is available.
         </p>
-         <p>For Malayalam alone, English->Malayalam, Malayalam->English Transliteration is available.
+		<p><a href="http://en.wikipedia.org/wiki/ISO_15919">ISO 15919</a>,  an international
+		 standard for the transliteration of Indic scripts to the Latin alphabet formed in 2001 is also supported.
+		  Select ISO 15919:2001 for 'Transliterate To' for using this scheme.
         </p>
-
+        <p>Transliteration to <a href="http://en.wikipedia.org/wiki/IPA"> International Phonetic Alphabet</a> is also available.
+        </p>
         <form action="" method="post" onsubmit="return trans(this); ">
         <textarea  name='input_text' id='input_text'></textarea></br> 
         Transliterate To : <select id="translang" name="translang" style="width:12em;">
@@ -56,6 +60,7 @@ $.ajax({
           <option value="kn_IN">Kannada</option>
           <option value="en_US">English</option>
           <option value="ISO15919">ISO 15919:2001</option>
+          <option value="IPA">International Phonetical Alphabet(IPA)</option>
         </select>
         <input  type="submit" id="Transliterate" value="Transliterate"  name="action" style="width:12em;"/>
         </br>
