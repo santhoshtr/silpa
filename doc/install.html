@@ -1,9 +1,166 @@
 <h2>Installing Silpa in your machine</h2>
-<h3>Running as standalone server</h3>
-<p>Download the <a href="source.html">source code</a> , extract it. Suppose you extracted it to ~/silpa. Then from the home folder , run this command</p>
-<pre>
-$python -m silpa
+<p>You can a silpa server in your own machine irrespective of whether you are using GNU/Linux or windows. Getting the server running on your computer is very easy. 
+</p>
+<h3>Running as standalone server in GNU/Linux</h3>
+<p>
+You should have python 2.5 or 2.6 installed in your machine. Note that silpa does not work with python 3.x version 
+as of now. 
+Download the <a href="http://smc.org.in/silpa.git/?p=silpa.git;a=snapshot;h=HEAD;sf=tgz">source code</a> , extract it. 
+Suppose you extracted it to ~/silpa. Then from the home folder , run this command</p>
+<pre  class="code">
+$python -m silpa	
 </pre>
-This will start and http server at port 8080. Launch your browser to http://locahost:8080 and start using silpa!
+<p>
+This will start and http server at port 8080. Launch your browser to <a href="http://localhost:8080">http://localhost:8080</a> and start using silpa!. If you want to use another port other than the default 8080, use the following command to start.
+</p>
+<pre  class="code">
+$python -m silpa [port]	
+for eg:
+$python -m silpa 9999	
+</pre>
+
+<h3>Running as standalone server in Windows</h3>
+<p>
+You should have python 2.5 or 2.6 installed in your machine. Note that silpa does not work with python 3.x version 
+as of now. There is no other dependency for silpa.
+Download the <a href="http://smc.org.in/silpa.git/?p=silpa.git;a=snapshot;h=HEAD;sf=tgz">source code</a> , extract it. 
+Suppose you extracted it to c:\silpa. Then from the C:\ folder , run this command</p>
+<pre  class="code">
+c:\>python -m silpa	
+</pre>
+<p>
+This will start and http server at port 8080. Launch your browser to <a href="http://localhost:8080">http://localhost:8080</a> and start using silpa!. If you want to use another port other than the default 8080, use the following command to start.
+</p>
+<pre  class="code">
+c:\>python -m silpa [port]	
+for eg:
+c:\>python -m silpa 9999
+</pre>
+If you gave 9999 as port, then point your browser to <a href="http://localhost:9999">http://localhost:9999</a>
 <h3>Running in apache server with mod_wsgi</h3>
- to be written
+ <b>Caution: This section of the document is for advanced users for setting up silpa server on a public webserver using apache mod_wsgi module. </b>
+<h4><a name="WSGI_Application_Script_File"/>WSGI Application Script File</a></h4>
+<p>WSGI is a specification of a generic API for mapping between an underlying web server and a Python web application. WSGI itself is described by Python <a href="http://www.python.org/dev/peps/pep-0333/" rel="nofollow">PEP 0333</a>. The purpose of the WSGI specification is to provide a common mechanism for hosting a Python web application on a range of different web servers supporting the Python programming language. </p>
+
+<p>A very simple WSGI application, and the one which should be used for the examples in this document, is as follows: </p>
+<pre class="code">
+def application(environ, start_response):
+    status = &#x27;200 OK&#x27;
+    output = &#x27;Hello World!&#x27;
+
+    response_headers = [(&#x27;Content-type&#x27;, &#x27;text/plain&#x27;),
+                        (&#x27;Content-Length&#x27;, str(len(output)))]
+    start_response(status, response_headers)
+
+    return [output]
+ </pre>
+ <p>This sample application will need to be placed into what will be referred to as the WSGI application script file. For the examples presented here, the WSGI application will be run as the user that Apache runs as. As such, the user that Apache runs as must have read access to both the WSGI application script file and all the parent directories that contain it. </p>
+ <p>Note that mod_wsgi requires that the WSGI application entry point be called &#x27;application&#x27;. If you want to call it something else then you would need to configure mod_wsgi explicitly to use the other name. Thus, don&#x27;t go arbitrarily changing the name of the function. If you do, even if you set up everything else correctly the application will not be found. </p>
+ 
+ <h2>Mounting The WSGI Application</h2><p>There are a number of ways that a WSGI application hosted by mod_wsgi can be mounted against a specific URL. These methods are similar to how one would configure traditional CGI applications. </p>
+ 
+ <p>The main approach entails explicitly declaring in the main Apache configuration file the URL mount point and a reference to the WSGI application script file. In this case the mapping is fixed, with changes only being able to be made by modifying the main Apache configuration and restarting Apache. </p><p>When using mod_cgi to host CGI applications, this would be done using the ScriptAlias directive. For mod_wsgi, the directive is instead called WSGIScriptAlias. </p>
+ <pre class="code">WSGIScriptAlias /silpa /usr/local/www/silpa/dispatch.fcgi</pre><p>This directive can only appear in the main Apache configuration files. The directive can be used at server scope but would normally be placed within the VirtualHost container for a particular site. It cannot be used within either of the Location, Directory or Files container directives, nor can it be used within a &quot;.htaccess&quot; file. </p>
+ <p>The first argument to the WSGIScriptAlias directive should be the URL mount point for the WSGI application. For this case the URL should not contain a trailing slash. The only exception to this is if the WSGI application is to be mounted at the root of the web server, in which case &#x27;/&#x27; would be used. </p>
+ <p>The second argument to the WSGIScriptAlias directive should be an absolute pathname to the WSGI application script file. It is into this file that the sample WSGI application code should be placed. </p><p>Note that an absolute pathname must be used for the WSGI application script file supplied as the second argument. It is not possible to specify an application by Python module name alone. A full path is used for a number of reasons, the main one being so that all the Apache access controls can still be applied to indicate who can actually access the WSGI application. </p>
+ 
+ <p>Because the Apache access controls will apply, if the WSGI application is located outside of any directories already configured to be accessible to Apache, it will be necessary to tell Apache that files within that directory can be used. To do this the Directory directive must be used. </p>
+ 
+ 
+ <pre class="code>&lt;Directory /usr/local/www/silpa&gt;
+
+Order allow,deny
+Allow from all
+&lt;/Directory&gt;</pre>
+<p>Note that it is highly recommended that the WSGI application script file in this case NOT be placed within the existing DocumentRoot for your main Apache installation, or the particular site you are setting it up for. This is because if that directory is otherwise being used as a source of static files, the source code for your application might be able to be downloaded. </p><p>You also should not use the home directory of a user account, as to do that would mean allowing Apache to serve up any files in that account. In this case any misconfiguration of Apache could end up exposing your whole account for downloading. </p><p>It is thus recommended that a special directory be setup distinct from other directories and that the only thing in that directory be the WSGI application script file, and if necessary any support files it requires. </p><p>A complete virtual host configuration for this type of setup would therefore be something like: </p><pre class="code">&lt;VirtualHost *:80&gt;
+
+    ServerName www.example.com
+    ServerAlias example.com
+    ServerAdmin webmaster@example.com
+
+    DocumentRoot /usr/local/www/documents
+
+    &lt;Directory /usr/local/www/documents&gt;
+    Order allow,deny
+    Allow from all
+    &lt;/Directory&gt;
+
+    WSGIScriptAlias /silpa /usr/local/www/silpa/dispatch.fcgi
+
+    &lt;Directory /usr/local/www/silpa&gt;
+    Order allow,deny
+    Allow from all
+    &lt;/Directory&gt;
+
+&lt;/VirtualHost&gt;</pre><p>After appropriate changes have been made Apache will need to be restarted. For this example, the URL &#x27;<a href="http://www.example.com/silpa" rel="nofollow">http://www.example.com/silpa</a>&#x27; would then be used to access the the WSGI application. </p><p>Note that you obviously should substitute the paths and hostname with values appropriate for your system. </p>
+
+
+<h2>Mounting At Root Of Site</h2><p>If instead you want to mount a WSGI application at the root of a site, simply list &#x27;/&#x27; as the mount point when configuring the WSGIScriptAlias directive. </p><pre class="code">WSGIScriptAlias / /usr/local/www/silpa/dispatch.fcgi</pre><p>Do note however that doing so will mean that any static files contained in the DocumentRoot will be hidden and requests against URLs pertaining to the static files will instead be processed by the WSGI application. </p><p>In this situation it becomes necessary to remap using the Alias directive, any URLs for static files to the directory containing them. </p><pre class="code">Alias /robots.txt /usr/local/www/documents/robots.txt
+Alias /favicon.ico /usr/local/www/documents/favicon.ico
+
+Alias /media/ /usr/local/www/documents/media/</pre><p>A complete virtual host configuration for this type of setup would therefore be something like: </p><pre class="code">&lt;VirtualHost *:80&gt;
+
+    ServerName www.example.com
+    ServerAlias example.com
+    ServerAdmin webmaster@example.com
+
+    DocumentRoot /usr/local/www/documents
+
+    Alias /robots.txt /usr/local/www/documents/robots.txt
+    Alias /favicon.ico /usr/local/www/documents/favicon.ico
+
+    Alias /media/ /usr/local/www/documents/media/
+
+    &lt;Directory /usr/local/www/documents&gt;
+    Order allow,deny
+    Allow from all
+    &lt;/Directory&gt;
+
+    WSGIScriptAlias / /usr/local/www/silpa/dispatch.fcgi
+
+    &lt;Directory /usr/local/www/silpa&gt;
+    Order allow,deny
+    Allow from all
+    &lt;/Directory&gt;
+
+&lt;/VirtualHost&gt;</pre><p>After appropriate changes have been made Apache will need to be restarted. For this example, the URL &#x27;<a href="http://www.example.com/" rel="nofollow">http://www.example.com/</a>&#x27; would then be used to access the the WSGI application. </p><p>Note that you obviously should substitute the paths and hostname with values appropriate for your system. </p>
+
+<h2>Delegation To Daemon Process</h2><p>By default any WSGI application will run in what is called embedded mode. That is, the application will be hosted within the Apache worker processes used to handle normal static file requests. </p><p>When embedded mode is used, whenever you make changes to your WSGI application code you would generally have to restart the whole Apache web server in order for changes to be picked up. This can be inconvenient, especially if the web server is a shared resource hosting other web applications at the same time, or you don&#x27;t have root access to be able to restart the server and rely on someone else to restart it. </p><p>On UNIX systems when running Apache 2.X, an option which exists with mod_wsgi and that avoids the need to restart the whole Apache web server when code changes are made, is to use what is called daemon mode. </p><p>In daemon mode a set of processes is created for hosting a WSGI application, with any requests for that WSGI application automatically being routed to those processes for handling. </p><p>When code changes are made and it is desired that the daemon processes for the WSGI application be restarted, all that is required is to mark the WSGI application script file as modified by using the &#x27;touch&#x27; command. </p><p>To make use of daemon mode for WSGI applications hosted within a specific site, the WSGIDaemonProcess and WSGIProcessGroup directives would need to be defined. For example, to setup a daemon process group containing two multithreaded process one could use: </p><pre class="code">WSGIDaemonProcess example.com processes=2 threads=15
+WSGIProcessGroup example.com</pre><p>A complete virtual host configuration for this type of setup would therefore be something like: </p><pre class="code">&lt;VirtualHost *:80&gt;
+
+    ServerName www.example.com
+    ServerAlias example.com
+    ServerAdmin webmaster@example.com
+
+    DocumentRoot /usr/local/www/documents
+
+    Alias /robots.txt /usr/local/www/documents/robots.txt
+    Alias /favicon.ico /usr/local/www/documents/favicon.ico
+
+    Alias /media/ /usr/local/www/documents/media/
+
+    &lt;Directory /usr/local/www/documents&gt;
+    Order allow,deny
+    Allow from all
+    &lt;/Directory&gt;
+
+    WSGIDaemonProcess example.com processes=2 threads=15 display-name=%{GROUP}
+    WSGIProcessGroup example.com
+
+    WSGIScriptAlias / /usr/local/www/silpa/dispatch.fcgi
+
+    &lt;Directory /usr/local/www/silpa&gt;
+    Order allow,deny
+    Allow from all
+    &lt;/Directory&gt;
+
+&lt;/VirtualHost&gt;</pre>
+<p>After appropriate changes have been made Apache will need to be restarted. For this example, the URL &#x27;<a href="http://www.example.com/" rel="nofollow">http://www.example.com/</a>&#x27; would then be used to access the the WSGI application. </p><p>Note that you obviously should substitute the paths and hostname with values appropriate for your system. </p><p>As mentioned previously, the daemon processes will be shutdown and restarted automatically if the WSGI application script file is modified. </p><p>For the sample application presented in this document the whole application is in that file. For more complicated applications the WSGI application script file will be merely an entry point to an application being imported from other Python modules or packages. In this later case, although no change may be required to the WSGI application script file itself, it can still be touched to trigger restarting of the daemon processes in the event that any code in the separate modules or packages is changed. </p><p>Note that only requests for the WSGI application are handled within the context of the daemon processes. Any requests for static files are still handled within the Apache worker processes. </p>
+
+
+<h2>Debugging Any Problems</h2><p>To debug any problems one should take note of the type of error response being returned, but more importantly one should look at the Apache error logs for more detailed descriptions of a specific problem. </p><p>Being new to mod_wsgi it is highly recommended that the default Apache LogLevel be increased from &#x27;warn&#x27; to &#x27;info&#x27;. </p><pre class="code">LogLevel info</pre><p>When this is done mod_wsgi will output additional information regarding when daemon processes are created, when Python sub interpreters related to a group of WSGI applications are created and when WSGI application script files are loaded and/or reloaded. This information can be quite valuable in determining what problem may be occuring. </p><p>Note that where the LogLevel directive may have been defined both in and outside of a VirualHost directive, due to the VirtualHost declaring its own error logs, both instances of the LogLevel directive should be changed. </p><p>This is because although the virtual host may have its own error log, some information is still logged to the main Apache error log and the LogLevel directive outside of the virtual host context needs to be changed for that additional information to be recorded. </p><p>In other words, even if the VirtualHost has its own error log file, also look in the main Apache error log file for information as well. </p>
+
+
+
+ 
+

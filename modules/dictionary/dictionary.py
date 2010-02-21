@@ -26,28 +26,28 @@ from common import *
 import os
 from dictdlib import DictDB
 class Dictionary(SilpaModule):
-	def __init__(self):
-		self.template=os.path.join(os.path.dirname(__file__), 'dictionary.html')	
+    def __init__(self):
+        self.template=os.path.join(os.path.dirname(__file__), 'dictionary.html')    
 
-	@ServiceMethod	
-	def getdef(self, word, dictionary):
-		dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
-		dictdata=dict_dir+ "/"+dictionary
-		dict=DictDB(dictdata)
-		meanings =  dict.getdef(word)
-		meaningstring= ""
-		if (meanings==None):
-			meaningstring = "No definition found"
-			return meaningstring
-		for meaning in meanings:
-			meaningstring += meaning
-		return meaningstring.decode("utf-8")
-		
-	def get_module_name(self):
-		return "Dictionary"
-		
-	def get_info(self):
-		return 	"Bilingual Dictionaries"	
-		
+    @ServiceMethod  
+    def getdef(self, word, dictionary):
+        dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
+        dictdata=dict_dir+ "/"+dictionary
+        dict=DictDB(dictdata)
+        meanings =  dict.getdef(word)
+        meaningstring= ""
+        if meanings==None or meanings == []:
+            meaningstring = "No definition found"
+            return meaningstring
+        for meaning in meanings:
+            meaningstring += meaning
+        return meaningstring.decode("utf-8")
+        
+    def get_module_name(self):
+        return "Dictionary"
+        
+    def get_info(self):
+        return  "Bilingual Dictionaries"    
+        
 def getInstance():
-	return Dictionary()
+    return Dictionary()

@@ -11,3 +11,5 @@ print tx.transliterate(u"தீபாவளி வாழ்த்துகள்
 print tx.transliterate(u"தீபாவளி வாழ்த்துகள்","kn_IN").encode("utf-8")
 print tx.transliterate(u"ഔട്‍‍‍‍‍‍ലുക് മുകളിൽ പകർന്നുതന്ന അറിവിന്‍റെ തേൻകണം ","ml_IN").encode("utf-8")
 print tx.transliterate(u"translation", "ml_IN").encode("utf-8")
+print tx.transliterate(u"ശാരദ സന്ധ്യകള്‍ മരവൂരി ചുറ്റൂം", "ISO15919")
+print tx.transliterate(u"ശാരദ സന്ധ്യകള്‍ മരവൂരി ചുറ്റൂം", "IPA")

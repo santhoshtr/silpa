@@ -1,30 +1,23 @@
 # -*- coding: utf-8 -*-
-from jsonrpc import ServiceProxy
-from jsonrpc import JSONRPCException
-from jsonrpc import ServiceHandler
-import jsonrpc
-handler=ServiceHandler("")
-print handler.listMethods()
-json=jsonrpc.dumps({"method":"system.listMethods",  "params":[''], 'id':''})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"method":"modules.Fortune.fortune_ml", "params":[u"ആന"], 'id':''})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"method":"modules.Hyphenator.hyphenate", "params":[u"ആനയാരാമോന്‍"], 'id':''})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"method":"modules.Hyphenator.hyphenate", "params":[u"hithukollaalo"], 'id':''})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"method":"modules.LangGuess.guessLanguage", "params":[u"ആന"], 'id':''})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"version":"1.1","method":"modules.Fortune.fortune_ml","id":2,"params":[""]})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"version":"1.1","method":"modules.Dictionary.getdef","id":2,"params":["word","freedict-eng-hin"]})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"version":"1.1","method":"modules.CharDetails.getdetails","id":2,"params":[u"c"]})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"version":"1.1","method":"modules.InexactSearch.compare","id":2,"params":[u"സന്തോഷ്", u"സന്തോഷിന്റെ"]})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"version":"1.1","method":"modules.InexactSearch.compare","id":2,"params":[u"സന്തോഷ്", u"ஸந்தௌஷ்"]})
-print handler.handleRequest(json)
-json=jsonrpc.dumps({"version":"1.1","method":"modules.InexactSearch.compare","id":2,"params":[u"weigt", u"and"]})
-print handler.handleRequest(json)
+import sys
+#sys.path.append("../")
+from common import *
+def import_module(name):
+    parts = name.split(".")
+    try:
+        obj= sys.modules[name]
+        print dir(obj)
+    except KeyError:
+        obj  = __import__(name)
+    if(len(parts)>1):   
+        for part in parts[1:]:
+            try:
+                obj = getattr(obj,part)
+            except:
+                pass    
+    return obj
+import_module("modules.transliterator")
+import_module("modules.transliterator")
+#mm = ModuleManager()
+#print mm.getModuleInstance("Transliterate")
 

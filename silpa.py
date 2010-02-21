@@ -5,6 +5,7 @@ import sys
 import os
 import cgitb
 import cgi
+import timeit
 sys.path.append(os.path.dirname(__file__))
 from common import *
 from utils import *
@@ -19,6 +20,7 @@ class Silpa():
         """
         The method to serve all the requests.
         """
+        time = timeit.Timer()
         try:
             request_uri = environ['REQUEST_URI']
             # TODO there should be a better way to handle the below line
@@ -36,6 +38,7 @@ class Silpa():
                 data = environ['wsgi.input'].read(content_length).decode("utf-8")
                 start_response('200 OK', [('Content-Type', 'application/json')])
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
+                print time.timeit()
                 return [jsonreponse.encode('utf-8')]
         if  request_uri == None or request_uri .strip()=='': 
             request = SilpaRequest(environ)
