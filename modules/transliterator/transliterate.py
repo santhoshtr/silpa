@@ -31,8 +31,14 @@ class Transliterator(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'transliterate.html')
         self.cmu = CMUDict()
+
     def transliterate_en_ml(self, word):   
+        """
+        Transliterate English to Malayalam with the help of
+        CMU pronuciation dictionary
+        """
         return self.cmu.pronunciation(word,"ml_IN")
+
     def transliterate_iso15919(self, word, src_language):
         tx_str = ""
         index=0;
@@ -47,10 +53,14 @@ class Transliterator(SilpaModule):
                 tx_str = tx_str + charmap["ISO15919"][offset]
             #delete the inherent 'a' at the end of the word from hindi    
             if tx_str[-1:]=='a' and (src_language == "hi_IN" or src_language == "gu_IN" or src_language == "bn_IN" ) :
-				if word_length ==  index and word_length>1: #if last letter 
-				    tx_str = tx_str[:-1] #remove the last 'a' 
+                if word_length ==  index and word_length>1: #if last letter 
+                    tx_str = tx_str[:-1] #remove the last 'a' 
         return tx_str .decode("utf-8")
     def transliterate_ipa(self, word, src_language):
+        """
+        Transliterate the given word in src_language to 
+        IPA - International Phonetical Alphabet notation.
+        """
         tx_str = ""
         index=0;
         word_length = len(word)
@@ -59,7 +69,7 @@ class Transliterator(SilpaModule):
             offset = ord(chr) - lang_bases[src_language]
             #76 is the virama offset for all indian languages from its base
             if offset >= 61  and offset <=76: 
-			    tx_str = tx_str[:-(len('ə'))] #remove the last 'ə' 
+                tx_str = tx_str[:-(len('ə'))] #remove the last 'ə' 
             if offset>0 and offset<=128:
                 tx_str = tx_str + charmap["IPA"][offset]
             #delete the inherent 'a' at the end of the word from hindi    
@@ -70,7 +80,7 @@ class Transliterator(SilpaModule):
     def transliterate_ml_en(self, word):
         virama=u"്"
         #TODO: how to make this more generic so that more languages can be handled here?
-        #idea1: transliterate any langauge to a common language say hindi and the n do conversion?
+        #idea1: transliterate any language to a common language say hindi and the n do conversion?
         #existing transliterate.py can be used?
         #idea2: Have dictionaries for each language like english_xx_dict ?
         #TODO: complete this
@@ -105,7 +115,7 @@ class Transliterator(SilpaModule):
                 tx_string +='a'
             #handle am sign
             if index+1 < word_length and word[index+1] == u'ം' and  not word[index] in ml_vowel_signs:
-				tx_string +='a'
+                tx_string += 'a'
             index+=1
         return tx_string       
     def _malayalam_fixes(self, text):
@@ -119,7 +129,30 @@ class Transliterator(SilpaModule):
         except:
             pass    
         return text 
-        
+    def transliterate_indic_indic(self, word, src_lang, target_lang) :
+        """
+        Transliterate from an Indian languge word to another indian language word
+        """
+        index = 0
+        tx_str = ""
+        for chr in word:
+            index += 1
+            if chr in string.punctuation or chr<='z':
+                tx_str = tx_str + chr 
+                continue
+            offset = ord(chr) + self.getOffset(src_lang, target_lang) 
+            if(offset>0):
+                tx_str = tx_str + unichr (offset) 
+            #schwa deletion
+            baseoffset = offset - lang_bases[target_lang]
+            #76 : virama
+            if (index ==  len(word) 
+                and baseoffset == 76
+                and target_lang == "hi_IN") : 
+                #TODO Add more languages having schwa deletion characteristic
+                tx_str = tx_str[:-(len(chr))] #remove the last 'a'
+        return tx_str
+
     @ServiceMethod
     def transliterate(self,text, target_lang_code):
         text =  normalize(text)
@@ -137,11 +170,12 @@ class Transliterator(SilpaModule):
                         tx_str=tx_str + self.transliterate_en_ml(word)   + " "
                         continue
                     else:    
-                        tx_str="Not implemented now."
+                        tx_str = tx_str + " "+ word
                         break    
                 if target_lang_code=="ISO15919" :
                     tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
                     continue
+                
                 if target_lang_code=="IPA" :
                     tx_str=tx_str + self.transliterate_ipa(word, src_lang_code)   + " "
                     continue
@@ -151,15 +185,8 @@ class Transliterator(SilpaModule):
                         continue    
                     else:    
                         tx_str = tx_str + " " + word 
-                        #tx_str="Not implemented now."
-                        #break    
-                for chr in word:
-                    if chr in string.punctuation or chr<='z':
-                        tx_str = tx_str + chr 
-                        continue
-                    offset = ord(chr) + self.getOffset(src_lang_code, target_lang_code) 
-                    if(offset>0):
-                        tx_str = tx_str + unichr (offset) 
+                tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
+
                 tx_str = tx_str   + " "
             else:
                 tx_str = tx_str   +  word
@@ -169,7 +196,6 @@ class Transliterator(SilpaModule):
         return  tx_str
 
     def getOffset(self,src,target):
-        
         src_id=0
         target_id=0
         try:
