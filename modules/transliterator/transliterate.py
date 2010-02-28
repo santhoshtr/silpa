@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # Any Indian Language to any other Indian language transliterator
-# Copyright 2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+# Copyright 2009-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 # http://www.smc.org.in
 #
 # This program is free software; you can redistribute it and/or modify
@@ -148,7 +148,10 @@ class Transliterator(SilpaModule):
             #76 : virama
             if (index ==  len(word) 
                 and baseoffset == 76
-                and target_lang == "hi_IN") : 
+                and ( target_lang == "hi_IN" or
+                      target_lang == "gu_IN" or
+                      target_lang == "pa_IN" or
+                      target_lang == "bn_IN")) : 
                 #TODO Add more languages having schwa deletion characteristic
                 tx_str = tx_str[:-(len(chr))] #remove the last 'a'
         return tx_str
