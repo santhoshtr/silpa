@@ -15,10 +15,11 @@ class Spellchecker(SilpaModule):
         self.dictionaries = {}
         
     def words(self,text): 
-        for punct in string.punctuation:
-            text = text.replace(punct,"")
+        #no need to check for punctuation since we are loading a proof read wordlist
+        #for punct in string.punctuation:
+        #    text = text.replace(punct,"")
         words = text.split()
-        return words
+        return set(words)
 
     def train(self,features=None):
         if not self.dictionaries.has_key(self.lang) :
@@ -31,6 +32,9 @@ class Spellchecker(SilpaModule):
         return self.dictionaries[self.lang]
         
     def levenshtein(self,s1, s2):
+        """
+        Return the levenshtein distance between two string
+        """
         if len(s1) < len(s2):
             return self.levenshtein(s2, s1)
         if not s1:
@@ -60,13 +64,14 @@ class Spellchecker(SilpaModule):
             self.lang = language
         if self.NWORDS == None:
             self.NWORDS = self.train() 
-        if self.check(word):
+        if word in self.NWORDS:
             return word        
         candidates = []
         for candidate in self.NWORDS:
-            #Dont check if the first letter is different
+            #skip if the first letter is different
             if candidate[0] != word[0]:
                 continue
+            #if the length difference is greater than the threshold distance, skip
             if len(candidate) - len(word)  > distance or len(word) - len(candidate)  >    distance :
                 continue
             if not self.levenshtein(candidate, word) > distance :
@@ -76,22 +81,42 @@ class Spellchecker(SilpaModule):
     @ServiceMethod                  
     def check(self, word, language=None):
         word=word.strip()
+        if word == "": 
+            return None
         if self.lang != language:
             self.NWORDS = None
-        if language==None :
+        if language == None :
             self.lang = detect_lang(word)[word]
         else :
             self.lang = language
         if word=="": return True
-        if self.NWORDS==None: 
+        if self.NWORDS == None: 
             self.NWORDS = self.train()  
-        if self.NWORDS==None:           
+        if self.NWORDS == None:           
             # Dictionary not found
             return False
-        for w in self.NWORDS :
-            if word == unicode(w) :
-                return True
-        return False    
+        return word in self.NWORDS
+            
+    def strip_punctuations(self,s):
+        """
+        Remove all the punctuation characters from the string and return the resulting string
+        """
+        exclude = set(string.punctuation)
+        return  ''.join(ch for ch in s if ch not in exclude)
+
+
+    @ServiceMethod
+    def check_batch(self, text, language=None):
+       """
+       Return a list of misspelled words give a chunk of text.
+       """
+       words = text.split()
+       misspelled_words = []
+       for word in words:
+           tempword = self.strip_punctuations(word) 
+           if not self.check(tempword, language):
+               misspelled_words.append(word)
+       return misspelled_words
 
     def get_module_name(self):
         return "Spellchecker"
