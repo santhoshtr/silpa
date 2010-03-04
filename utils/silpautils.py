@@ -52,3 +52,4 @@ def getMimetype(filename):
     type, encoding = mimetypes.guess_type(filename)
     # We'll ignore encoding, even though we shouldn't really
     return type or 'application/octet-stream'
+

@@ -6,7 +6,6 @@ sys.path.append("../../")
 from silpa.modules import spellchecker
 
 class TestSpellchecker(unittest.TestCase):
-
 	def setUp(self):
 		self.spellchecker=spellchecker.getInstance()
 	
@@ -22,12 +21,17 @@ class TestSpellchecker(unittest.TestCase):
 		self.assertEqual(self.spellchecker.check(u"അംഗങ്ങളാകുന്നുവ"), False)
 	def testSuggestions(self):
 		self.assertEqual(self.spellchecker.suggest("calculateq"), u'["calculate","calculated","calculates","calculator"]')
+	def testCheckBatch(self):
+		self.assertEqual(self.spellchecker.check_batch(u"മോങ്ങാനിരുന്ന നായുടെ തലയില്‍ തേങ്ങാ വീണു."),[])
 		
 		
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
+    sc = spellchecker.getInstance()
+    print sc.check(u"തമിഴ്നാട്") 
+    print sc.check(u"തമിഴ്‌നാട്") 
+    print sc.suggest(u"തമിഴ്നാട്")
 
-#print sc.suggest(u"തമിഴ്നാട്") 
 #print sc.check(u"")
 #print sc.suggest(u"അംഗങ്ങളാകുന്നുവ")
 #print sc.suggest("calculateq")

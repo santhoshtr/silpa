@@ -31,7 +31,7 @@ class Spellchecker(SilpaModule):
             #print "loaded "  + self.lang +" dictionary"
         return self.dictionaries[self.lang]
         
-    def levenshtein(self,s1, s2):
+    def levenshtein1(self,s1, s2):
         """
         Return the levenshtein distance between two string
         """
@@ -50,7 +50,7 @@ class Spellchecker(SilpaModule):
                 current_row.append(min(insertions, deletions, substitutions))
             previous_row = current_row
         return previous_row[-1]
-
+    
     @ServiceMethod
     def suggest(self,word, language=None, distance=2):
         word=word.strip()

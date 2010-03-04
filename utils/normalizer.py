@@ -2,7 +2,7 @@
 import re
 import unicodedata
 def normalize(text):
-    text = unicodedata.normalize('NFC', text)
+    text = unicodedata.normalize('NFC', unicode(text))
     space_re = re.compile('\s+', re.UNICODE)
     text = space_re.sub(' ', text)
     text = normalize_ml (text)
@@ -20,4 +20,4 @@ def normalize_ml (text):
     text = text.replace(u"ൿ", u"ക്‍")
     text = text.replace(u"ന്‍റ", u"ന്റ")
     return text     
-#print normalize(u"ഔട്‍‍‍‍‍‍ലുക് മുകളിൽ പകർന്നുതന്ന അറിവിന്‍റെ തേൻകണം ").encode("utf-8")
+

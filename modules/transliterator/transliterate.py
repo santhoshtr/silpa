@@ -39,6 +39,22 @@ class Transliterator(SilpaModule):
         """
         return self.cmu.pronunciation(word,"ml_IN")
 
+    def transliterate_en_xx(self,word, target_lang):
+        """
+        Transliterate English to any Indian Language.
+        """
+        tx_str = self.transliterate_en_ml(word)
+        if target_lang == "ml_IN":
+            return tx_str
+        #chain it through indic indic transliteratioin
+        #first remove malayalam specific zwj
+        tx_str = tx_str.replace(u'‍', '') # remove instances of zwnj
+        if tx_str[-1:] == u'്' and (target_lang == "hi_IN" or target_lang == "gu_IN" or target_lang == "bn_IN" ) :
+            tx_str = tx_str[:-(len(u'്'))] #remove the last virama' 
+            
+        return self.transliterate_indic_indic(tx_str, "ml_IN", target_lang)
+
+
     def transliterate_iso15919(self, word, src_language):
         tx_str = ""
         index=0;
@@ -56,6 +72,7 @@ class Transliterator(SilpaModule):
                 if word_length ==  index and word_length>1: #if last letter 
                     tx_str = tx_str[:-1] #remove the last 'a' 
         return tx_str .decode("utf-8")
+
     def transliterate_ipa(self, word, src_language):
         """
         Transliterate the given word in src_language to 
@@ -77,6 +94,7 @@ class Transliterator(SilpaModule):
 				if word_length ==  index and word_length>1: #if last letter 
 				    tx_str = tx_str[:-(len('ə'))] #remove the last 'a' 
         return tx_str .decode("utf-8")
+
     def transliterate_ml_en(self, word):
         virama=u"്"
         #TODO: how to make this more generic so that more languages can be handled here?
@@ -118,6 +136,7 @@ class Transliterator(SilpaModule):
                 tx_string += 'a'
             index+=1
         return tx_string       
+
     def _malayalam_fixes(self, text):
         try:
             text = text.replace(u"മ് ",u"ം ")
@@ -129,6 +148,7 @@ class Transliterator(SilpaModule):
         except:
             pass    
         return text 
+
     def transliterate_indic_indic(self, word, src_lang, target_lang) :
         """
         Transliterate from an Indian languge word to another indian language word
@@ -169,12 +189,8 @@ class Transliterator(SilpaModule):
                     tx_str = tx_str + " " + word 
                     continue #FIXME 
                 if src_lang_code=="en_US" :    
-                    if target_lang_code=="ml_IN" :
-                        tx_str=tx_str + self.transliterate_en_ml(word)   + " "
-                        continue
-                    else:    
-                        tx_str = tx_str + " "+ word
-                        break    
+                    tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
+                    continue
                 if target_lang_code=="ISO15919" :
                     tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
                     continue
@@ -207,7 +223,7 @@ class Transliterator(SilpaModule):
             return (target_id - src_id)
         except:
             return 0    
-
+    
     def get_module_name(self):
         return "Transliterator"
     def get_info(self):
