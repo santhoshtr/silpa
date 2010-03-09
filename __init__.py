@@ -12,7 +12,8 @@ if __name__ == '__main__':
     try:
         from wsgiref import simple_server
         silpa = Silpa()
-        print("Silpa is ready for serving requests and listening on port " + str(port))
+        print("Listening on port : " + str(port))
+        print("Silpa is ready!!!")
         simple_server.make_server('', port, silpa.serve).serve_forever()
     except KeyboardInterrupt:
         print("Ctrl-C caught, Silpa server exiting...")

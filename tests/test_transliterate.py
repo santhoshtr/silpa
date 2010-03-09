@@ -13,4 +13,5 @@ print tx.transliterate(u"ഔട്‍‍‍‍‍‍ലുക് മുകളി
 print tx.transliterate(u"translation", "ml_IN").encode("utf-8")
 print tx.transliterate(u"ശാരദ സന്ധ്യകള്‍ മരവൂരി ചുറ്റൂം", "ISO15919")
 print tx.transliterate(u"ശാരദ സന്ധ്യകള്‍ മരവൂരി ചുറ്റൂം", "IPA")
+print tx.transliterate(u"some english text", "IPA")
 print tx.transliterate("how was the match?", "hi_IN")
