@@ -31,7 +31,7 @@ class Spellchecker(SilpaModule):
             #print "loaded "  + self.lang +" dictionary"
         return self.dictionaries[self.lang]
         
-    def levenshtein1(self,s1, s2):
+    def levenshtein(self,s1, s2):
         """
         Return the levenshtein distance between two string
         """

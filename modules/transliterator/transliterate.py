@@ -83,6 +83,9 @@ class Transliterator(SilpaModule):
         word_length = len(word)
         for chr in word:
             index+=1
+            if ord(chr) < 255 : #ASCII characters + English
+                tx_str += chr
+                continue
             offset = ord(chr) - lang_bases[src_language]
             #76 is the virama offset for all indian languages from its base
             if offset >= 61  and offset <=76: 
@@ -188,9 +191,8 @@ class Transliterator(SilpaModule):
                 except:
                     tx_str = tx_str + " " + word 
                     continue #FIXME 
-                if src_lang_code=="en_US" :    
-                    tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
-                    continue
+
+
                 if target_lang_code=="ISO15919" :
                     tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
                     continue
@@ -198,17 +200,25 @@ class Transliterator(SilpaModule):
                 if target_lang_code=="IPA" :
                     tx_str=tx_str + self.transliterate_ipa(word, src_lang_code)   + " "
                     continue
+
+                if src_lang_code=="en_US" :    
+                    tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
+                    continue
+
+
                 if target_lang_code=="en_US" :
                     if src_lang_code=="ml_IN" :
                         tx_str=tx_str + self.transliterate_ml_en(word)   + " "
                         continue    
                     else:    
                         tx_str = tx_str + " " + word 
-                tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
 
+                tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
                 tx_str = tx_str   + " "
+
             else:
                 tx_str = tx_str   +  word
+
         # Language specific fixes
         if target_lang_code == "ml_IN":
             tx_str = self._malayalam_fixes(tx_str)      
