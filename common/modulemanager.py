@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+# Copyright 2009-2010
+# Santhosh Thottingal <santhosh.thottingal@gmail.com?
+# This code is part of Silpa project.
 import sys
 from utils import *
+
 class ModuleManager:
+
     def import_module(self,name):
         parts = name.split(".")
         try:
@@ -51,9 +56,14 @@ class ModuleManager:
                 response = response+"<tr><td>"+action.replace("_"," ")+"</td>"
                 response = response+"<td>Error while retrieving module details</td></tr>"   
         return  response+"</table>" 
+
     def get_form(self):
         return  self.getModulesInfoAsHTML()
+
     def getAllModules(self):
+        """
+        return a list of all the modules available in the system
+        """
         modules=[]
         module_dict=getModulesList  ()
         for action in   module_dict:
@@ -61,4 +71,22 @@ class ModuleManager:
             modules.append(module_instance)
         modules.sort()
         return modules  
-        
+
+    def getServiceMethods(self):
+        """
+        Return the dictionary of service methods defined in all modules
+        dictionary key: the method name. for eg: modules.spellchecker.suggest.
+        dictionary value : The invocable method.
+        """
+        service_methods = dict()
+        modules = self.getAllModules()
+        for module in modules:
+            for key in dir(module):
+                try:
+                    method = getattr(module, key)
+                    if getattr(method, "IsServiceMethod"):
+                        service_methods["modules."+module.__class__.__name__ + "." + key] = method
+                except AttributeError:
+                    #ignore it!
+                    pass
+        return service_methods
