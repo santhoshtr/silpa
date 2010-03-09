@@ -25,10 +25,9 @@ def getModulesList():
 
 def getStaticContent(page):
     try:
-        print "Static content : " + getRootFolder() +  "/" + page
         return codecs.open(getRootFolder() + "/" + page).read()#, encoding='utf-8', errors='ignore'
     except:
-        return "Requested resource not found!"
+        return "Oops! Requested resource not found!"
     
 def loadConfiguration():
     conf_dict={}
