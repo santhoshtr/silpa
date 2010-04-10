@@ -53,7 +53,15 @@ class Transliterator(SilpaModule):
             tx_str = tx_str[:-(len(u'്'))] #remove the last virama' 
             
         return self.transliterate_indic_indic(tx_str, "ml_IN", target_lang)
-
+        
+    def transliterate_xx_en(self,word, src_lang):
+        """
+        Transliterate Indian Language to English.
+        """
+        if not src_lang == "ml_IN":
+            word = self.transliterate_indic_indic(word, src_lang, "ml_IN")
+                   
+        return self.transliterate_ml_en(word)
 
     def transliterate_iso15919(self, word, src_language):
         tx_str = ""
@@ -64,7 +72,7 @@ class Transliterator(SilpaModule):
             offset = ord(chr) - lang_bases[src_language]
             #76 is the virama offset for all indian languages from its base
             if offset >= 61  and offset <=76: 
-			    tx_str = tx_str[:-1] #remove the last 'a' 
+                tx_str = tx_str[:-1] #remove the last 'a' 
             if offset>0 and offset<=128:
                 tx_str = tx_str + charmap["ISO15919"][offset]
             #delete the inherent 'a' at the end of the word from hindi    
@@ -94,8 +102,8 @@ class Transliterator(SilpaModule):
                 tx_str = tx_str + charmap["IPA"][offset]
             #delete the inherent 'a' at the end of the word from hindi    
             if tx_str[-1:]=='ə' and (src_language == "hi_IN" or src_language == "gu_IN" or src_language == "bn_IN" ) :
-				if word_length ==  index and word_length>1: #if last letter 
-				    tx_str = tx_str[:-(len('ə'))] #remove the last 'a' 
+                if word_length ==  index and word_length>1: #if last letter 
+                    tx_str = tx_str[:-(len('ə'))] #remove the last 'a' 
         return tx_str .decode("utf-8")
 
     def transliterate_ml_en(self, word):
@@ -177,6 +185,17 @@ class Transliterator(SilpaModule):
                       target_lang == "bn_IN")) : 
                 #TODO Add more languages having schwa deletion characteristic
                 tx_str = tx_str[:-(len(chr))] #remove the last 'a'
+            if target_lang == "ml_IN" and src_lang == "ta_IN":
+                tx_str = tx_str.replace(u"ഩ" , u"ന")
+            #If target is malayalam, we need to add the virama    
+            if ( (target_lang == "ml_IN") 
+                and (src_lang == "hi_IN" or 
+                src_lang == "gu_IN" or
+                src_lang == "pa_IN" or
+                src_lang == "bn_IN")
+                and tx_str[-1].isalpha()
+                ):
+                tx_str = tx_str+u"്"
         return tx_str
 
     @ServiceMethod
@@ -205,14 +224,10 @@ class Transliterator(SilpaModule):
                     tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
                     continue
 
-
                 if target_lang_code=="en_US" :
-                    if src_lang_code=="ml_IN" :
-                        tx_str=tx_str + self.transliterate_ml_en(word)   + " "
-                        continue    
-                    else:    
-                        tx_str = tx_str + " " + word 
-
+                     tx_str=tx_str + self.transliterate_xx_en(word, src_lang_code)   + " "
+                     continue
+                     
                 tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
                 tx_str = tx_str   + " "
 
