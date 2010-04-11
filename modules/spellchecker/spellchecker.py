@@ -23,6 +23,7 @@ import string
 import codecs
 from common import SilpaModule,ServiceMethod,dumps
 from utils import detect_lang
+from modules.soundex import soundex
 class Spellchecker(SilpaModule):
     
     def __init__(self):
@@ -93,7 +94,16 @@ class Spellchecker(SilpaModule):
                 continue
             if not self.levenshtein(candidate, word) > distance :
                 candidates.append(candidate)
+        candidates = self.filter_candidates(word, candidates)
         return dumps(candidates)
+    def filter_candidates(self, word, candidates):
+        filtered_candidates=[]
+        sx = soundex.getInstance() 
+        for candidate in candidates:
+            if sx.compare(word,candidate) >= 0.8:  #if both words sounds alike - almost
+                filtered_candidates.append(candidate)
+        return filtered_candidates
+
             
     @ServiceMethod                  
     def check(self, word, language=None):
