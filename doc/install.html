@@ -15,36 +15,44 @@ the Free Software Foundation; either version 3 of the License, or
 <p>
 You should have python 2.5 or 2.6 installed in your machine. Note that silpa does not work with python 3.x version 
 as of now. 
-Download the <a href="http://smc.org.in/silpa.git/?p=silpa.git;a=snapshot;h=HEAD;sf=tgz">source code</a> , extract it. 
+Download the <a href="source.html">source code</a> , extract it. 
 Suppose you extracted it to ~/silpa. Then from the home folder , run this command</p>
 <pre  class="code">
-$python -m silpa	
+$python silpa/__init__.py	
 </pre>
 <p>
 This will start and http server at port 8080. Launch your browser to <a href="http://localhost:8080">http://localhost:8080</a> and start using silpa!. If you want to use another port other than the default 8080, use the following command to start.
 </p>
+<pre  class="code">
+$python silpa/__init__.py [port]	
+for eg:
+$python silpa/__init__.py 9999	
+</pre>
+<p>
+<b>Note</b>: In Python versions upto 2.5 you can also use 
 <pre  class="code">
 $python -m silpa [port]	
 for eg:
 $python -m silpa 9999	
 </pre>
 
+</p>
 <h3>Running as standalone server in Windows</h3>
 <p>
 You should have python 2.5 or 2.6 installed in your machine. Note that silpa does not work with python 3.x version 
 as of now. There is no other dependency for silpa.
-Download the <a href="http://smc.org.in/silpa.git/?p=silpa.git;a=snapshot;h=HEAD;sf=tgz">source code</a> , extract it. 
+Download the <a href="source.html">source code</a> , extract it. 
 Suppose you extracted it to c:\silpa. Then from the C:\ folder , run this command</p>
 <pre  class="code">
-c:\>python -m silpa	
+c:\>python silpa/__init__.py	
 </pre>
 <p>
 This will start and http server at port 8080. Launch your browser to <a href="http://localhost:8080">http://localhost:8080</a> and start using silpa!. If you want to use another port other than the default 8080, use the following command to start.
 </p>
 <pre  class="code">
-c:\>python -m silpa [port]	
+c:\>python silpa/__init__.py [port]	
 for eg:
-c:\>python -m silpa 9999
+c:\>python silpa/__init__.py 9999
 </pre>
 If you gave 9999 as port, then point your browser to <a href="http://localhost:9999">http://localhost:9999</a>
 <h3>Running in apache server with mod_wsgi</h3>
