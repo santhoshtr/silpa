@@ -71,7 +71,7 @@ class Spellchecker(SilpaModule):
     
     @ServiceMethod
     def suggest(self,word, language=None, distance=2):
-        word=word.strip()
+        word=word.strip().lower()
         if word=="": 
             return None
         if self.lang != language:
@@ -107,7 +107,7 @@ class Spellchecker(SilpaModule):
             
     @ServiceMethod                  
     def check(self, word, language=None):
-        word=word.strip()
+        word=word.strip().lower()
         if word == "": 
             return None
         if self.lang != language:
