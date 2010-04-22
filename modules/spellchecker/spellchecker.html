@@ -53,10 +53,16 @@
           var resultobj=eval(msg.result);
           $('#progress').html("");
           $('#result').html("<b>Wrong Spelling. Suggestions :</b><ul id='list'></ul>");
+	  if(resultobj.length != 0)
+	  {
             $.each(resultobj,function(index, item)
             {
                $('#list').append($( "<li>" + item +"</li>" ));
             });
+	  }
+	  else {
+	  	$('#list').append($( " <li> No suggestions available </li>" ));
+	  }
         },
         error: function(msg) { alert(msg); }
     });
