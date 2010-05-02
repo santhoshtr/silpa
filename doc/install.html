@@ -106,6 +106,8 @@ Allow from all
     WSGIScriptAlias /silpa /usr/local/www/silpa/dispatch.fcgi
 
     &lt;Directory /usr/local/www/silpa&gt;
+    Options ExecCGI
+    AddHandler wsgi-script .fcgi
     Order allow,deny
     Allow from all
     &lt;/Directory&gt;
@@ -137,6 +139,8 @@ Alias /media/ /usr/local/www/documents/media/</pre><p>A complete virtual host co
     WSGIScriptAlias / /usr/local/www/silpa/dispatch.fcgi
 
     &lt;Directory /usr/local/www/silpa&gt;
+    Options ExecCGI
+    AddHandler wsgi-script .fcgi
     Order allow,deny
     Allow from all
     &lt;/Directory&gt;
@@ -168,6 +172,8 @@ WSGIProcessGroup example.com</pre><p>A complete virtual host configuration for t
     WSGIScriptAlias / /usr/local/www/silpa/dispatch.fcgi
 
     &lt;Directory /usr/local/www/silpa&gt;
+    Options ExecCGI
+    AddHandler wsgi-script .fcgi
     Order allow,deny
     Allow from all
     &lt;/Directory&gt;
