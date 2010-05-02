@@ -43,7 +43,7 @@ class Spellchecker(SilpaModule):
         if not self.dictionaries.has_key(self.lang) :
             try:
                 dictionary = os.path.join(os.path.dirname(__file__), 'dicts/'+self.lang+'.dic')
-                self.dictionaries[self.lang] = self.words(codecs.open(dictionary,'r',encoding='utf-8', errors='ignore').read())#, errors='ignore'
+                self.dictionaries[self.lang] = self.words(codecs.open(dictionary,'r',encoding='utf-8').read())
             except:
                 self.dictionaries[self.lang] =None  
             #print "loaded "  + self.lang +" dictionary"
@@ -107,7 +107,7 @@ class Spellchecker(SilpaModule):
             
     @ServiceMethod                  
     def check(self, word, language=None):
-        word=word.strip().lower()
+        word=word.strip()
         if word == "": 
             return None
         if self.lang != language:
