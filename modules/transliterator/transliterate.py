@@ -166,6 +166,10 @@ class Transliterator(SilpaModule):
         """
         index = 0
         tx_str = ""
+        if src_lang == "ml_IN":
+            word = normalizer.normalize_ml(word)
+            word = word.replace("‍","") #replace all zwj by empty
+            
         for chr in word:
             index += 1
             if chr in string.punctuation or chr<='z':
@@ -185,6 +189,7 @@ class Transliterator(SilpaModule):
                       target_lang == "bn_IN")) : 
                 #TODO Add more languages having schwa deletion characteristic
                 tx_str = tx_str[:-(len(chr))] #remove the last 'a'
+                
             if target_lang == "ml_IN" and src_lang == "ta_IN":
                 tx_str = tx_str.replace(u"ഩ" , u"ന")
             #If target is malayalam, we need to add the virama    
