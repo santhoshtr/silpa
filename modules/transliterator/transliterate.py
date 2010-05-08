@@ -43,6 +43,8 @@ class Transliterator(SilpaModule):
         """
         Transliterate English to any Indian Language.
         """
+        if target_lang=="en_IN"  or target_lang=="en_US":
+            return word
         tx_str = self.transliterate_en_ml(word)
         if target_lang == "ml_IN":
             return tx_str
@@ -58,6 +60,8 @@ class Transliterator(SilpaModule):
         """
         Transliterate Indian Language to English.
         """
+        if src_lang == "en_IN" or src_lang == "en_US":
+            return word
         if not src_lang == "ml_IN":
             word = self.transliterate_indic_indic(word, src_lang, "ml_IN")
                    
@@ -167,12 +171,15 @@ class Transliterator(SilpaModule):
         index = 0
         tx_str = ""
         if src_lang == "ml_IN":
-            word = normalizer.normalize_ml(word)
-            word = word.replace("‍","") #replace all zwj by empty
-            
+            word = normalizer.normalize(word)
+            word = word.replace(u"\u200C",u"") 
+            word = word.replace(u"\u200D",u"") 
+            word = word.replace(u"ു്",u"") #replace all samvruthokaram by u vowels
+        
+                
         for chr in word:
             index += 1
-            if chr in string.punctuation or chr<='z':
+            if chr in string.punctuation or (ord(chr)<=2304 and ord(chr)>=3071):
                 tx_str = tx_str + chr 
                 continue
             offset = ord(chr) + self.getOffset(src_lang, target_lang) 
@@ -189,9 +196,27 @@ class Transliterator(SilpaModule):
                       target_lang == "bn_IN")) : 
                 #TODO Add more languages having schwa deletion characteristic
                 tx_str = tx_str[:-(len(chr))] #remove the last 'a'
-                
+
             if target_lang == "ml_IN" and src_lang == "ta_IN":
                 tx_str = tx_str.replace(u"ഩ" , u"ന")
+            
+            if target_lang == "ta_IN":    
+                tx_str = tx_str.replace(u'\u0B96' , u"க")
+                tx_str = tx_str.replace(u'\u0B97' , u"க")
+                tx_str = tx_str.replace(u'\u0B98' , u"க")
+                tx_str = tx_str.replace(u'\u0B9B' , u"ச")
+                tx_str = tx_str.replace(u'\u0B9D' , u"ச")
+                tx_str = tx_str.replace(u'\u0BA0' , u"ட")
+                tx_str = tx_str.replace(u'\u0BA1' , u"ட")
+                tx_str = tx_str.replace(u'\u0BA2' , u"ட")
+                tx_str = tx_str.replace(u'\u0BA5' , u"த")
+                tx_str = tx_str.replace(u'\u0BA6' , u"த")
+                tx_str = tx_str.replace(u'\u0BA7' , u"த")
+                tx_str = tx_str.replace(u'\u0BAB' , u"ப")
+                tx_str = tx_str.replace(u'\u0BAC' , u"ப")
+                tx_str = tx_str.replace(u'\u0BAD' , u"ப")
+                tx_str = tx_str.replace(u'\u0BC3' , u"ிரு")
+                tx_str = tx_str.replace(u'ஂ',u'ம்')
             #If target is malayalam, we need to add the virama    
             if ( (target_lang == "ml_IN") 
                 and (src_lang == "hi_IN" or 
@@ -224,12 +249,12 @@ class Transliterator(SilpaModule):
                 if target_lang_code=="IPA" :
                     tx_str=tx_str + self.transliterate_ipa(word, src_lang_code)   + " "
                     continue
-
-                if src_lang_code=="en_US" :    
+                
+                if src_lang_code=="en_US" :        
                     tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
                     continue
 
-                if target_lang_code=="en_US" :
+                if target_lang_code=="en_US" or target_lang_code=="en_IN"  :
                      tx_str=tx_str + self.transliterate_xx_en(word, src_lang_code)   + " "
                      continue
                      
