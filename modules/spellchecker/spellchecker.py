@@ -24,6 +24,8 @@ import codecs
 from common import SilpaModule,ServiceMethod,dumps
 from utils import detect_lang
 from modules.soundex import soundex
+from indexer import DictionaryIndex
+
 class Spellchecker(SilpaModule):
     
     def __init__(self):
@@ -40,14 +42,37 @@ class Spellchecker(SilpaModule):
         return set(words)
 
     def train(self,features=None):
-        if not self.dictionaries.has_key(self.lang) :
-            try:
-                dictionary = os.path.join(os.path.dirname(__file__), 'dicts/'+self.lang+'.dic')
-                self.dictionaries[self.lang] = self.words(codecs.open(dictionary,'r',encoding='utf-8').read())
-            except:
-                self.dictionaries[self.lang] =None  
-            #print "loaded "  + self.lang +" dictionary"
-        return self.dictionaries[self.lang]
+        if not self.dictionaries.has_key(self.lang):
+            index = DictionaryIndex()
+            self.dictionaries[self.lang] = index.load_index(self.lang+".dic")
+    
+
+    def get_candidates(self,word=""):
+        index = self.dictionaries.get(self.lang,None)
+        if index == None:
+            self.train()
+            index = self.dictionaries.get(self.lang,None)
+
+        words = []
+        if word == "":
+            return words
+
+        byte_offset = index.get(word[0],None)
+        if byte_offset == None:
+            return words
+
+        path = os.path.join(os.path.dirname(__file__),"dicts/"+self.lang+".dic")
+        fp = codecs.open(path,"r",encoding="utf-8",errors="ignore")
+        fp.seek(int(byte_offset))
+
+        while True:
+           line = fp.readline().strip()
+           if len(line) > 0 and not word[0] == line[0]:
+               break
+           words.append(line)
+
+        return words
+
         
     def levenshtein(self,s1, s2):
         """
@@ -81,14 +106,14 @@ class Spellchecker(SilpaModule):
         else :
             self.lang = language
         if self.NWORDS == None:
-            self.NWORDS = self.train() 
+            self.NWORDS = self.get_candidates(word) 
         if word in self.NWORDS:
             return word        
         candidates = []
         for candidate in self.NWORDS:
             #skip if the first letter is different
-            if candidate[0] != word[0]:
-                continue
+            #if candidate[0] != word[0]:
+            #    continue
             #if the length difference is greater than the threshold distance, skip
             if len(candidate) - len(word)  > distance or len(word) - len(candidate)  >    distance :
                 continue
@@ -96,6 +121,7 @@ class Spellchecker(SilpaModule):
                 candidates.append(candidate)
         candidates = self.filter_candidates(word, candidates)
         return dumps(candidates)
+        
     def filter_candidates(self, word, candidates):
         filtered_candidates=[]
         sx = soundex.getInstance() 
@@ -118,7 +144,7 @@ class Spellchecker(SilpaModule):
             self.lang = language
         if word=="": return True
         if self.NWORDS == None: 
-            self.NWORDS = self.train()  
+            self.NWORDS = self.get_candidates(word)  
         if self.NWORDS == None:           
             # Dictionary not found
             return False
@@ -148,7 +174,7 @@ class Spellchecker(SilpaModule):
     def get_module_name(self):
         return "Spellchecker"
     def get_info(self):
-        return  "Spellchecker module"
+        return  "Indic Spellchecker"
 
 def getInstance():
         return Spellchecker()
