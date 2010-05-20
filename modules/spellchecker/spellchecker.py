@@ -25,6 +25,7 @@ from common import SilpaModule,ServiceMethod,dumps
 from utils import detect_lang
 from modules.soundex import soundex
 from indexer import DictionaryIndex
+import urllib
 
 class Spellchecker(SilpaModule):
     
@@ -163,13 +164,14 @@ class Spellchecker(SilpaModule):
        """
        Return a list of misspelled words give a chunk of text.
        """
-       words = text.split()
+       words = urllib.unquote(text)
+       words = words.split()
        misspelled_words = []
        for word in words:
            tempword = self.strip_punctuations(word) 
            if not self.check(tempword, language):
                misspelled_words.append(word)
-       return misspelled_words
+       return dumps(misspelled_words)
 
     def get_module_name(self):
         return "Spellchecker"
