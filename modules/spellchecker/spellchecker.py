@@ -22,8 +22,8 @@ import os
 import string
 import codecs
 from common import SilpaModule,ServiceMethod,dumps
-from utils import detect_lang
-from modules.soundex import soundex
+from utils import detect_lang, silpautils
+from modules.inexactsearch import inexactsearch
 from indexer import DictionaryIndex
 import urllib
 
@@ -48,7 +48,7 @@ class Spellchecker(SilpaModule):
             self.dictionaries[self.lang] = index.load_index(self.lang+".dic")
     
 
-    def get_candidates(self,word=""):
+    def get_wordlist(self,word=""):
         index = self.dictionaries.get(self.lang,None)
         if index == None:
             self.train()
@@ -107,7 +107,7 @@ class Spellchecker(SilpaModule):
         else :
             self.lang = language
         if self.NWORDS == None:
-            self.NWORDS = self.get_candidates(word) 
+            self.NWORDS = self.get_wordlist(word) 
         if word in self.NWORDS:
             return word        
         candidates = []
@@ -121,13 +121,22 @@ class Spellchecker(SilpaModule):
             if not self.levenshtein(candidate, word) > distance :
                 candidates.append(candidate)
         candidates = self.filter_candidates(word, candidates)
+        if len(candidates)==0:
+            #try inserting spaces in between the letters to see if the word got merged
+            pos = 2;
+            while pos < len(word)-2:
+                if self.check(word[:pos],self.lang) and self.check(word[pos:],self.lang):
+                    candidates.append(word[:pos]+" "+word[pos:])
+                    candidates.append(word[:pos]+"-"+word[pos:])
+                pos+=1    
         return dumps(candidates)
         
     def filter_candidates(self, word, candidates):
         filtered_candidates=[]
-        sx = soundex.getInstance() 
+        isearch = inexactsearch.getInstance() 
+        #TODO sort by score
         for candidate in candidates:
-            if sx.compare(word,candidate) >= 0.8:  #if both words sounds alike - almost
+            if isearch.compare(word,candidate) >= 0.6:  #if both words sounds alike - almost
                 filtered_candidates.append(candidate)
         return filtered_candidates
 
@@ -137,6 +146,9 @@ class Spellchecker(SilpaModule):
         word=word.strip()
         if word == "": 
             return None
+        #If it is a number, don't do spelcheck
+        if silpautils.is_number(word): 
+            return True            
         if self.lang != language:
             self.NWORDS = None
         if language == None :
@@ -144,12 +156,21 @@ class Spellchecker(SilpaModule):
         else :
             self.lang = language
         if word=="": return True
+        
         if self.NWORDS == None: 
-            self.NWORDS = self.get_candidates(word)  
+            self.NWORDS = self.get_wordlist(word)  
         if self.NWORDS == None:           
             # Dictionary not found
             return False
-        return word in self.NWORDS
+        result = word in self.NWORDS
+        #if it is english word, try converting the first letter to lower case.
+        #This will happen if the word is first word of a sentence
+        if result == False and word.upper() != word.lower():
+            newword = word[0].lower()+word[1:]
+            self.NWORDS = self.get_wordlist(newword)  
+            return newword in self.NWORDS
+        else:
+            return result    
             
     def strip_punctuations(self,s):
         """
