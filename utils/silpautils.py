@@ -71,3 +71,9 @@ def getMimetype(filename):
     # We'll ignore encoding, even though we shouldn't really
     return type or 'application/octet-stream'
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
