@@ -63,6 +63,47 @@ CMU_MALAYALAM_MAP = {
 	"V" : "വ്",
 	"Z"  : "സ്",
 }		
+
+CMU_KANNADA_MAP = {
+	"AA" : "ಆ",
+	"AH" : "ಅ",
+	"AE" : "ಏ",
+	"AO" : "ಓ",
+	"AW" : "ಔ",
+	"AY" : "ಐ",
+	"B"  : "ಬ್",
+	"CH" : "ಚ್",
+	"D"  : "ಡ್",
+	"DH" : "ದ್",
+	"EA" : "ಈ",
+	"EH" : "ಎ",
+	"ER" : "ಅರ್",
+	"EY" : "ಎಯ್",
+	"F"  : "ಫ್",
+	"G"  : "ಗ್",
+	"HH"  : "ಹ್",
+	"IH" : "ಇ",
+	"IY" : "ಈ",
+	"J"   : "ಜ್",
+	"JH"  : "ಜ್",
+	"K"  : "ಕ್",
+	"L"  : "ಲ್",
+	"M"  : "ಮ್",
+	"N"  : "ನ್",
+	"NG"  : "ಂಗ್",
+	"OW"  : "ಒ",
+	"P"  : "ಪ್",
+	"R"  : "ರ್",
+	"S"  : "ಸ್",
+	"SH"  : "ಷ್",
+	"T"  : "ಟ್",
+	"TH"  : "ತ್",
+	"Y"  :  "ಯ್",
+	"UW" : "ಉ",
+	"W"  : "ವ್",
+	"V" : "ವ್",
+	"Z":"ಸ್"
+}
 	
 class CMUDict():
 	def __init__(self):
@@ -97,7 +138,15 @@ class CMUDict():
 					pronunciation_str += CMU_MALAYALAM_MAP[syl]	
 				except KeyError:
 					pronunciation_str += syl
-			pronunciation_str = self._fix_vowel_signs_ml(pronunciation_str)	
+			pronunciation_str = self._fix_vowel_signs_ml(pronunciation_str)
+		
+		if language == "kn_IN":
+			for symbol in cmu_pronunciation:
+				try:
+					pronunciation_str += CMU_KANNADA_MAP[symbol]
+				except KeyError:
+					pronunciation_str += symbol	
+		        pronunciation_str = self._fix_vowel_signs_kn(pronunciation_str)
 		return (pronunciation_str).decode("utf-8") +		punctuations
 	def _fix_vowel_signs_ml(self,text)	:
 		text= text.replace("്അ","")
@@ -128,4 +177,20 @@ class CMUDict():
 		text= text.replace("ര്ര","റ്റ")
 		text= text.replace("റ്ര","റ്റ")
 		text= text.replace("ന്‍റ്റ","ന്റ")
+		return text
+
+	def _fix_vowel_signs_kn(self,text)	:
+		text= text.replace("್ಅ","")
+		text= text.replace("್ಆ","ಾ")
+		text= text.replace("್ಇ","ಿ")
+		text= text.replace("್ಈ","ೀ")
+		text= text.replace("್ಉ","ು")
+		text= text.replace("್ಊ","ೂ")
+		text= text.replace("್ಋ","ೃ")
+		text= text.replace("್ಎ","ೆ")
+		text= text.replace("್ಏ","ೇ")
+		text= text.replace("್ಐ","ೈ")
+		text= text.replace("್ಒ","ೊ")
+		text= text.replace("್ಓ","ೋ")
+		text= text.replace("್ಔ","ೌ")
 		return text

@@ -38,6 +38,14 @@ class Transliterator(SilpaModule):
         CMU pronuciation dictionary
         """
         return self.cmu.pronunciation(word,"ml_IN")
+        
+    def transliterate_en_kn(self, word):   
+        """
+        Transliterate English to Kannada with the help of
+        CMU pronuciation dictionary
+        """
+        return self.cmu.pronunciation(word,"kn_IN")
+
 
     def transliterate_en_xx(self,word, target_lang):
         """
@@ -45,7 +53,12 @@ class Transliterator(SilpaModule):
         """
         if target_lang=="en_IN"  or target_lang=="en_US":
             return word
-        tx_str = self.transliterate_en_ml(word)
+        if target_lang == "kn_IN":
+            tx_str = self.transliterate_en_kn(word)
+	    return tx_str
+	else:
+	    tx_str = self.transliterate_en_ml(word)
+	
         if target_lang == "ml_IN":
             return tx_str
         #chain it through indic indic transliteratioin
