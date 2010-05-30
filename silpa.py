@@ -27,6 +27,7 @@ from common import *
 from utils import *
 from jsonrpc import handleCGI,ServiceHandler
 cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
+
 class Silpa():
     
     def __init__(self):
@@ -38,6 +39,7 @@ class Silpa():
         """
         The method to serve all the requests.
         """
+        request = SilpaRequest(environ)
         try:
             request_uri = environ['REQUEST_URI']
             # TODO there should be a better way to handle the below line
@@ -45,25 +47,18 @@ class Silpa():
         except:
             # To handle the python -m silpa server instances.
             request_uri = environ.get('PATH_INFO', '').lstrip('/')
-            
+        
         #JSON RPC requests
-        if request_uri == "JSONRPC":
-            try:
-                content_length = int(environ['CONTENT_LENGTH'])
-            except: 
-                content_length = 0
-            if  content_length > 0 :
-                data = environ['wsgi.input'].read(content_length).decode("utf-8")
+        if request_uri== "JSONRPC":
+                data = request.get_body()
                 start_response('200 OK', [('Content-Type', 'application/json')])
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
                 return [jsonreponse.encode('utf-8')]
-        request = SilpaRequest(environ)
-        if  request_uri == None or request_uri .strip()=='': 
+        
+        if  request.get('action') != None: 
             request_uri = request.get('action')  
-            
         from common.silparesponse import SilpaResponse
         self._response=SilpaResponse()
-        
         if request_uri :
             #Check if the action is defined.
             if self._module_manager.find_module(request_uri ):

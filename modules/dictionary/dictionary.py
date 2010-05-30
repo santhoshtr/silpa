@@ -48,7 +48,7 @@ class Dictionary(SilpaModule):
         definition=""
         if self.request.get('word'):
                 definition = self.getdef(self.request.get('word'),self.request.get('dictionary'))
-        return definition
+        return definition 
         
     def get_free_dict(self, src, dest):
         dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
@@ -71,7 +71,7 @@ class Dictionary(SilpaModule):
         if meaningstring=="None":
             meaningstring = "No definition found"
             return meaningstring
-        return meaningstring.decode("utf-8")
+        return meaningstring
         
     def get_module_name(self):
         return "Dictionary"

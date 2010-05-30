@@ -19,7 +19,6 @@
 
 from common import *
 from utils import *
-
 class ServiceException(Exception):
     pass
 
@@ -157,7 +156,6 @@ class ServiceHandler(object):
             #Construct the error message json
             error = {"name": error.__class__.__name__, "message":error}
             result = None
-            print error
         try:
             data = dumps({"result":result, "id":id_, "error":error})
         except JSONEncodeException, e:

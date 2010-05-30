@@ -25,9 +25,10 @@ class SilpaRequest(object):
     
     def __init__(self, environ):
         if environ:
-            self._formvalues = self._parse_query(environ)
+            self._environ=environ
+            self._formvalues = None
             self._cookies = self._parse_cookies(environ)
-        self._environ=environ
+        
     
     def getCookie(self, key):
         try:
@@ -36,18 +37,31 @@ class SilpaRequest(object):
             return None 
         
     def get(self , key) :
-        if(self._formvalues.has_key(key)):
-            return self._formvalues[key].value  
+        if self._formvalues==None:
+            self._formvalues=self._parse_query(self._environ)
+        try:
+            if(self._formvalues and self._formvalues.has_key(key)):
+                return self._formvalues[key].value  
+        except:
+            pass
         return self._environ.get(key,None)
     
     def _parse_query(self, environ) :   
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ,  keep_blank_values=1)
         return form
-    
-    def body(self): 
+        
+    def is_post_request(self):
+        if self._environ['REQUEST_METHOD'].upper() != 'POST':
+            return False
+        content_type = self._environ.get('CONTENT_TYPE', 'application/x-www-form-urlencoded')
+        return (content_type.startswith('application/x-www-form-urlencoded'
+            or content_type.startswith('multipart/form-data')))
+            
+    def get_body(self): 
         length = int(self._environ.get('CONTENT_LENGTH', '0'))
         fileobj = self._environ['wsgi.input']
         return fileobj.read(length).decode("utf-8")
+            
     
     def _parse_cookies(self, environ)   :
         _QUOTES_RE = re.compile('"(.*)"')
