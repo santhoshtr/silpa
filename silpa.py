@@ -88,14 +88,14 @@ class Silpa():
             start_response('200 OK', [('Content-Type', getMimetype(request_uri))])
             if request_uri .endswith(".html"):
                 # HTML pages need to be embedded inside the content area
-                self._response.setContent(getStaticContent("doc/"+request_uri))
+                self._response.set_content(getStaticContent("doc/"+request_uri))
                 return [self._response.toString().encode('utf-8')]
             else: 
                 # Images, css, javascript etc..
                 return [getStaticContent(request_uri)]
                 
         else: #No action. Show home page
-            self._response.setContent(getStaticContent('doc/index.html'))
+            self._response.set_content(getStaticContent('doc/index.html'))
             start_response('200 OK', [('Content-Type', 'text/html')])
             return [self._response.toString().encode('utf-8')]
 
