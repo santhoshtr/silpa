@@ -25,22 +25,52 @@
 from common import *
 import os
 from dictdlib import DictDB
+from jsonrpc import *
 class Dictionary(SilpaModule):
+    
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'dictionary.html')    
+        
+    def get_json_result(self):
+        error=None
+        _id = 0
+        try:
+            if self.request.get('word'):
+                definition = self.getdef(self.request.get('word'),self.request.get('dictionary'))
+            data = dumps({"result":definition, "id":_id, "error":error})
+        except JSONEncodeException:
+            #translate the exception also to the error
+            error = {"name": "JSONEncodeException", "message":"Result Object Not Serializable"}
+            data = dumps({"result":None, "id":id_, "error":error})
+        return data
+        
+    def get_result(self):
+        definition=""
+        if self.request.get('word'):
+                definition = self.getdef(self.request.get('word'),self.request.get('dictionary'))
+        return definition
+        
+    def get_free_dict(self, src, dest):
+        dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
+        dictdata=dict_dir+ "/freedict-"+src+"-"+dest
+        if os.path.isfile(dictdata+".index"):
+            return dictdata
+        return None    
 
     @ServiceMethod  
     def getdef(self, word, dictionary):
-        dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
-        dictdata=dict_dir+ "/"+dictionary
-        dict=DictDB(dictdata)
-        meanings =  dict.getdef(word)
         meaningstring= ""
-        if meanings==None or meanings == []:
+        src = dictionary.split("-")[0]
+        dest = dictionary.split("-")[1]
+        dictdata = self.get_free_dict(src,dest)
+        if dictdata:
+            dict=DictDB(dictdata)
+            meanings =  dict.getdef(word)
+            for meaning in meanings:
+                meaningstring += meaning
+        if meaningstring=="None":
             meaningstring = "No definition found"
             return meaningstring
-        for meaning in meanings:
-            meaningstring += meaning
         return meaningstring.decode("utf-8")
         
     def get_module_name(self):

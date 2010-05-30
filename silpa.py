@@ -22,22 +22,22 @@ import sys
 import os
 import cgitb
 import cgi
-import timeit
 sys.path.append(os.path.dirname(__file__))
 from common import *
 from utils import *
 from jsonrpc import handleCGI,ServiceHandler
 cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
 class Silpa():
+    
     def __init__(self):
         self._module_manager = ModuleManager()
         self._response=None
         self._jsonrpc_handler=ServiceHandler(self) 
+        
     def serve(self,environ, start_response):
         """
         The method to serve all the requests.
         """
-        time = timeit.Timer()
         try:
             request_uri = environ['REQUEST_URI']
             # TODO there should be a better way to handle the below line
@@ -45,6 +45,7 @@ class Silpa():
         except:
             # To handle the python -m silpa server instances.
             request_uri = environ.get('PATH_INFO', '').lstrip('/')
+            
         #JSON RPC requests
         if request_uri == "JSONRPC":
             try:
@@ -55,21 +56,33 @@ class Silpa():
                 data = environ['wsgi.input'].read(content_length).decode("utf-8")
                 start_response('200 OK', [('Content-Type', 'application/json')])
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
-                print time.timeit()
                 return [jsonreponse.encode('utf-8')]
+        request = SilpaRequest(environ)
         if  request_uri == None or request_uri .strip()=='': 
-            request = SilpaRequest(environ)
             request_uri = request.get('action')  
+            
         from common.silparesponse import SilpaResponse
         self._response=SilpaResponse()
+        
         if request_uri :
             #Check if the action is defined.
             if self._module_manager.find_module(request_uri ):
                 module_instance =  self._module_manager.getModuleInstance(request_uri )
                 if(module_instance):
-                    self._response.setForm(module_instance.get_form())
+                    module_instance.set_request(request)
+                    
+                    #if this is a json request
+                    if request.get('json'):
+                        jsonreponse = module_instance.get_json_result()
+                        start_response('200 OK', [('Content-Type', 'application/json')])
+                        return [jsonreponse.encode('utf-8')]
+                        
+                    #normal request for the page, may contain request parameters(GET)    
+                    self._response.set_form(module_instance.get_form())
+                    self._response.set_result(module_instance.get_result())
                     start_response('200 OK', [('Content-Type', 'text/html')])
                     return [self._response.toString().encode('utf-8')]
+                    
             #It is a static content request.
             # Content type depends on the mimetype
             start_response('200 OK', [('Content-Type', getMimetype(request_uri))])
@@ -80,6 +93,7 @@ class Silpa():
             else: 
                 # Images, css, javascript etc..
                 return [getStaticContent(request_uri)]
+                
         else: #No action. Show home page
             self._response.setContent(getStaticContent('doc/index.html'))
             start_response('200 OK', [('Content-Type', 'text/html')])

@@ -18,9 +18,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from common import *
-from jsonrpc import JSONEncodeException
-from jsonrpc import dumps
-from jsonrpc import loads
 from utils import *
 
 class ServiceException(Exception):
@@ -54,7 +51,7 @@ class ServiceHandler(object):
         args = None
         #Translate the json request to python objects
         try:
-            req = self.translateRequest(json)
+            req = self.translate_request(json)
         except ServiceRequestNotTranslatable, e:
             err = e
             req = {'id':id_}
@@ -84,11 +81,11 @@ class ServiceHandler(object):
                 result = self.call(meth, args)
             except Exception, e:
                 err = e
-        resultdata = self.translateResult(result, err, id_)
+        resultdata = self.translate_result(result, err, id_)
         
         return resultdata
 
-    def translateRequest(self, data):
+    def translate_request(self, data):
         """
         Translate the json request to python objects
         """
@@ -152,13 +149,13 @@ class ServiceHandler(object):
             return method(*_args)
         
 
-    def translateResult(self, result, error, id_):
+    def translate_result(self, result, error, id_):
         """
         Translate the method results back to the json.
         """
         if error != None:
             #Construct the error message json
-            error = {"name": error.__class__.__name__, "message":error.message}
+            error = {"name": error.__class__.__name__, "message":error}
             result = None
             print error
         try:

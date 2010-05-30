@@ -24,30 +24,31 @@ class SilpaResponse:
     def __init__(self):
         xhtml = getTemplate()
         self.page = Meld(xhtml)     
+        
     def toString(self):
         return str(self.page)
 
-    def setForm(self,value):
+    def set_form(self,value):
         if(value):
             self.page.form = value
 
-    def setResult(self,value):
+    def set_result(self,value):
         if(value):
             self.page.result= value 
 
-    def setErrorMessage(self,value):
+    def set_error_message(self,value):
         if(value):
             self.page.errormessage = value
 
-    def setSuccessMessage(self,value):
+    def set_success_message(self,value):
         if(value):
             self.page.successmessage = value
 
-    def setContent(self, value):
+    def set_content(self, value):
         if value:
             self.page.content = value           
 
-    def setFooter(self, value):
+    def set_footer(self, value):
         if value:
             self.page.footer = value
         

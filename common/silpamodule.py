@@ -19,21 +19,28 @@
 
 import os
 class SilpaModule:
-	def __init__(self):
-		self.template=None
-	def get_errormessage(self):
-		return None
-	def get_successmessage(self):
-		return None
-	def get_module_name(self):
-		return "Untitled Silpa Module"
-	def get_info(self):
-		return 	"Module description"
-	def process(self,object):
-		return 	"Not Implemented"
-	def get_form(self,templatefile='template.html'):
-		return open(self.template).read()
-
+    def __init__(self):
+        self.template=None
+        self.request=None
+    def get_errormessage(self):
+        return None
+    def get_successmessage(self):
+        return None
+    def get_module_name(self):
+        return "Untitled Silpa Module"
+    def get_info(self):
+        return     "Module description"
+    def process(self,object):
+        return     "Not Implemented"
+    def get_form(self,templatefile='template.html'):
+        return open(self.template,'r').read()
+    def set_request(self,request):
+        self.request=request
+    def get_result(self):
+        return ""
+    def get_json_result(self):
+        return ""
+        
 def ServiceMethod(fn):
-	fn.IsServiceMethod = True
-	return fn
+    fn.IsServiceMethod = True
+    return fn
