@@ -80,17 +80,17 @@ class Silpa():
                     
             #It is a static content request.
             # Content type depends on the mimetype
-            start_response('200 OK', [('Content-Type', getMimetype(request_uri))])
+            start_response('200 OK', [('Content-Type', get_mimetype(request_uri))])
             if request_uri .endswith(".html"):
                 # HTML pages need to be embedded inside the content area
-                self._response.set_content(getStaticContent("doc/"+request_uri))
+                self._response.set_content(get_static_content("doc/"+request_uri))
                 return [self._response.toString().encode('utf-8')]
             else: 
                 # Images, css, javascript etc..
-                return [getStaticContent(request_uri)]
+                return [get_static_content(request_uri)]
                 
         else: #No action. Show home page
-            self._response.set_content(getStaticContent('doc/index.html'))
+            self._response.set_content(get_static_content('doc/index.html'))
             start_response('200 OK', [('Content-Type', 'text/html')])
             return [self._response.toString().encode('utf-8')]
 
