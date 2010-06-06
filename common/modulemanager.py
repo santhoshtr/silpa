@@ -55,12 +55,12 @@ class ModuleManager:
             #List the available modules
             return True #Well, that was not good
         try:
-            return getModulesList()[action]
+            return get_modules_list()[action]
         except: 
             return None
             
     def getModulesInfoAsHTML(self):
-        module_dict=getModulesList  ()
+        module_dict=get_modules_list  ()
         response = "<h2>Available Modules</h2></hr>"
         response = response+"<table class=\"table1\"><tr><th>Module</th><th>Description</th></tr>"
         for action in   module_dict:
@@ -81,7 +81,7 @@ class ModuleManager:
         return a list of all the modules available in the system
         """
         modules=[]
-        module_dict=getModulesList  ()
+        module_dict=get_modules_list  ()
         for action in   module_dict:
             module_instance=self.getModuleInstance(action)
             modules.append(module_instance)
