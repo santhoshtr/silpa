@@ -183,8 +183,8 @@ class Transliterator(SilpaModule):
         """
         index = 0
         tx_str = ""
-        if src_lang == "ml_IN":
-            word = normalizer.normalize(word)
+        word = normalizer.normalize(word)
+        if src_lang == "ml_IN" and target_lang != "ml_IN" :
             word = word.replace(u"\u200C",u"") 
             word = word.replace(u"\u200D",u"") 
             word = word.replace(u"ു്",u"") #replace all samvruthokaram by u vowels
@@ -243,40 +243,41 @@ class Transliterator(SilpaModule):
 
     @ServiceMethod
     def transliterate(self,text, target_lang_code):
-        text =  normalize(text)
         tx_str=""
-        words=text.split(" ")
-        for word in words:
-            if(word.strip()>""):
-                try:
-                    src_lang_code=detect_lang(word)[word]
-                except:
-                    tx_str = tx_str + " " + word 
-                    continue #FIXME 
+        lines=text.split("\n")
+        for line in lines:
+            words=line.split(" ")
+            for word in words:
+                if(word.strip()>""):
+                    try:
+                        src_lang_code=detect_lang(word)[word]
+                    except:
+                        tx_str = tx_str + " " + word 
+                        continue #FIXME 
 
 
-                if target_lang_code=="ISO15919" :
-                    tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
-                    continue
-                
-                if target_lang_code=="IPA" :
-                    tx_str=tx_str + self.transliterate_ipa(word, src_lang_code)   + " "
-                    continue
-                
-                if src_lang_code=="en_US" :        
-                    tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
-                    continue
+                    if target_lang_code=="ISO15919" :
+                        tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
+                        continue
+                    
+                    if target_lang_code=="IPA" :
+                        tx_str=tx_str + self.transliterate_ipa(word, src_lang_code)   + " "
+                        continue
+                    
+                    if src_lang_code=="en_US" :        
+                        tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
+                        continue
 
-                if target_lang_code=="en_US" or target_lang_code=="en_IN"  :
-                     tx_str=tx_str + self.transliterate_xx_en(word, src_lang_code)   + " "
-                     continue
-                     
-                tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
-                tx_str = tx_str   + " "
+                    if target_lang_code=="en_US" or target_lang_code=="en_IN"  :
+                        tx_str=tx_str + self.transliterate_xx_en(word, src_lang_code)   + " "
+                        continue
+                        
+                    tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
+                    tx_str = tx_str   + " "
 
-            else:
-                tx_str = tx_str   +  word
-
+                else:
+                    tx_str = tx_str   +  word
+            tx_str = tx_str   +  "\n"
         # Language specific fixes
         if target_lang_code == "ml_IN":
             tx_str = self._malayalam_fixes(tx_str)      
