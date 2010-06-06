@@ -1,12 +1,31 @@
 #!/usr/bin/python
+#silpalogger.py
+#       
+#Copyright 2008-2010
+#          Vasudev Kamath <kamathvasudev@gmail.com>
+#	   Santhosh Thottingal <santhosh.thottingal@gmail.com>       
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU Affero General Public License as published by
+#the Free Software Foundation; either version 3 of the License, or
+#(at your option) any later version.
+#       
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU Lesser General Public License for more details.
+#       
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#MA 02110-1301, USA.
 
 import os
 import logging
-from logging.handlers import TimedRotateFileHandler
+from logging.handlers import TimedRotatingFileHandler
 import silpautils
 
-conf_values = silpautils.loadConfiguration()
-LOG_FOLDER = os.path.join(silpautils.getRootFolder(),conf_values.get("SILPA_LOG_FOLDER","logs"))
+conf_values = silpautils.load_configuration()
+LOG_FOLDER = os.path.join(silpautils.get_root_folder(),conf_values.get("SILPA_LOG_FOLDER","logs"))
 LOG_FILE = os.path.join(LOG_FOLDER,"silpa.log")
 silpautils.ensure_dir(LOG_FOLDER)
 BACKUPS = 10
@@ -24,10 +43,11 @@ def get_logger():
        Funcion creates and configures new instance of logger
        for the SILPA and returns it
     '''
+    global conf_values
     logger = logging.getLogger("SILPA")
-    logger.setLevel(LOG_LEVELS.get(conf_vaules.get("SILPA_LOG_LEVEL","debug"),logging.DEBUG))
+    logger.setLevel(LOG_LEVELS.get(conf_values.get("SILPA_LOG_LEVEL","debug"),logging.DEBUG))
 
-    log_handler = TimedRotateFileHandler(LOG_FILE,"midnight",BACKUPS)
+    log_handler = TimedRotatingFileHandler(LOG_FILE,"midnight",BACKUPS)
 
     formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s")
     log_handler.setFormatter(formatter)
