@@ -3,3 +3,4 @@
 from  silpautils import *
 from langdetect import *
 from normalizer import *
+from silpalogger import *
