@@ -22,7 +22,7 @@ from PyMeld import Meld
 
 class SilpaResponse:
     def __init__(self):
-        xhtml = getTemplate()
+        xhtml = get_template()
         self.page = Meld(xhtml)     
         
     def toString(self):
