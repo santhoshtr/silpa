@@ -21,6 +21,8 @@
 import sys
 from utils import *
 
+log = silpalogger.get_logger()
+
 class ModuleManager:
 
     def import_module(self,name):
@@ -48,7 +50,8 @@ class ModuleManager:
                 return self.import_module(module_name).getInstance()
             except:
                 #print dir(self.import_module(module_name))
-                print "Failed to get instance for " +  module_name
+                global log
+                log.exception("Failed to get instance for %s",module_name)
             
     def find_module(self,action):
         if action == 'AllModules':
