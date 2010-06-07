@@ -21,34 +21,34 @@
 import codecs
 import mimetypes
 import os
-def getTemplate():
-    return open(os.path.dirname(__file__)+"/../"+getTemplateName()).read()
+def get_template():
+    return open(os.path.dirname(__file__)+"/../"+get_template_name()).read()
 
-def getTemplateName():
-    return loadConfiguration()["SILPA_TEMPLATE"]    
+def get_template_name():
+    return load_configuration()["SILPA_TEMPLATE"]    
 
-def getCopyrightInfo():
-    return loadConfiguration()["SILPA_SITE_COPYRIGHT"]      
+def get_copyright_nnfo():
+    return load_configuration()["SILPA_SITE_COPYRIGHT"]      
     
-def getRootFolder():
+def get_root_folder():
     #return loadConfiguration()["SILPA_ROOT_FOLDER"]      
     return os.path.dirname(__file__)+ "/../" 
 
 def getModulesList():
-    conf_dict=loadConfiguration()
+    conf_dict=load_configuration()
     action_dict={}
     for item in conf_dict   :
         if(item.startswith("SILPA_ACTION.")):
             action_dict[item.replace("SILPA_ACTION.","")] = conf_dict[item]
     return  action_dict 
 
-def getStaticContent(page):
+def get_static_content(page):
     try:
-        return codecs.open(getRootFolder() + "/" + page).read()#, encoding='utf-8', errors='ignore'
+        return codecs.open(get_root_folder() + "/" + page).read()#, encoding='utf-8', errors='ignore'
     except:
         return "Oops! Requested resource not found!"
     
-def loadConfiguration():
+def load_configuration():
     conf_dict={}
     conffile = codecs. open(os.path.dirname(__file__)+"/../silpa.conf",encoding='utf-8', errors='ignore')
     while 1:
@@ -66,7 +66,7 @@ def loadConfiguration():
             pass    
     return conf_dict
 
-def getMimetype(filename):
+def get_mimetype(filename):
     type, encoding = mimetypes.guess_type(filename)
     # We'll ignore encoding, even though we shouldn't really
     return type or 'application/octet-stream'

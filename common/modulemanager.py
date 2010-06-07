@@ -47,7 +47,6 @@ class ModuleManager:
             try:
                 return self.import_module(module_name).getInstance()
             except:
-                #print dir(self.import_module(module_name))
                 print "Failed to get instance for " +  module_name
             
     def find_module(self,action):

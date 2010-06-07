@@ -36,11 +36,9 @@ class SilpaModule:
         return open(self.template,'r').read()
     def set_request(self,request):
         self.request=request
-    def get_result(self):
-        return ""
     def get_json_result(self):
         return ""
-        
+
 def ServiceMethod(fn):
     fn.IsServiceMethod = True
     return fn

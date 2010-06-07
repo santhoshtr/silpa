@@ -20,7 +20,7 @@ import sys,os
 sys.path.append(os.path.dirname(__file__))
 import common
 import modules
-import utils
+from  utils import *
 from silpa import Silpa
 if __name__ == '__main__':
     print("Silpa server loading ...")

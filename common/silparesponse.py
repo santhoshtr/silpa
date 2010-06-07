@@ -20,35 +20,20 @@
 from utils import *
 from PyMeld import Meld
 
-class SilpaResponse:
+class SilpaResponse(Meld):
     def __init__(self):
-        xhtml = getTemplate()
-        self.page = Meld(xhtml)     
+        Meld.__init__(self,get_template())
+    def populate_form(self,request):
+        #try to populate the html form with the values from the request.
+        for key in request:
+            try:
+                value = request.get(key)
+                field = self.__getattr__(key)
+                field.value = value
+                self.__getattr__(value).selected= 'selected' 
+            except:
+                pass
+        return self   
         
-    def toString(self):
-        return str(self.page)
-
-    def set_form(self,value):
-        if(value):
-            self.page.form = value
-
-    def set_result(self,value):
-        if(value):
-            self.page.result= value 
-
-    def set_error_message(self,value):
-        if(value):
-            self.page.errormessage = value
-
-    def set_success_message(self,value):
-        if(value):
-            self.page.successmessage = value
-
-    def set_content(self, value):
-        if value:
-            self.page.content = value           
-
-    def set_footer(self, value):
-        if value:
-            self.page.footer = value
+     
         

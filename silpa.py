@@ -26,7 +26,6 @@ sys.path.append(os.path.dirname(__file__))
 from common import *
 from utils import *
 from jsonrpc import handleCGI,ServiceHandler
-cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
 
 class Silpa():
     
@@ -73,24 +72,25 @@ class Silpa():
                         return [jsonreponse.encode('utf-8')]
                         
                     #normal request for the page, may contain request parameters(GET)    
-                    self._response.set_form(module_instance.get_form())
-                    self._response.set_result(module_instance.get_result())
+                    self._response.form = module_instance.get_form()
+                    #populate the form with the query values
+                    self._response = self._response.populate_form(request)
                     start_response('200 OK', [('Content-Type', 'text/html')])
-                    return [self._response.toString().encode('utf-8')]
+                    return [str(self._response).encode('utf-8')]
                     
             #It is a static content request.
             # Content type depends on the mimetype
-            start_response('200 OK', [('Content-Type', getMimetype(request_uri))])
+            start_response('200 OK', [('Content-Type', get_mimetype(request_uri))])
             if request_uri .endswith(".html"):
                 # HTML pages need to be embedded inside the content area
-                self._response.set_content(getStaticContent("doc/"+request_uri))
-                return [self._response.toString().encode('utf-8')]
+                self._response.content=get_static_content("doc/"+request_uri)
+                return [str(self._response).encode('utf-8')]
             else: 
                 # Images, css, javascript etc..
-                return [getStaticContent(request_uri)]
+                return [get_static_content(request_uri)]
                 
         else: #No action. Show home page
-            self._response.set_content(getStaticContent('doc/index.html'))
+            self._response.content= get_static_content('doc/index.html')
             start_response('200 OK', [('Content-Type', 'text/html')])
-            return [self._response.toString().encode('utf-8')]
+            return [str(self._response).encode('utf-8')]
 
