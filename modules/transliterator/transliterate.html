@@ -10,7 +10,7 @@
         $('#progress') .html("Transliterating. Please Wait...");
         $('#result').html("");
         var text= form.input_text.value;
-        var targetlang= form.translang.value;
+        var targetlang= form.lang.value;
         var jsonRequest = {
         "method" :  "modules.Transliterator.transliterate",
          "params" : [text, targetlang], 
@@ -48,7 +48,7 @@
         </p>
         <form action="" method="post" onsubmit="return trans(this); ">
         <textarea  name='input_text' id='input_text'></textarea></br> 
-        Transliterate To : <select id="translang" name="translang" style="width:12em;">
+        Transliterate To : <select id="lang" name="lang" style="width:12em;">
           <option value="hi_IN">Hindi</option>
           <option value="ml_IN">Malayalam</option>
           <option value="bn_IN">Bengali</option>

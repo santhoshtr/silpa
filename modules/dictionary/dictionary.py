@@ -44,12 +44,9 @@ class Dictionary(SilpaModule):
             data = dumps({"result":None, "id":id_, "error":error})
         return data
         
-    def get_result(self):
-        definition=""
-        if self.request.get('word'):
-                definition = self.getdef(self.request.get('word'),self.request.get('dictionary'))
-        return definition 
-        
+    def get_form(self):
+        page = open(self.template,'r').read()
+        return page
     def get_free_dict(self, src, dest):
         dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
         dictdata=dict_dir+ "/freedict-"+src+"-"+dest
@@ -64,11 +61,11 @@ class Dictionary(SilpaModule):
         dest = dictionary.split("-")[1]
         dictdata = self.get_free_dict(src,dest)
         if dictdata:
-            dict=DictDB(dictdata)
+            dict = DictDB(dictdata)
             meanings =  dict.getdef(word)
             for meaning in meanings:
                 meaningstring += meaning
-        if meaningstring=="None":
+        if meaningstring == "None":
             meaningstring = "No definition found"
             return meaningstring
         return meaningstring

@@ -27,7 +27,7 @@
                 // Render it
                 $('#result') .html("<pre>"+ msg.result + "</pre>");
             },
-            error: function(msg) { alert(msg.error); }
+            error: function(msg) { alert(msg.message); }
         });
         return false;
     }
@@ -41,8 +41,8 @@
          <p align="center">
         Word : <input type="text" id="word" name="word"/>
         Dictionary :<select id="dictionary" name="dictionary" style="width:12em;">
-          <option value="en-hi">English-Hindi</option>
-          <option value="en-ml">English-Malayalam</option>
+          <option value="en-hi" id="en-hi" >English-Hindi</option>
+          <option value="en-ml" id="en-ml" >English-Malayalam</option>
         </select>
         <input type="hidden" name="action" value="Dictionary">
         </br>
