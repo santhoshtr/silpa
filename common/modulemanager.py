@@ -86,7 +86,13 @@ class ModuleManager:
             modules.append(module_instance)
         modules.sort()
         return modules  
-
+        
+    def set_request(self,request):
+        """
+        A not-so-good fix to avoid an exception when calling all modules screen
+        """
+        return
+        
     def getServiceMethods(self):
         """
         Return the dictionary of service methods defined in all modules
