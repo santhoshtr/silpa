@@ -77,3 +77,12 @@ def is_number(s):
         return True
     except ValueError:
         return False
+
+def ensure_dir(d):
+    '''
+       Function checks if directory exists if not it creates
+       the directrory
+       d Absolute Path to the directory
+    '''
+    if not os.path.exists(d):
+        os.mkdir(d)
