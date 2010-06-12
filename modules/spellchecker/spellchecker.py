@@ -129,7 +129,7 @@ class Spellchecker(SilpaModule):
                     candidates.append(word[:pos]+" "+word[pos:])
                     candidates.append(word[:pos]+"-"+word[pos:])
                 pos+=1    
-        return dumps(candidates)
+        return candidates
         
     def filter_candidates(self, word, candidates):
         filtered_candidates=[]

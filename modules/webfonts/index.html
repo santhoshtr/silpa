@@ -1,0 +1,56 @@
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var pathname = window.location;
+
+    var jsonRequest = {
+        "method" :  "modules.Webfonts.get_fonts_list",
+         "params" : [], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+          var fonts =eval( '(' + msg.result + ')');
+          $('#progress').html("Loading fonts list...");
+            // Render it
+           $('#fontslist').append("<table id='resulttable' class='table1'><tr><th>Font</th><th>CSS Link</th></tr></table>");
+           for (var index in fonts) {
+              $('#resulttable tr:last').after("<tr><td>" + fonts[index] +"</td><td><a href='" + pathname+"?font="+fonts[index] +"'>"+ pathname+"?font="+fonts[index]+"</td></tr>" );
+              $('#progress').html("Loading font "+ fonts[index] );
+           };
+            $('#fontslist').append("<br/>");
+            $('#progress').html("" );
+        },
+        error: function(msg) { alert(msg); }
+    });
+});    
+</script>
+<body>
+        <h2>Webfonts</h2>
+        </hr>
+        <p>Webfonts allows web designers to use custom fonts in the pages without having the fonts installed in users computer.
+        This technique make usr of @font-face feature. Any modern webbrowser is capable of using webfonts
+        </p>
+        <p>
+        Silpa provides a set of indic fonts that you can use in your webpages. Users can see the pages in Indic languages even if the
+        font is not availabe in their computer. Silpa webfonts module simplifies the usage of webfonts for developers by hosting
+        available opensource fonts in our sever and providing the easy to use css links.
+        </p>
+        <h3>Avaialable Fonts</h3>
+        <div id="fontslist"></div>
+        <h3>How to use webfont in your website</h3>
+        <p>To embed a font say,Meera into your web page, copy the css link from above table as the first element in the &lt;head&gt; of your html document.<p>
+        <p>The API will generate the necessary CSS specific to the user's browser so you
+        can use the font on your page. Simply use the font Meera in your CSS font stack like any other font,
+        for example:</p>
+        <code>
+        p { font-family: 'Meera',sans; }
+        </code>
+        <br/>
+        <p>Note:This module is under development</p>
+ </body>

@@ -53,8 +53,7 @@ class CharDetails(SilpaModule):
             details['Canonical Decomposition']=  decomposition(character)
             chardetails[character] = details
         chardetails['Characters'] = list(text)
-        print  dumps(chardetails)
-        return dumps(chardetails)
+        return chardetails
     
     def get_module_name(self):
         return "Unicode Character Details"

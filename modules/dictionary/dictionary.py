@@ -47,6 +47,7 @@ class Dictionary(SilpaModule):
     def get_form(self):
         page = open(self.template,'r').read()
         return page
+        
     def get_free_dict(self, src, dest):
         dict_dir=os.path.join(os.path.dirname(__file__), 'dictionaries')
         dictdata=dict_dir+ "/freedict-"+src+"-"+dest

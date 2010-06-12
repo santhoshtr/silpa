@@ -157,7 +157,7 @@ class ServiceHandler(object):
             error = {"name": error.__class__.__name__, "message":error}
             result = None
         try:
-            data = dumps({"result":result, "id":id_, "error":error})
+            data = dumps({"result":dumps(result), "id":id_, "error":error})
         except JSONEncodeException, e:
             #translate the exception also to the error
             error = {"name": "JSONEncodeException", "message":"Result Object Not Serializable"}

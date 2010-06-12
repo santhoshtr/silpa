@@ -38,7 +38,11 @@ class SilpaModule:
         self.request=request
     def get_json_result(self):
         return ""
-
+    def is_self_serve(self) :       
+        return False
+    def get_mimetype(self):
+        return "text/html"
+        
 def ServiceMethod(fn):
     fn.IsServiceMethod = True
     return fn

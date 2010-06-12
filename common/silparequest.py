@@ -45,8 +45,10 @@ class SilpaRequest(object):
         except:
             pass
         return self._environ.get(key,None)
+        
     def __iter__(self):
         return self._formvalues.__iter__()
+        
     def _parse_query(self, environ) :   
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ,  keep_blank_values=1)
         return form

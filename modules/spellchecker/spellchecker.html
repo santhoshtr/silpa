@@ -22,7 +22,7 @@
         success: function(msg) {
           var resultobj =eval( '(' + msg.result + ')');
           $('#progress').html("");
-          if(msg.result )   {
+          if(resultobj)   {
                  $('#result').html("<b>  Correct Spelling.</b>"); 
           }
           else {
