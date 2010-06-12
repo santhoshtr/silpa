@@ -3,26 +3,29 @@
     <title></title>
     <meta content="">
     <style></style>
-    <script type="text/javascript" src="js/rpc.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/pure.js"></script>
 	<script type="text/javascript">
 	function syllabalise(form)
 	{
 		var text= form.word.value;
-		$('#progress') .html("Processing. Please Wait...");
-		$('#result').html("");
-		var service = new rpc.ServiceProxy("JSONRPC", {asynchronous:false});
-		try {
-		 var result = service.modules.Syllabalizer.syllabalize(text);
-		 $('#errormessage').html("");
-		}
-		catch(e){
-			$('#errormessage').html(e.message);
-		}
-		$('#progress').html("");
-		// Render it
-		$('#result') .html("<p>"+ result + "</p>");
+		var jsonRequest = {
+        "method" :  "modules.Syllabalizer.syllabalize",
+         "params" : [text], 
+         "id" : ""
+         };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "JSONRPC",
+            data: $.toJSON(jsonRequest), 
+            dataType: "json",
+            success: function(msg) {
+                $('#progress').html("");
+                // Render it
+                $('#result') .html("<p>"+ msg.result + "</p>");
+            },
+            error: function(msg) { alert(msg.message); }
+        });
 		return false;
 	}
 	</script>
