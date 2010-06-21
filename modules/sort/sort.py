@@ -33,7 +33,7 @@ class Sort(SilpaModule):
         sorted_words= {}
         sorted_words['SILPA'] = sorted(words, key=self.silpacollator.sort_key) 
         sorted_words['UCA'] = sorted(words, key=self.ucacollator.sort_key) 
-        return dumps(sorted_words)
+        return sorted_words
 
     def get_module_name(self):
         return "Sort"
