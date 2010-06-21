@@ -118,7 +118,7 @@ class InexactSearch(SilpaModule):
 		for word in words:
 			word = word.strip()
 			search_results[word]= self.compare(word, key)	
-		return dumps(search_results)	
+		return search_results
 	def get_module_name(self):
 		return "Approximate Search"
 	def get_info(self):
