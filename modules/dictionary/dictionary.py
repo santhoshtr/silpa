@@ -69,7 +69,7 @@ class Dictionary(SilpaModule):
         if meaningstring == "None":
             meaningstring = "No definition found"
             return meaningstring
-        return meaningstring
+        return meaningstring.decode("utf-8")
         
     def get_module_name(self):
         return "Dictionary"
