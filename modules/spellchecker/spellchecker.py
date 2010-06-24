@@ -192,10 +192,11 @@ class Spellchecker(SilpaModule):
            tempword = self.strip_punctuations(word) 
            if not self.check(tempword, language):
                misspelled_words.append(word)
-       return dumps(misspelled_words)
+       return misspelled_words
 
     def get_module_name(self):
         return "Spellchecker"
+        
     def get_info(self):
         return  "Indic Spellchecker"
 
