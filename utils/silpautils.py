@@ -34,7 +34,7 @@ def get_root_folder():
     #return loadConfiguration()["SILPA_ROOT_FOLDER"]      
     return os.path.dirname(__file__)+ "/../" 
 
-def getModulesList():
+def get_modules_list():
     conf_dict=load_configuration()
     action_dict={}
     for item in conf_dict   :
