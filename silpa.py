@@ -61,7 +61,7 @@ class Silpa():
         if request_uri :
             #Check if the action is defined.
             if self._module_manager.find_module(request_uri ):
-                module_instance =  self._module_manager.getModuleInstance(request_uri )
+                module_instance =  self._module_manager.get_module_instance(request_uri )
                 if(module_instance):
                     module_instance.set_request(request)
                     
