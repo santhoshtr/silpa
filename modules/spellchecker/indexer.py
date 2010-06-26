@@ -21,6 +21,8 @@ import sys
 import os
 import timeit
 import codecs
+sys.path.append("../../")
+from utils import *
 
 class DictionaryIndex:
     def __init__(self):
@@ -95,7 +97,7 @@ class DictionaryIndex:
         try:
             self.fp = codecs.open(self.index_file,"r",encoding="utf-8",errors="ignore")
         except IOError:
-            print "Could not find the dictionary for "+ dictfile
+            silpalogger.info("Could not find the dictionary for %s",dictfile)
             self.create_index(dictfile)
        
         self.fp = codecs.open(self.index_file,"r",encoding="utf-8")
