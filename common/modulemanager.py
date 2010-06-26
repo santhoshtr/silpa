@@ -37,7 +37,7 @@ class ModuleManager:
                     pass
         return obj
 
-    def getModuleInstance(self,action):
+    def get_module_instance(self,action):
         action=action.replace(" ","_")
         if action == 'AllModules':
             #List the available modules
@@ -47,23 +47,23 @@ class ModuleManager:
             try:
                 return self.import_module(module_name).getInstance()
             except:
-                print "Failed to get instance for " +  module_name
+                silpalogger.exception("Failed to get instance for %s",module_name)
             
     def find_module(self,action):
         if action == 'AllModules':
             #List the available modules
             return True #Well, that was not good
         try:
-            return getModulesList()[action]
+            return get_modules_list()[action]
         except: 
             return None
             
-    def getModulesInfoAsHTML(self):
-        module_dict=getModulesList  ()
+    def get_modules_info_as_html(self):
+        module_dict=get_modules_list  ()
         response = "<h2>Available Modules</h2></hr>"
         response = response+"<table class=\"table1\"><tr><th>Module</th><th>Description</th></tr>"
         for action in   module_dict:
-            module_instance=self.getModuleInstance(action)
+            module_instance=self.get_module_instance(action)
             if(module_instance!=None):
                 response = response+"<tr><td><a href='"+ action +"'>"+module_instance.get_module_name()+"</a></td>"
                 response = response+"<td>"+module_instance.get_info()+"</td></tr>"
@@ -73,16 +73,16 @@ class ModuleManager:
         return  response+"</table>" 
 
     def get_form(self):
-        return  self.getModulesInfoAsHTML()
+        return  self.get_modules_info_as_html()
 
-    def getAllModules(self):
+    def get_all_modules(self):
         """
         return a list of all the modules available in the system
         """
         modules=[]
-        module_dict=getModulesList  ()
+        module_dict=get_modules_list  ()
         for action in   module_dict:
-            module_instance=self.getModuleInstance(action)
+            module_instance=self.get_module_instance(action)
             modules.append(module_instance)
         modules.sort()
         return modules  
@@ -94,14 +94,14 @@ class ModuleManager:
         return
     def is_self_serve(self):    
         return False
-    def getServiceMethods(self):
+    def get_service_methods(self):
         """
         Return the dictionary of service methods defined in all modules
         dictionary key: the method name. for eg: modules.spellchecker.suggest.
         dictionary value : The invocable method.
         """
         service_methods = dict()
-        modules = self.getAllModules()
+        modules = self.get_all_modules()
         for module in modules:
             for key in dir(module):
                 try:
