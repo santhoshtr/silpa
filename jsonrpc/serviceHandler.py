@@ -105,7 +105,7 @@ class ServiceHandler(object):
                 #initialize the singleton instance. This will take time. but will be invoked only
                 #once in the life cycle of application
                 module_manager = ModuleManager()
-                self.service_methods = module_manager.getServiceMethods()
+                self.service_methods = module_manager.get_service_methods()
             if method_name.startswith("system."):
                 return  getattr(self, method_name.split(".")[1])
             try:
@@ -124,7 +124,7 @@ class ServiceHandler(object):
         results = []
         if self.service_methods == None:
             module_manager = ModuleManager()
-            self.service_methods = module_manager.getServiceMethods()
+            self.service_methods = module_manager.get_service_methods()
         for method in self.service_methods:
             results.append(method)
         results.sort()

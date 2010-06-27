@@ -22,7 +22,7 @@ import os
 import string
 import codecs
 from common import SilpaModule,ServiceMethod,dumps
-from utils import detect_lang, silpautils
+from utils import detect_lang, silpautils, silpalogger
 from modules.inexactsearch import inexactsearch
 from indexer import DictionaryIndex
 import urllib

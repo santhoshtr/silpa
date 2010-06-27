@@ -25,7 +25,7 @@ class Webfonts(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), 'index.html')  
         self.font=None
-        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi', 'Kalyani','RaghuMalayalam','Lohit Malayalam','Dyuthi']
+        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi', 'Kalyani','RaghuMalayalam','Lohit Malayalam','Dyuthi','Mallige-n','Kedage-n','lohit_kn']
         
     def set_request(self,request):
         self.request=request
