@@ -44,17 +44,17 @@ class Webfonts(SilpaModule):
         """
         Provide the css for the given font. CSS will differ for IE and Other browsers
         """
-        http_host =self.request.get('HTTP_HOST')
-        
+        http_ref =self.request.get('HTTP_REFERER')
+        http_ref=http_ref.replace("Webfonts","")
         if self.font not in self.available_fonts:
             return "Error!, Font not available"
         user_agent= self.request.get('HTTP_USER_AGENT')
         if user_agent.find("MSIE")<0:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-            css=css.replace('$$FONTURL$$','http://'+ http_host +'/silpa/webfonts/font/' + self.font + '.ttf')
+            css=css.replace('$$FONTURL$$', http_ref +'/modules/webfonts/font/' + self.font + '.ttf')
         else:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-            css=css.replace('$$FONTURL$$','http://'+ http_host +'/silpa/webfonts/font/' + self.font + '.eot')
+            css=css.replace('$$FONTURL$$', http_ref +'/modules/webfonts/font/' + self.font + '.eot')
 
         css=css.replace('$$FONTFAMILY$$',self.font)
         return css
