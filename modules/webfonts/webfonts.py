@@ -51,10 +51,10 @@ class Webfonts(SilpaModule):
         user_agent= self.request.get('HTTP_USER_AGENT')
         if user_agent.find("MSIE")<0:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-            css=css.replace('$$FONTURL$$','http://'+ http_host +'/webfonts/font/' + self.font + '.ttf')
+            css=css.replace('$$FONTURL$$','http://'+ http_host +'/silpa/webfonts/font/' + self.font + '.ttf')
         else:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-            css=css.replace('$$FONTURL$$','http://'+ http_host +'/webfonts/font/' + self.font + '.eot')
+            css=css.replace('$$FONTURL$$','http://'+ http_host +'/silpa/webfonts/font/' + self.font + '.eot')
 
         css=css.replace('$$FONTFAMILY$$',self.font)
         return css
