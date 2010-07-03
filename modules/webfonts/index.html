@@ -15,14 +15,37 @@ $(document).ready(function() {
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-          var fonts =eval( '(' + msg.result + ')');
+          var resultobj =eval( '(' + msg.result + ')');
           $('#progress').html("Loading fonts list...");
             // Render it
-           $('#fontslist').append("<table id='resulttable' class='table1'><tr><th>Font</th><th>CSS Link</th></tr></table>");
-           for (var index in fonts) {
-              $('#resulttable tr:last').after("<tr><td>" + fonts[index] +"</td><td><a href='" + pathname+"?font="+fonts[index] +"'>"+ pathname+"?font="+fonts[index]+"</td></tr>" );
-              $('#progress').html("Loading font "+ fonts[index] );
-           };
+            $('#fontslist').append("<table id='resulttable' class='table1'><tr><th>Font Name</th><th>Language</th><th>CSS Link</th><th>Font Preview</th></tr></table>");
+            var fonts = resultobj["Fonts"];
+            $("head").append("<style>");
+            var style = $("head").children(":last");
+            style.attr({
+              type: "text/css"
+            });
+            
+            for(var index in fonts){
+              var font = fonts[index];
+              var font_details = resultobj[font];
+              var css_link = pathname + "?font="+font;
+
+              $("head").append("<link>");
+              css = $("head").children(":last");
+              css.attr({
+                rel: "stylesheet",
+                type: "text/css",
+                href: css_link
+              });
+
+              style.append("."+ font +"{ font-family:"+ font +",sans; font-size: 16px;}");
+              
+               $('#resulttable tr:last').after("<tr><td>" + font +"</td><td>" + font_details["Language"] + "</td><td><a href='" + css_link +"'>"+ css_link + "</td><td><p class="+ font +">" + font_details["SampleText"] + "</p></td></tr>" );
+               $('#progress').html("Loading font "+ fonts[index] );
+
+            }
+           
             $('#fontslist').append("<br/>");
             $('#progress').html("" );
         },
