@@ -19,6 +19,7 @@ import cgitb
 import os
 import cgi
 import sys
+import codecs
 from common import *
 from utils import *
 
@@ -26,7 +27,18 @@ class Webfonts(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), 'index.html')  
         self.font=None
-        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi', 'Kalyani','RaghuMalayalam','Lohit Malayalam','Dyuthi','Malige-n','Kedage-n','lohit_kn']
+
+        #List of available fonts
+        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi', 'Kalyani','RaghuMalayalam','LohitMalayalam','Dyuthi','Malige','Kedage','Lohit Kannada']
+
+        # Generate path for the font information file
+        self.font_info_file = os.path.join(os.path.dirname(__file__),"fonts.info")
+
+        # Read the entire file so this will be invoked only
+        # first time
+        # P.S don't use unicode() function here it will mess
+        # up everything
+        self.font_info_lines = codecs.open(self.font_info_file,encoding="utf-8",errors="ignore").read().split("\n")
         
     def set_request(self,request):
         self.request=request
@@ -68,7 +80,49 @@ class Webfonts(SilpaModule):
         return a list of available fonts names for the given Language
         If the language is not given, return all the available fonts
         """
-        return self.available_fonts
+
+        # Font map which holds details
+        font_map = {}
+        for line in self.font_info_lines:
+            # TODO: For each line create new map object This is weird
+            # but for some reason same object reference was used
+            # by Python so all Fonts will have same value as last
+            # font updated but it was working fine in chardetails
+            # module need to check on this
+            
+            details_map = {}
+            
+            # If the line starts with # its comment just skip it
+            if line.startswith("#"):
+                continue
+            # Split the line on ","
+            info = line.split(",")
+
+            # If there are less than 3 objects this is not a valid line
+            # and can cause trouble in further processing so skip it
+            
+            if len(info) < 3:
+                continue
+
+            try:
+                details_map["Language"] = info[1]
+                details_map["SampleText"] = info[2]
+                font_map[info[0]] = details_map
+            except:
+                silpalogger.debug(info)
+                silpalogger.exception("Index out of bound exeption")
+
+        #use this for debugging only don't log real data
+        # silpalogger.debug(font_map) 
+
+        # Ok now add list of available fonts which will be used by client
+        # as key to get details of each font
+        font_map["Fonts"] = self.available_fonts
+        return font_map
+            
+            
+        
+        
         
     def get_module_name(self):
         return "Webfonts"
@@ -78,4 +132,3 @@ class Webfonts(SilpaModule):
         
 def getInstance():
     return Webfonts()
-        
