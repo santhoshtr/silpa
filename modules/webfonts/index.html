@@ -2,7 +2,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var pathname = window.location;
-
+    var page = window.location.href;
+    var silpaInstallation = page.substring(0,page.lastIndexOf('/')+1);
     var jsonRequest = {
         "method" :  "modules.Webfonts.get_fonts_list",
          "params" : [], 
@@ -18,7 +19,7 @@ $(document).ready(function() {
           var resultobj =eval( '(' + msg.result + ')');
           $('#progress').html("Loading fonts list...");
             // Render it
-            $('#fontslist').append("<table id='resulttable' class='table1'><tr><th>Font Name</th><th>Language</th><th>CSS Link</th><th>Font Preview</th></tr></table>");
+            $('#fontslist').append("<table id='resulttable' class='table1'><tr><th>Font Name</th><th>Language</th><th>CSS Link</th><th>Font Preview</th><th>Download</th></tr></table>");
             var fonts = resultobj["Fonts"];
             $("head").append("<style>");
             var style = $("head").children(":last");
@@ -41,7 +42,7 @@ $(document).ready(function() {
 
               style.append("."+ font +"{ font-family:"+ font +",sans; font-size: 18px;}");
               
-               $('#resulttable tr:last').after("<tr><td>" + font +"</td><td>" + font_details["Language"] + "</td><td><a href='" + css_link +"'>"+ css_link + "</td><td><p class="+ font +">" + font_details["SampleText"] + "</p></td></tr>" );
+               $('#resulttable tr:last').after("<tr><td>" + font +"</td><td>" + font_details["Language"] + "</td><td><a href='" + css_link +"'>"+ css_link + "</td><td><p class="+ font +">" + font_details["SampleText"] + "</p></td><td><a href="+ silpaInstallation +"modules/webfonts/font/"+ font +".ttf>"+ font  +".ttf</a></td></tr>" );
                $('#progress').html("Loading font "+ fonts[index] );
 
             }
