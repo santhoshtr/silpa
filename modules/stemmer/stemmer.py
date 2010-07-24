@@ -60,10 +60,10 @@ class Stemmer(SilpaModule):
 			if(word_stemmed==""):
 				word_stemmed=word
 			result_dict[ word ] = word_stemmed
-		return dumps(result_dict)
+		return result_dict
 					
 	def LoadRules(self):	
-		print "Loading the rules..."
+		#print "Loading the rules..."
 		rules_dict = dict()
 		line = []
 		line_number = 0
@@ -100,7 +100,7 @@ class Stemmer(SilpaModule):
 	 		rule_number=rule_number+1
 			rules_dict[lhs]=rhs
 			#print "[", rule_number ,"] " +lhs + " : " +rhs
-		print "Found ",rule_number, " rules."
+		#print "Found ",rule_number, " rules."
 		return rules_dict
 	
 	def trim(self,word):
@@ -117,6 +117,7 @@ class Stemmer(SilpaModule):
 	
 	def get_module_name(self):
 		return "Stemmer"
+        
 	def get_info(self):
 		return 	"Malayalam Stemmer(Experimental)"
 		
