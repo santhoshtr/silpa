@@ -29,7 +29,9 @@ class Webfonts(SilpaModule):
         self.font=None
 
         #List of available fonts
-        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi', 'Kalyani','RaghuMalayalam','LohitMalayalam','Dyuthi','Malige','Kedage','Lohit Kannada']
+        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi',
+                              'Kalyani','RaghuMalayalam','LohitMalayalam',
+                              'Dyuthi','Malige','Kedage','LohitKannada']
 
         # Generate path for the font information file
         self.font_info_file = os.path.join(os.path.dirname(__file__),"fonts.info")
@@ -64,14 +66,17 @@ class Webfonts(SilpaModule):
         if self.font not in self.available_fonts:
             return "Error!, Font not available"
         user_agent= self.request.get('HTTP_USER_AGENT')
-        if user_agent.find("MSIE")<0:
-            css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.ttf')
-        else:
-            css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.eot')
+        css_string = '''@font-face {
+ font-family: $$FONTFAMILY$$;
+ font-style: normal;
+ font-weight: normal;
+ src: url($$FONTURL$$.eot);
+ src: local(''),url($$FONTURL$$.ttf) format(truetype);
+}'''
 
-        css=css.replace('$$FONTFAMILY$$',self.font)
+        css = css_string.replace('$$FONTFAMILY$$',self.font)
+        css = css.replace('$$FONTURL$$',"http://"+ http_host +
+                          "/modules/webfonts/font/"+ self.font)
         return css
     
     @ServiceMethod      
