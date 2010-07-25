@@ -66,18 +66,17 @@ class Webfonts(SilpaModule):
         if self.font not in self.available_fonts:
             return "Error!, Font not available"
         user_agent= self.request.get('HTTP_USER_AGENT')
-        css_string = '''@font-face {
- font-family: $$FONTFAMILY$$;
- font-style: normal;
- font-weight: normal;
- src: url($$FONTURL$$.eot);
- src: local(''),url($$FONTURL$$.ttf) format(truetype);
-}'''
+        if user_agent.find("MSIE")<0:
+            css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
+            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.ttf')
+        else:
+            css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
+            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.eot')
 
-        css = css_string.replace('$$FONTFAMILY$$',self.font)
-        css = css.replace('$$FONTURL$$',"http://"+ http_host +
-                          "/modules/webfonts/font/"+ self.font)
+        css=css.replace('$$FONTFAMILY$$',self.font)
         return css
+        
+   
     
     @ServiceMethod      
     def get_fonts_list(self, language=None):
