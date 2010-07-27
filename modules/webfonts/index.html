@@ -40,7 +40,7 @@ $(document).ready(function() {
                 href: css_link
               });
 
-              style.append("."+ font +"{ font-family:"+ font +",sans; font-size: 18px;}");
+              style.append("."+ font +"{ font-family:"+ font +",sans; font-size: 16px;}");
               
                $('#resulttable tr:last').after("<tr><td>" + font +"</td><td>" + font_details["Language"] + "</td><td><a href='" + css_link +"'>"+ css_link + "</td><td><p class="+ font +">" + font_details["SampleText"] + "</p></td><td><a href="+ silpaInstallation +"modules/webfonts/font/"+ font +".ttf>"+ font  +".ttf</a></td></tr>" );
                $('#progress').html("Loading font "+ fonts[index] );
