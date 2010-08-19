@@ -83,6 +83,36 @@
         </br>
         </p>
         </form>
+<h3>Python Spell Check and Spell Suggest  API</h3>
+<ul>
+<li>Method: modules.Spellchecker.check
+
+<ul>
+	<li>arg1 : the word</li>
+	<li>arg2 : the language for the word(optional)</li>
+	<li>Return : True or False. True means the word is with correct spelling. Otherwise false.</li>
+</ul></li>
+
+
+<li>Method: modules.Spellchecker.suggest
+<ul>
+	<li>arg1 : the word</li>
+	<li>arg2 : the language for the word(optional)</li>
+	<li>Return : List of string containing spelling suggestions</li>
+</ul></li>
+</ul>
+Sample usage is given below.
+<pre class="code">
+# -*- coding: utf-8 -*-
+>>>from jsonrpc import ServiceProxy
+>>>silpaService = ServiceProxy("http://smc.org.in/silpa/JSONRPC")
+>>>print silpaService.modules.Spellchecker.check("speling")
+False
+>>>print silpaService.modules.Spellchecker.check("speling","en_US")
+False
+>>>print silpaService.modules.Spellchecker.suggest("speling")
+["spelling","spieling","spewing"]
+</pre>
   </body>
 </html>
 
