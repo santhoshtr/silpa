@@ -26,6 +26,7 @@ from utils import *
 import string
 import os
 from cmudict import CMUDict
+from indic_en import *
 
 class Transliterator(SilpaModule):
     def __init__(self):
@@ -75,10 +76,18 @@ class Transliterator(SilpaModule):
         """
         if src_lang == "en_IN" or src_lang == "en_US":
             return word
+
+        # TODO: the function is generic now so no need of testing the lanuguage
+        # but since the indic_en contains only for kn_IN and ml_IN we need this
+        # check.
+        # Add all indic language to indic_en
+        # remplace this block with single call to indic_en function
+        if src_lang == "kn_IN":
+            return self.transliterate_indic_en(word,src_lang)
         if not src_lang == "ml_IN":
             word = self.transliterate_indic_indic(word, src_lang, "ml_IN")
                    
-        return self.transliterate_ml_en(word)
+        return self.transliterate_indic_en(word,"ml_IN")
 
     def transliterate_iso15919(self, word, src_language):
         tx_str = ""
@@ -241,6 +250,74 @@ class Transliterator(SilpaModule):
                 tx_str = tx_str+u"്"
         return tx_str
 
+    def transliterate_indic_en(self,word,src_lang):
+        """
+    
+        Arguments:
+        - `self`:
+        - `word`: Word to be transliterated (sentence)
+        - `src_lang`: Language from which we need to transilterate
+        """
+
+        # Get all the language related stuffs
+        dictionary = get_dictionary_for(src_lang)
+        vowels = get_vowels_for(src_lang)
+        vowel_signs = get_vowel_signs_for(src_lang)
+        virama = get_virama_for(src_lang)
+        anuswara = get_anuswara_for(src_lang)
+
+        
+        word_length = len(word)
+        index = 0
+        tx_string = ""
+        while index < word_length:
+
+            # If current charachter is a punctuation symbol
+            # skip it.
+            # Added to avoid getting extra 'a' to the begining
+            # of word next to punctuation symbol
+            #
+            
+            if word[index] in string.punctuation:
+                tx_string += word[index]
+                index += 1
+                continue
+            
+            # Virama = conjucter  
+            if word[index] == virama:
+                index+=1
+                continue;
+            
+            # Get english equivalaent of the charachter.
+            try:
+                tx_string += dictionary[word[index]]
+            except KeyError:
+                # If charachter isn't present in the dict
+                # just append the charachter to string
+                # This case is now handled by punctuation checking
+                
+                tx_string += word[index]
+
+
+            
+            if index+1 < word_length and not word[index+1] in vowel_signs\
+                and word[index+1] in dictionary \
+                and not word[index] in vowels\
+                and not word[index] in vowel_signs :
+                tx_string +='a'
+            
+            if index+1 == word_length and not word[index] in vowel_signs\
+                and word[index] in dictionary:
+                tx_string +='a'
+
+            #handle am sign
+            if index+1 < word_length and word[index+1] == anuswara\
+                and  not word[index] in vowel_signs:
+                tx_string += 'a'
+            index+=1
+        return tx_string     
+
+    
     @ServiceMethod
     def transliterate(self,text, target_lang_code):
         tx_str=""

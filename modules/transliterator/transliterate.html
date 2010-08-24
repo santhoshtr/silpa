@@ -23,7 +23,7 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-            var result = $.parseJSON(msg.result);
+	     var result = $.parseJSON(msg.result);
             $('#progress').html("");
             // Render it
             $('#result') .html("<textarea>"+ result + "</textarea>");
