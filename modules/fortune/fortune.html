@@ -61,5 +61,24 @@
         <div id="successmessage"></div>
         <div id="errormessage"></div>
         <div id="result"></div>
+        <h3>Python fortune API</h3>
+        This service provides random quotes
+        <ul>
+          <li>Method: modules.Fortune.fortune
+            <ul>
+	          <li>arg1 : database file name</li>
+	          <li>arg2 : Search word(optional)</li>
+	          <li>Return : Random quote</li>
+            </ul>
+<pre class="code">
+>>>print silpaService.modules.Fortune.fortune('chanakya')
+Do not inhabit a country where you are not respected,\n cannot earn your
+livelihood,have no friends, or cannot\n acquire knowledge.\n"
+>>>print silpaService.modules.Fortune.fortune('chanakya','charity')
+" The good habits of charity, learning and austerity\n practised during
+many past lives continue to be cultivated\n in this birth by virtue of
+the link (yoga) of this present\n life to the previous ones.\n"
+</pre>
+        
   </body>
 </html>
