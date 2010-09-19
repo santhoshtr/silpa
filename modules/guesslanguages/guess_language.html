@@ -3,7 +3,6 @@
     <title></title>
     <meta content="Fortune">
     <style></style>
-    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
     function guesslanguage(form)
     {
@@ -24,7 +23,7 @@
         success: function(msg) {
             $('#progress').html("");
             // Render it
-            $('#result') .html("<b>"+ msg.result + "</b>");
+            $('#result') .html("<b>"+ $.parseJSON(msg.result) + "</b>");
         },
         error: function(msg) { alert(msg); }
     });
@@ -33,7 +32,7 @@
     </script>
 
   </head>
-  <body>
+  <body>o
         <h2>Guess the language</h2></hr>
         <p>Enter the text for guessing the language in the below text area.
          You can give the text in any language and even with mixed language

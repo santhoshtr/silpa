@@ -131,6 +131,7 @@ NAME_MAP = {
     "da" : "Danish",
     "de_DE" : "German",
     "el" : "Greek",
+    "en" : "English",
     "en_US" : "English",
     "eo" : "Esperanto",
     "es" : "Spanish",
@@ -541,11 +542,14 @@ class LangGuess(SilpaModule):
     def guessLanguage(self,text):
         
         lang = guessLanguageName(text)
+        
         if lang ==  'UNKNOWN':
             firstWord = text.split()[0] 
             lang = detect_lang(firstWord)[firstWord]
+            print lang          
             lang = _getName(lang.split("_")[0])
         return lang 
+        
     @ServiceMethod          
     def guessLanguageId(self,text):
         lang = guessLanguage(text)
