@@ -21,10 +21,17 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-	     var result = $.parseJSON(msg.result).replace("\n", "&#13;");
+        if(msg.result=null){
+            $('#progress').html("");
+            // Render it
+            $('#result') .html("<textarea>"+ msg.message + "</textarea>");
+        }
+        else{
+        var result = $.parseJSON(msg.result).replace("\n", "&#13;");
         $('#progress').html("");
         // Render it
         $('#result') .html("<textarea>"+ result + "</textarea>");
+        }
         },
         error: function(msg) { alert(msg.message); }
     });
