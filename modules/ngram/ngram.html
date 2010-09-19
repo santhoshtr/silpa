@@ -75,5 +75,31 @@
         <div id="successmessage"></div>
         <div id="errormessage"></div>
         <div id="result"></div>
+        <h3>Python ngram API</h3>
+        This service provides indic ngram libraries
+        <ul>
+          <li>Method: modules.Ngram.wordNgram
+            <ul>
+	          <li>arg1 : the  sentence</li>
+	          <li>n :  n of n-gram (Optional)</li>
+	          <li>Return : The ngram for the sentence</li>
+            </ul>
+          </li>
+
+          <li>Method: modules.Ngram.letterNgram
+            <ul>
+	          <li>arg1 : the word</li>
+	          <li>n :  n of n-gram (Optional)</li>
+	          <li>Return : The ngram for the word</li>
+          </ul></li>
+
+          <li>Method: modules.Ngram.syllableNgram
+            <ul>
+	          <li>arg1 : the word</li>
+	          <li>n :  n of n-gram (Optional)</li>
+	          <li>Return : The ngram for the word, the letters being splitted at syllable level</li>
+            </ul>
+          </li>
+        </ul>
   </body>
 </html>
