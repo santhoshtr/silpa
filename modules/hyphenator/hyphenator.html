@@ -12,7 +12,6 @@
         -webkit-column-rule: 1px solid #ddccb5;
     }
     </style>
-    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
     function dohyphenate(form)
     {
@@ -32,8 +31,9 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
+            var result = $.parseJSON(msg.result).replace("\n", "&#13;");
             $('#progress').html("");
-            $('#hyphresult').html("<p align='justify'>"+ msg.result+ "</p>");
+            $('#hyphresult').html("<p align='justify'>"+ result+ "</p>");
         },
         error: function(msg) { alert(msg); }
     });
