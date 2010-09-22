@@ -20,6 +20,7 @@
 import traceback
 import sys
 import os
+import datetime
 import cgitb
 import cgi
 sys.path.append(os.path.dirname(__file__))
@@ -33,6 +34,7 @@ class Silpa():
         self._module_manager = ModuleManager()
         self._response=None
         self._jsonrpc_handler=ServiceHandler(self) 
+        self.time_format = "%a, %d %b %Y %H:%M:%S %Z"
         
     def serve(self,environ, start_response):
         """
@@ -83,7 +85,7 @@ class Silpa():
                     
             #It is a static content request.
             # Content type depends on the mimetype
-            start_response('200 OK', [('Content-Type', get_mimetype(request_uri))])
+            start_response('200 OK', [('Content-Type', get_mimetype(request_uri)),('Expires',(datetime.datetime.now()+ datetime.timedelta(+10)).strftime(self.time_format))])
             if request_uri .endswith(".html"):
                 # HTML pages need to be embedded inside the content area
                 self._response.content=get_static_content("doc/"+request_uri)
