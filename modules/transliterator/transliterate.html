@@ -21,7 +21,7 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-        if(msg.result=null){
+        if(msg.result==null){
             $('#progress').html("");
             // Render it
             $('#result') .html("<textarea>"+ msg.message + "</textarea>");
@@ -61,7 +61,7 @@
           <option value="ta_IN">Tamil</option>
           <option value="te_IN">Telugu</option>
           <option value="or_IN">Oriya</option>
-          <option value="gu_IN">Gujarai</option>
+          <option value="gu_IN">Gujarati</option>
           <option value="pa_IN">Panjabi</option>
           <option value="kn_IN">Kannada</option>
           <option value="en_US">English</option>
