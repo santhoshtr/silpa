@@ -31,7 +31,10 @@ class Webfonts(SilpaModule):
         #List of available fonts
         self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi',
                               'Kalyani','RaghuMalayalam','LohitMalayalam',
-                              'Dyuthi','Malige','Kedage','LohitKannada']
+                              'Dyuthi','Malige','Kedage','LohitKannada',
+                              'lohit-te','lohit-ta','lohit-or','lohit-bn','lohit-hi',
+                              'Samyak-Devanagari', 'Samyak-Gujarati'
+                              ]
 
         # Generate path for the font information file
         self.font_info_file = os.path.join(os.path.dirname(__file__),"fonts.info")
@@ -66,12 +69,17 @@ class Webfonts(SilpaModule):
         if self.font not in self.available_fonts:
             return "Error!, Font not available"
         user_agent= self.request.get('HTTP_USER_AGENT')
-        if user_agent.find("MSIE")<0:
-            css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.ttf')
-        else:
+        print user_agent
+        if user_agent.find("MSIE")>0:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.eot')
+            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.eot')    
+        else:
+            if user_agent.find("Chrome")>0:    
+                css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('woff');}"
+                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.woff')
+            else:
+                css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
+                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.ttf')    
 
         css=css.replace('$$FONTFAMILY$$',self.font)
         return css
