@@ -18,7 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-# If you find any bugs or have any suggestions email: santhosh.thottingal@gmail.com
+# If you find any bugs or have any suggestions
+# email: santhosh.thottingal@gmail.com
 # URL: http://www.smc.org.in
 
 from common import *
@@ -30,7 +31,8 @@ from indic_en import *
 
 class Transliterator(SilpaModule):
     def __init__(self):
-        self.template=os.path.join(os.path.dirname(__file__), 'transliterate.html')
+        self.template=os.path.join(os.path.dirname(__file__),\
+                                       'transliterate.html')
         self.cmu = CMUDict()
 
     def transliterate_en_ml(self, word):   
@@ -65,7 +67,9 @@ class Transliterator(SilpaModule):
         #chain it through indic indic transliteratioin
         #first remove malayalam specific zwj
         tx_str = tx_str.replace(u'‍', '') # remove instances of zwnj
-        if tx_str[-1:] == u'്' and (target_lang == "hi_IN" or target_lang == "gu_IN" or target_lang == "bn_IN" ) :
+        if tx_str[-1:] == u'്' and (target_lang == "hi_IN"\
+                                        or target_lang == "gu_IN"\
+                                        or target_lang == "bn_IN" ) :
             tx_str = tx_str[:-(len(u'്'))] #remove the last virama' 
             
         return self.transliterate_indic_indic(tx_str, "ml_IN", target_lang)
@@ -102,7 +106,9 @@ class Transliterator(SilpaModule):
             if offset>0 and offset<=128:
                 tx_str = tx_str + charmap["ISO15919"][offset]
             #delete the inherent 'a' at the end of the word from hindi    
-            if tx_str[-1:]=='a' and (src_language == "hi_IN" or src_language == "gu_IN" or src_language == "bn_IN" ) :
+            if tx_str[-1:]=='a' and (src_language == "hi_IN"\
+                                         or src_language == "gu_IN"\
+                                         or src_language == "bn_IN" ) :
                 if word_length ==  index and word_length>1: #if last letter 
                     tx_str = tx_str[:-1] #remove the last 'a' 
         return tx_str .decode("utf-8")
@@ -127,52 +133,13 @@ class Transliterator(SilpaModule):
             if offset>0 and offset<=128:
                 tx_str = tx_str + charmap["IPA"][offset]
             #delete the inherent 'a' at the end of the word from hindi    
-            if tx_str[-1:]=='ə' and (src_language == "hi_IN" or src_language == "gu_IN" or src_language == "bn_IN" ) :
+            if tx_str[-1:]=='ə' and (src_language == "hi_IN"\
+                                         or src_language == "gu_IN"\
+                                         or src_language == "bn_IN" ) :
                 if word_length ==  index and word_length>1: #if last letter 
                     tx_str = tx_str[:-(len('ə'))] #remove the last 'a' 
         return tx_str .decode("utf-8")
 
-    def transliterate_ml_en(self, word):
-        virama=u"്"
-        #TODO: how to make this more generic so that more languages can be handled here?
-        #idea1: transliterate any language to a common language say hindi and the n do conversion?
-        #existing transliterate.py can be used?
-        #idea2: Have dictionaries for each language like english_xx_dict ?
-        #TODO: complete this
-        malayalam_english_dict={u'അ':'a',u'ആ':'aa',u'ഇ':'i',u'ഈ':'ee',u'ഉ':'u',u'ഊ':'oo',u'ഋ':'ri',\
-                u'എ':'e',u'ഏ':'e',u'ഐ':'ai',u'ഒ':'o',u'ഓ':'o',u'ഔ':'au',\
-                u'ക':'k',u'ഖ':'kh',u'ഗ':'g',u'ഘ':'gh',u'ങ്ങ':'ng',u'ങ':'ng',\
-                u'ച':'ch',u'ഛ':'chh',u'ജ':'j',u'ഝ':'jhh',u'ഞ':'nj',\
-                u'ട':'t',u'ഠ':'th',u'ഡ':'d',u'ഢ':'dh',u'ണ':'n',\
-                u'ത':'th',u'ഥ':'th',u'ദ':'d',u'ധ':'dh',u'ന':'n',\
-                u'പ':'p',u'ഫ':'ph',u'ബ':'b',u'ഭ':'bh',u'മ':'m',\
-                u'യ':'y',u'ര':'r',u'ല':'l', u'വ':'v', u'റ':'r',\
-                u'ശ':'s',u'ഷ':'sh',u'സ':'s', u'ഹ':'h',u'ള':'l',u'ഴ':'zh',\
-                u'്':'',u'ം':'m',u'ാ':'aa',u'ി':'i' ,u'ീ':'ee' ,u'ു':'u',\
-                u'ൂ':'oo',u'ൃ':'ri' ,u'െ':'e' ,u'േ':'e',\
-                u'ൈ':'ai',u'ൊ':'o' ,u'ോ':'oo' ,u'ൗ':'au',  u'ൌ':'ou'}
-        ml_vowels = [u'അ',u'ആ',u'ഇ',u'ഈ',u'ഉ' ,u'ഊ',u'ഋ', u'എ',u'ഏ',u'ഐ',u'ഒ',u'ഓ',u'ഔ']                        
-        ml_vowel_signs = [u'്',u'ം',u'ാ',u'ി',u'ീ',u'ു', u'ൂ',u'ൃ' ,u'െ' ,u'േ',u'ൈ',u'ൊ' ,u'ോ' ,u'ൗ' , u'ൌ',u'‍']        
-        word_length = len(word)
-        index = 0
-        tx_string = ""
-        while index < word_length:
-            if word[index] == u'്':
-                index+=1
-                continue;
-            try:
-                tx_string += malayalam_english_dict[word[index]]
-            except KeyError:
-                tx_string += word[index]
-            if index+1 < word_length and not word[index+1] in ml_vowel_signs and word[index+1] in malayalam_english_dict and not word[index] in ml_vowels and not word[index] in ml_vowel_signs :
-                tx_string +='a'
-            if index+1 == word_length and not word[index] in ml_vowel_signs and word[index] in malayalam_english_dict:
-                tx_string +='a'
-            #handle am sign
-            if index+1 < word_length and word[index+1] == u'ം' and  not word[index] in ml_vowel_signs:
-                tx_string += 'a'
-            index+=1
-        return tx_string       
 
     def _malayalam_fixes(self, text):
         try:
@@ -188,15 +155,18 @@ class Transliterator(SilpaModule):
 
     def transliterate_indic_indic(self, word, src_lang, target_lang) :
         """
-        Transliterate from an Indian languge word to another indian language word
+            Transliterate from an Indian languge word
+            to another indian language word
         """
         index = 0
         tx_str = ""
         word = normalizer.normalize(word)
         if src_lang == "ml_IN" and target_lang != "ml_IN" :
             word = word.replace(u"\u200C",u"") 
-            word = word.replace(u"\u200D",u"") 
-            word = word.replace(u"ു്",u"") #replace all samvruthokaram by u vowels
+            word = word.replace(u"\u200D",u"")
+
+            #replace all samvruthokaram by u vowels
+            word = word.replace(u"ു്",u"")
         
                 
         for chr in word:
@@ -334,22 +304,29 @@ class Transliterator(SilpaModule):
 
 
                     if target_lang_code=="ISO15919" :
-                        tx_str=tx_str + self.transliterate_iso15919(word, src_lang_code)   + " "
+                        tx_str=tx_str + \
+                            self.transliterate_iso15919(word, src_lang_code)\
+                            + " "
                         continue
                     
                     if target_lang_code=="IPA" :
-                        tx_str=tx_str + self.transliterate_ipa(word, src_lang_code)   + " "
+                        tx_str=tx_str + \
+                            self.transliterate_ipa(word, src_lang_code)   + " "
                         continue
                     
                     if src_lang_code=="en_US" :        
-                        tx_str = tx_str + self.transliterate_en_xx(word, target_lang_code) + " "
+                        tx_str = tx_str + \
+                            self.transliterate_en_xx(word, target_lang_code)+" "
                         continue
 
                     if target_lang_code=="en_US" or target_lang_code=="en_IN"  :
-                        tx_str=tx_str + self.transliterate_xx_en(word, src_lang_code)   + " "
+                        tx_str=tx_str + \
+                            self.transliterate_xx_en(word, src_lang_code)  + " "
                         continue
                         
-                    tx_str += self.transliterate_indic_indic(word, src_lang_code, target_lang_code)        
+                    tx_str += self.transliterate_indic_indic(word,\
+                                                                 src_lang_code,\
+                                                               target_lang_code)
                     tx_str = tx_str   + " "
 
                 else:
