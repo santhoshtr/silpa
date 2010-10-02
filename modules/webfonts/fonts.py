@@ -3,7 +3,7 @@
 # Copyright 2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 fonts = {
             "AnjaliOldLipi":{
-					"Name": "അഞ്ജലി ഓള്‍ഡ് ലിപി",
+					"Name": u"അഞ്ജലി ഓള്‍ഡ് ലിപി",
                     "License":"GPL",
                     "Author" :"Kevin",
                     "ttf" : "AnjaliOldLipi.ttf",
@@ -15,7 +15,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     },
             "Meera":{
-					"Name": "മീര",
+					"Name": u"മീര",
                     "License":"GPL",
                     "Author" :"Hussain K H",
                     "ttf" : "Meera.ttf",
@@ -27,7 +27,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     },
             "Rachana":{
-					"Name": "രചന",
+					"Name": u"രചന",
                     "License":"GPL",
                     "Author" :"Hussain K H",
                     "ttf" : "Rachana.ttf",
@@ -39,7 +39,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     } ,   
              "Kalyani":{
-					"Name": "കല്യാണി",
+					"Name": u"കല്യാണി",
                     "License":"GPL",
                     "Author" :"Hussain K H",
                     "ttf" : "Kalyani.ttf",
@@ -51,7 +51,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     } ,
               "Suruma":{
-					"Name": "സുറുമ",
+					"Name": u"സുറുമ",
                     "License":"GPL",
                     "Author" :"Suresh P",
                     "ttf" : "Suruma.ttf",
@@ -63,7 +63,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     } ,                    
               "LohitMalayalam":{
-					"Name": "ലോഹിത് മലയാളം",
+					"Name": u"ലോഹിത് മലയാളം",
                     "License":"GPL",
                     "Author" :"Suresh P",
                     "ttf" : "LohitMalayalam.ttf",
@@ -75,7 +75,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     } ,                          
               "SamyakMalayalam":{
-					"Name": "സമ്യക്‍ മലയാളം",
+					"Name": u"സമ്യക്‍ മലയാളം",
                     "License":"GPL",
                     "Author" :"Suresh P",
                     "ttf" : "SamyakMalayalam.ttf",
@@ -87,7 +87,7 @@ fonts = {
                     "Glyphs":"3330:3455"
                     } ,    
 			  "RaghuMalayalam":{
-					"Name": "രഘു മലയാളം",
+					"Name": u"രഘു മലയാളം",
                     "License":"GPL",
                     "Author" :"",
                     "ttf" : "RaghuMalayalam.ttf",
@@ -123,7 +123,7 @@ fonts = {
                     "Glyphs":"65:122"
                     } ,                  
            "Dyuthi":{
-					"Name": "ദ്യുതി",
+					"Name": u"ദ്യുതി",
                     "License":"GPL",
                     "Author" :"Hiran Venugopal",	
                     "ttf" : "Dyuthi.ttf",
