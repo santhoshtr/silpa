@@ -40,7 +40,7 @@ outline-width:medium;
 
 }
 
-input[type=submit] {
+input[type=submit]   {
 background:#222;
 background-color:#36F;
 display:inline-block;
@@ -63,6 +63,13 @@ outline-color:-moz-use-text-color;
 outline-style:none;
 outline-width:medium;
 }
+
+input[type=checkbox]   {
+margin-right:10px;
+margin-bottom:15px;
+}
+
+
 
 select {
 border:1px solid;
@@ -115,9 +122,11 @@ position:relative;
 padding:.5em 0;
 }
 
-form.f-wrap-1 fieldset {
+form fieldset {
 width:auto;
 margin:0 1em;
+padding:.5em .5em;
+border:1px solid #E3E8EE;
 }
 
 form.f-wrap-1 h3 {

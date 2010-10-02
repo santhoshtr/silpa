@@ -22,28 +22,14 @@ import sys
 import codecs
 from common import *
 from utils import *
-
+import fonts
 class Webfonts(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), 'index.html')  
         self.font=None
 
         #List of available fonts
-        self.available_fonts=['Meera','Rachana', 'Suruma', 'AnjaliOldLipi',
-                              'Kalyani','RaghuMalayalam','LohitMalayalam',
-                              'Dyuthi','Malige','Kedage','LohitKannada',
-                              'lohit-te','lohit-ta','lohit-or','lohit-bn','lohit-hi',
-                              'Samyak-Devanagari', 'Samyak-Gujarati'
-                              ]
-
-        # Generate path for the font information file
-        self.font_info_file = os.path.join(os.path.dirname(__file__),"fonts.info")
-
-        # Read the entire file so this will be invoked only
-        # first time
-        # P.S don't use unicode() function here it will mess
-        # up everything
-        self.font_info_lines = codecs.open(self.font_info_file,encoding="utf-8",errors="ignore").read().split("\n")
+        self.available_fonts=fonts.fonts
         
     def set_request(self,request):
         self.request=request
@@ -66,20 +52,21 @@ class Webfonts(SilpaModule):
         request_uri =self.request.get('REQUEST_URI')
         if request_uri!=None:
             http_host+="/silpa"
-        if self.font not in self.available_fonts:
+            
+        if not self.available_fonts.has_key(self.font):
             return "Error!, Font not available"
         user_agent= self.request.get('HTTP_USER_AGENT')
         print user_agent
         if user_agent.find("MSIE")>0:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.eot')    
+            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.available_fonts[self.font]['eot'])    
         else:
             if user_agent.find("Chrome")>0:    
                 css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('woff');}"
-                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.woff')
+                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' +  self.available_fonts[self.font]['woff'])
             else:
                 css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.font + '.ttf')    
+                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' +  self.available_fonts[self.font]['ttf'])    
 
         css=css.replace('$$FONTFAMILY$$',self.font)
         return css
@@ -87,54 +74,22 @@ class Webfonts(SilpaModule):
    
     
     @ServiceMethod      
-    def get_fonts_list(self, language=None):
+    def get_fonts_list(self, languages=[]):
         """
         return a list of available fonts names for the given Language
-        If the language is not given, return all the available fonts
         """
-
-        # Font map which holds details
-        font_map = {}
-        for line in self.font_info_lines:
-            # TODO: For each line create new map object This is weird
-            # but for some reason same object reference was used
-            # by Python so all Fonts will have same value as last
-            # font updated but it was working fine in chardetails
-            # module need to check on this
-            
-            details_map = {}
-            
-            # If the line starts with # its comment just skip it
-            if line.startswith("#"):
-                continue
-            # Split the line on ","
-            info = line.split(",")
-
-            # If there are less than 3 objects this is not a valid line
-            # and can cause trouble in further processing so skip it
-            
-            if len(info) < 3:
-                continue
-
-            try:
-                details_map["Language"] = info[1]
-                details_map["SampleText"] = info[2]
-                font_map[info[0]] = details_map
-            except:
-                silpalogger.debug(info)
-                silpalogger.exception("Index out of bound exeption")
-
-        #use this for debugging only don't log real data
-        # silpalogger.debug(font_map) 
-
-        # Ok now add list of available fonts which will be used by client
-        # as key to get details of each font
-        font_map["Fonts"] = self.available_fonts
-        return font_map
-            
-            
-        
-        
+        results = []
+        if languages==[]:
+            return results
+        else:
+            for language in languages:
+				try:
+					for font in self.available_fonts:
+						if self.available_fonts[font]['Language']  == language:
+							results.append({font:self.available_fonts[font]})
+				except KeyError:
+					pass    
+        return results    
         
     def get_module_name(self):
         return "Webfonts"
