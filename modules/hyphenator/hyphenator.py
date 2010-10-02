@@ -238,7 +238,7 @@ class Hyphenator(SilpaModule):
         response=""
         words=text.split(" ")
         lang=self.guess_language.guessLanguageId(text)
-        print "detected lang is " +lang
+#        print "detected lang is " +lang
         self.loadHyphDict(lang)
         for word in words:
              hyph_word = self.inserted(word, hyphen)
