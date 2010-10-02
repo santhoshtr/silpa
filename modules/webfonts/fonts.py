@@ -133,7 +133,43 @@ fonts = {
                     "Scripts": "English,Malayalam",
                     "Language":"Malayalam",
 					"Glyphs":"3330:3455"
-                    }                             
+                    },
+            "Kedage":{
+                                        "Name": u"ಕೇದಗೆ",
+                    "License":"GPL",
+                    "Author":"Indian Institute of Science, Bangalore",
+                    "ttf": "Kedage.ttf",
+                    "eot": "Kedage.eot",
+                    "woff": "Kedage.woff",
+                    "Variants": "Normal",
+                    "Scripts": "English,Kannada",
+                    "Language": "Kannada",
+                                        "Glyphs":"3202:3311"
+                   },
+            "Malige":{
+                                        "Name": u"ಮಲ್ಲಿಗೆ",
+                    "License":"GPL",
+                    "Author":"Indian Institute of Science, Bangalore",
+                    "ttf":"Malige.ttf",
+                    "eot":"Malige.eot",
+                    "woff":"Malige.woff",
+                    "Variants": "Normal",
+                    "Scripts":"English,Kannada",
+                    "Language":"Kannada",
+                                        "Glyphs":"3202:3311"
+                  },
+            "LohitKannada":{
+                                        "Name": u"ಲೋಹಿತ್ ಕನ್ನಡ",
+                    "License":"GPL v2",
+                    "Author":"Red Hat Inc.",
+                    "ttf":"LohitKannada.ttf",
+                    "eot":"LohitKannada.eot",
+                    "woff":"LohitKannada.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Kannada,Devanagari",
+                    "Language":"Kannada",
+                                        "Glyphs":"3202:3314"
+                  }
         }
 """
 Kedage,Kannada,ಕೈ ಕೆಸರಾದರೆ ಬಾಯಿ ಮೊಸರು.
