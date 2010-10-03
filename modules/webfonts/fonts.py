@@ -135,7 +135,7 @@ fonts = {
 					"Glyphs":"3330:3455"
                     },
             "Kedage":{
-                                        "Name": u"ಕೇದಗೆ",
+					"Name": u"ಕೇದಗೆ",
                     "License":"GPL",
                     "Author":"Indian Institute of Science, Bangalore",
                     "ttf": "Kedage.ttf",
@@ -144,10 +144,10 @@ fonts = {
                     "Variants": "Normal",
                     "Scripts": "English,Kannada",
                     "Language": "Kannada",
-                                        "Glyphs":"3202:3311"
+					"Glyphs":"3202:3311"
                    },
             "Malige":{
-                                        "Name": u"ಮಲ್ಲಿಗೆ",
+					"Name": u"ಮಲ್ಲಿಗೆ",
                     "License":"GPL",
                     "Author":"Indian Institute of Science, Bangalore",
                     "ttf":"Malige.ttf",
@@ -156,10 +156,10 @@ fonts = {
                     "Variants": "Normal",
                     "Scripts":"English,Kannada",
                     "Language":"Kannada",
-                                        "Glyphs":"3202:3311"
+					"Glyphs":"3202:3311"
                   },
             "LohitKannada":{
-                                        "Name": u"ಲೋಹಿತ್ ಕನ್ನಡ",
+					"Name": u"ಲೋಹಿತ್ ಕನ್ನಡ",
                     "License":"GPL v2",
                     "Author":"Red Hat Inc.",
                     "ttf":"LohitKannada.ttf",
@@ -168,19 +168,82 @@ fonts = {
                     "Variants":"Regular",
                     "Scripts":"English,Kannada,Devanagari",
                     "Language":"Kannada",
-                                        "Glyphs":"3202:3314"
+					"Glyphs":"3202:3314"
+                  },
+           "LohitTamil":{
+					"Name": u"லௌஹித் தமிழ்",
+                    "License":"GPL v2",
+                    "Author":"Red Hat Inc.",
+                    "ttf":"lohit-ta.ttf",
+                    "eot":"lohit-ta.eot",
+                    "woff":"lohit-ta.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Tamil",
+                    "Language":"Tamil",
+					"Glyphs":"2946:3066"
+                  },       
+          "LohitOriya":{
+					"Name": u"Lohit Oriya",
+                    "License":"GPL v2",
+                    "Author":"Red Hat Inc.",
+                    "ttf":"lohit-or.ttf",
+                    "eot":"lohit-or.eot",
+                    "woff":"lohit-or.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Oriya",
+                    "Language":"Oriya",
+					"Glyphs":"2817:2929"
+                  },               
+           "LohitHindi":{
+					"Name": u"लौहित हिंदी",
+                    "License":"GPL v2",
+                    "Author":"Red Hat Inc.",
+                    "ttf":"lohit-hi.ttf",
+                    "eot":"lohit-hi.eot",
+                    "woff":"lohit-hi.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Devanagari",
+                    "Language":"Hindi",
+					"Glyphs":"2304:2431"
+                  },                       
+            "Samyak-Devanagari":{
+					"Name": u"सम्यक  हिंदी",
+                    "License":"GPL v2",
+                    "Author":"Rahul Bhalerao,Sandeep Shedmake,Bageshri Salvi,Pravin Satpute",
+                    "ttf":"Samyak-Devanagari.ttf",
+                    "eot":"Samyak-Devanagari.eot",
+                    "woff":"Samyak-Devanagari.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Devanagari",
+                    "Language":"Hindi",
+					"Glyphs":"2304:2431"
+                  },
+         "Samyak-Gujarati":{
+					"Name": u"Samyak Gujarati",
+                    "License":"GPL v2",
+                    "Author":"Rahul Bhalerao,Sandeep Shedmake,Bageshri Salvi,Pravin Satpute",
+                    "ttf":"Samyak-Gujarati.ttf",
+                    "eot":"Samyak-Gujarati.eot",
+                    "woff":"Samyak-Gujarati.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Gujarati",
+                    "Language":"Gujarati",
+					"Glyphs":"2689:2801"
+                  },
+      "LohitGujarati":{
+					"Name": u"Lohit Gujarati",
+                    "License":"GPL v2",
+                    "Author":"Red Hat Inc.",
+                    "ttf":"logit-gu.ttf",
+                    "eot":"logit-gu.eot",
+                    "woff":"logit-gu.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Gujarati",
+                    "Language":"Gujarati",
+					"Glyphs":"2689:2801"
                   }
         }
 """
-Kedage,Kannada,ಕೈ ಕೆಸರಾದರೆ ಬಾಯಿ ಮೊಸರು.
-Malige,Kannada,ಬೆಳ್ಳಗಿರೋದೆಲ್ಲ ಹಾಲಲ್ಲ ಹೊಳೆಯೋದೆಲ್ಲ ಚಿನ್ನ ಅಲ್ಲ.
-LohitKannada,Kannada,ಗಿಡವಾಗಿ ಬಗ್ಗದ್ದು ಮರವಾಗಿ ಬಗ್ಗೀತೇ?
-lohit-hi,Devanagari,अआईउऊऋऌऎए ऐऒओऔकचटतप 
-Samyak-Devanagari,Devanagari,अआईउऊऋऌऎए ऐऒओऔकचटतप 
-lohit-ta,Tamil,அஆஈஉஊஎஏ ஐஒஓஔகசடதப 
-lohit-or,Oriya,ଅଆଈଉଊଋଌଏ ଐଓଔକଚଟତପ 
 lohit-bn,Bengali,অআঈউঊঋঌএ ঐওঔকচটতপ 
-logit-gu,Gujarati,અઆઈઉઊઋઌએ ઐઓઔકચટતપ 
-Samyak-Gujarati,Gujarati,અઆઈઉઊઋઌએ ઐઓઔકચટતપ 
 lohit-te,Telugu,ಗఅఆఈఉఊఋఌఎఏ ఐఒఓఔకచటతప 
 """

@@ -56,7 +56,6 @@ class Webfonts(SilpaModule):
         if not self.available_fonts.has_key(self.font):
             return "Error!, Font not available"
         user_agent= self.request.get('HTTP_USER_AGENT')
-        print user_agent
         if user_agent.find("MSIE")>0:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
             css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.available_fonts[self.font]['eot'])    
