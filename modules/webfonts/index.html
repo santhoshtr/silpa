@@ -30,6 +30,7 @@ table.glyphs td {
 </style>
 <script type="text/javascript">
 function search_fonts(){
+	$('#progress').html("Loading fonts list...");
     var pathname = window.location;
     var page = window.location.href;
     var silpaInstallation = page.substring(0,page.lastIndexOf('/')+1);
@@ -51,7 +52,7 @@ function search_fonts(){
         success: function(msg) {
           var fonts =eval( '(' + msg.result + ')');
           
-          $('#progress').html("Loading fonts list...");
+          
             // Render it
                      
             $("head").append("<style>");
@@ -193,11 +194,10 @@ function embed(csslink, fontname){
 					<input type="submit" id="searchfont" value="Search"  style="width:10em;"/>
 		</div>                
         </form>
-        
+        <div id="progress"></div>
         <div style="clear: both;" id="fontslistheader"></div>
         <div id="fontslist">
         </div>
-        <div id="progress"></div>
         <br/>
         <h3>Browser Compatibility</h3>
         <p>As of now we guarantee 100% compatibility with Firefox browser. We are working on IE and Chrome compatibility. Be patient!</p>
