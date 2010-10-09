@@ -397,12 +397,10 @@ line-height:0;
 }
 
 #header {
-/*-moz-box-shadow:0 0 1em #36F;
--webkit-box-shadow:0 0 1em #36F;*/
 -moz-box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
 -webkit-box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
 box-shadow:0 0 1em #36F;
-margin:1px 0 25px;
+margin:1px 0 5px;
 padding:0 0 8px;
 }
 
