@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <script type="text/javascript">
+    function trans(form)
+    {
+        $('#progress') .html("Transliterating. Please Wait...");
+        $('#result').html("");
+        var text= form.input_text.value;
+        var targetlang= form.lang.value;
+        var jsonRequest = {
+        "method" :  "modules.Transliterator.transliterate",
+         "params" : [text, targetlang], 
+         "id" : ""
+    };
+	$.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+        if(msg.result==null){
+            $('#progress').html("");
+            // Render it
+            $('#result') .html("<textarea>"+ msg.message + "</textarea>");
+        }
+        else{
+        var result = $.parseJSON(msg.result).replace("\n", "&#13;");
+        $('#progress').html("");
+        // Render it
+        $('#result') .html("<textarea>"+ result + "</textarea>");
+        }
+        },
+        error: function(msg) { alert(msg.message); }
+    });
+     return false;
+    }
+    </script>
+  </head>
+  <body>
+        <h2>Transliterator</h2></hr>
+        <p>This application helps you to transliterate text from any Indian language to any other Indian language. Enter the text for transliteration in the below text area.
+         Language of each  word will be detected. 
+         You can give the text in any language and even with mixed language.
+        For Malayalam alone, English->Malayalam, Malayalam->English Transliteration is available.
+        </p>
+		<p><a href="http://en.wikipedia.org/wiki/ISO_15919">ISO 15919</a>,  an international
+		 standard for the transliteration of Indic scripts to the Latin alphabet formed in 2001 is also supported.
+		  Select ISO 15919:2001 for 'Transliterate To' for using this scheme.
+        </p>
+        <p>Transliteration to <a href="http://en.wikipedia.org/wiki/IPA"> International Phonetic Alphabet</a> is also available.
+        </p>
+        <form action="" method="post" onsubmit="return trans(this); ">
+        <textarea  name='input_text' id='input_text'></textarea></br> 
+        Transliterate To : <select id="lang" name="lang" style="width:12em;">
+          <option value="hi_IN">Hindi</option>
+          <option value="ml_IN">Malayalam</option>
+          <option value="bn_IN">Bengali</option>
+          <option value="ta_IN">Tamil</option>
+          <option value="te_IN">Telugu</option>
+          <option value="or_IN">Oriya</option>
+          <option value="gu_IN">Gujarati</option>
+          <option value="pa_IN">Panjabi</option>
+          <option value="kn_IN">Kannada</option>
+          <option value="en_US">English</option>
+          <option value="ISO15919">ISO 15919:2001</option>
+          <option value="IPA">International Phonetical Alphabet(IPA)</option>
+        </select>
+        <input  type="submit" id="Transliterate" value="Transliterate"  name="action" style="width:12em;"/>
+        </br>
+        </form>
+  </body>
+  <hr/>
+  <div id="progress"></div>
+  <div id="successmessage"></div>
+  <div id="errormessage"></div>
+  <div id="result"></div>
+</html>

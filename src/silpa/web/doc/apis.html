@@ -1,0 +1,205 @@
+<!--
+Copyright 2009-2010
+Santhosh Thottingal <santhosh.thottingal@gmail.com>
+This code is part of Silpa project.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+-->
+<h2>SILPA Webservice APIs</h2>
+<h3>Introduction</h3>
+<p>Silpa provides a set of webservice APIs over json-rpc protocol. Silpa services can be used from any programming language which
+has an RPC implementation. The request and response formats of APIs are in json. It is recommended to read the <a href="http://json-rpc.org">json-rpc documentation</a> if you are not familiar with that.
+</p>
+<p>This page explains the available usage and sample usage from python application. Implementing this in other programming languages should not be difficult and should be a matter of changing the programming language syntax
+For further assistance, see the <a href="#RelatedLinks">related links section</a> of this page
+</p>
+<p>For using the APIs you need the jsonrpc library of python. You can get this from <a href="http://json-rpc.org/wiki/python-json-rpc">here</a>. </p>
+
+<h3 id="concepts"><a href="#concepts">Concepts</a></h3>
+<p>JSON-RPC wraps an object, allowing you to call methods on that object
+and get the return values.  It also provides a way to get error
+responses.</p>
+<p>The <a href="http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html">specification</a> goes into the
+details (though in a vague sort of way).  Here&#8217;s the basics:</p>
+<ul>
+<li><p>All access goes through a POST to a single URL.</p>
+</li>
+<li><p>The POST contains a JSON body that looks like:</p>
+<div><pre><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;methodName&quot;</span><span class="p">,</span>
+
+ <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;arbitrary-something&quot;</span><span class="p">,</span>
+ <span class="s">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="o">...</span><span class="p">]}</span>
+
+</pre></div>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">id</span></tt> parameter is just a convenience for the client to keep
+track of which response goes with which request.  This makes
+asynchronous calls (like an XMLHttpRequest) easier.  We just send
+the exact same id back as we get, we never look at it.</p>
+</li>
+<li><p class="first">The response is JSON.  A successful response looks like:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="s">&quot;result&quot;</span><span class="p">:</span> <span class="n">the_result</span><span class="p">,</span>
+
+ <span class="s">&quot;error&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+ <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;arbitrary-something&quot;</span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">The error response looks like:</p>
+
+<pre>{"result": null,
+ "error": {"name": "JSONRPCError",
+           "code": (number 100-999),
+           "message": "Some Error Occurred",
+           "error": "whatever you want\n(a traceback?)"},
+ "id": "arbitrary-something"}</pre>
+</li>
+<li><p class="first">It doesn&#8217;t seem to indicate if an error response should have a 200
+response or a 500 response.  So as not to be completely stupid about
+HTTP, we choose a 500 resonse, as giving an error with a 200
+response is irresponsible.</p>
+</li>
+</ul>
+
+<h3><a name="AvailableServices">Available Services</a></h3>
+
+<p>
+Silpa provides a service discovery APIs to get the list of available service APIs. The following code illustrates the usage:
+</p>
+<pre class="code">
+# -*- coding: utf-8 -*-
+from jsonrpc import ServiceProxy
+silpaService = ServiceProxy("http://smc.org.in/silpa/JSONRPC")
+print silpaService.system.listMethods()
+</pre>
+<p>
+When the above code is executed you should get a response like this:
+</p>
+<pre class="code">
+['modules.CharDetails.getdetails', 'modules.Dictionary.getdef', 'modules.Fortune.fortune_ml', 
+'modules.LangGuess.getScriptName', 'modules.LangGuess.guessLanguage', 'modules.Payyans.ASCII2Unicode',
+'modules.Payyans.ASCII2Unicode', 'modules.Payyans.Unicode2ASCII', 'modules.Payyans.Unicode2ASCII',
+'modules.Soundex.compare', 'modules.Soundex.soundex','modules.Syllabalizer.syllabalize',
+'modules.Transliterator.transliterate']
+</pre>
+<p>As you can see the response is a json formatted list of available methods available in the server</p>
+
+<h3><a name="Dictionary">Dictionary</a></h3>
+Dictionary APIs provide dictionary lookup service.
+<ul>
+<li>Method: modules.Dictionary.getdef</li>
+<ul>
+<li>arg1 : the word</li>
+<li>arg2 : the dictionary</li>
+</ul>
+</ul>
+Sample usage is given below
+<pre class="code">
+print silpaService.modules.Dictionary.getdef("help","freedict-eng-hin")
+</pre>
+
+Response will be the string containing the definition of the given word
+
+<h3><a name="spellcheck">Spellcheck</a></h3>
+Spellcheck API provides langauge independent spellchecking service across Indian languages and English
+<ul>
+<li>Method: modules.Spellchecker.check
+
+<ul>
+	<li>arg1 : the word</li>
+	<li>arg2 : the language for the word(optional)</li>
+	<li>Return : True or False. True means the word is with correct spelling. Otherwise false.</li>
+</ul></li>
+
+
+<li>Method: modules.Spellchecker.suggest
+<ul>
+	<li>arg1 : the word</li>
+	<li>arg2 : the language for the word(optional)</li>
+	<li>Return : List of string containing spelling suggestions</li>
+</ul></li>
+</ul>
+Sample usage is given below.
+<pre class="code">
+>>>print silpaService.modules.Spellchecker.check("speling")
+False
+>>>print silpaService.modules.Spellchecker.check("speling","en_US")
+False
+>>>print silpaService.modules.Spellchecker.suggest("speling")
+["spelling","spieling","spewing"]
+</pre>
+
+The language parameter is optional. If not provided the language of the input word will be detected.
+
+
+<h3><a name="soundex">Soundex</a></h3>
+This service provides indic soundex algorithm based soundex codes for a word
+<ul>
+<li>Method: modules.Soundex.soundex
+
+<ul>
+	<li>arg1 : the word</li>
+	<li>Return : The soundex code for the word</li>
+</ul></li>
+
+
+<li>Method: modules.Soundex.compare
+<ul>
+	<li>arg1 : first word</li>
+	<li>arg2 : second word</li>
+	<li>Return : 0 if both strings are same, 1 if both strngs sounds alike and from same language, 2 if strings are from different langauges but sounds alike</li>
+</ul></li>
+</ul>
+Sample usage is given below.
+<pre class="code">
+>>>print silpaService.modules.Soundex.soundex("&#3349;&#3390;&#3376;&#3405;&#8205;&#3364;&#3405;&#3364;&#3391;&#3349;&#3405;")
+&#3349;APKKBF0
+>>>print silpaService.modules.Soundex.compare("&#3349;&#3390;&#3376;&#3405;&#8205;&#3364;&#3405;&#3364;&#3391;&#3349;&#3405;","&#2965;&#3006;&#2992;&#3021;&#2980;&#3007;&#2965;&#3021;")
+2
+</pre>
+
+<h3><a name="NGram">Ngram</a></h3>
+This service provides indic ngram libraries
+<ul>
+<li>Method: modules.Ngram.wordNgram
+<ul>
+	<li>arg1 : the  sentence</li>
+	<li>n :  n of n-gram (Optional)</li>
+	<li>Return : The ngram for the sentence</li>
+</ul>
+</li>
+
+<li>Method: modules.Ngram.letterNgram
+<ul>
+	<li>arg1 : the word</li>
+	<li>n :  n of n-gram (Optional)</li>
+	<li>Return : The ngram for the word</li>
+</ul></li>
+
+<li>Method: modules.Ngram.syllableNgram
+<ul>
+	<li>arg1 : the word</li>
+	<li>n :  n of n-gram (Optional)</li>
+	<li>Return : The ngram for the word, the letters being splitted at syllable level</li>
+</ul>
+</li>
+</ul>
+
+<h3><a name="Fortune">Fortune</a></h3>
+This service provides random quotes
+<ul>
+<li>Method: modules.Fortune.fortune
+<ul>
+	<li>arg1 : database file name</li>
+	<li>arg2 : Search word(optional)</li>
+	<li>Return : Random quote</li>
+</ul>
+<pre class="code">
+>>>print silpaService.modules.Fortune.fortune('chanakya')
+Do not inhabit a country where you are not respected,\n cannot earn your livelihood, have no friends, or cannot\n acquire knowledge.\n"
+>>>print silpaService.modules.Fortune.fortune('chanakya','charity')
+" The good habits of charity, learning and austerity\n practised during many past lives continue to be cultivated\n in this birth by virtue of the link (yoga) of this present\n life to the previous ones.\n"
+</pre>
+
+  

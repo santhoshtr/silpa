@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title></title>
+    <style></style>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+    function chardetails(form)
+    {
+    $('#progress').html("Checking. Please Wait..");
+    $('#result').html("");
+    var result="";
+    var character= form.character.value;
+    var jsonRequest = {
+        "method" :  "modules.CharDetails.getdetails",
+         "params" : [character], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+          var resultobj =eval( '(' + msg.result + ')');
+          $('#progress').html("");
+            // Render it
+            characters = resultobj['Characters']
+            
+            for (var index in characters) {
+              var character = characters[index];
+              chardetails = resultobj[character]
+              $('#result').append("<table id='resulttable' class='table1'><tr><th>Character</th><th>"+ character +" </th></tr></table>");
+              for (var property in chardetails) 
+              {
+                $('#resulttable tr:last').after("<tr><td>" + property +"</td><td>" + chardetails[property] +"</td></tr>" );
+              };
+              $('#result').append("<br/>");
+            };
+        },
+        error: function(msg) { alert(msg); }
+    });
+    return false;
+    }
+    </script>
+
+  </head>
+  <body>
+        <h2>Unicode Character Details</h2></hr>
+        <p>Enter a character to get the unicode details
+        </p>
+        <form action="" method="post" onsubmit="return chardetails(this);" >
+         <p align="center">
+        Character : <input type="text"  name="character" style="width:12em;"/>
+        <input type="hidden" name="action" value="CharDetails">
+        <input  type="submit" id="Char_Details" value="Get Details"  style="width:12em;"/>
+        </br>
+        </p>
+        </form>
+        <hr/>
+        <div id="progress"></div>
+        <div id="successmessage"></div>
+        <div id="errormessage"></div>
+        <div id="result"></div>
+  </body>
+</html>

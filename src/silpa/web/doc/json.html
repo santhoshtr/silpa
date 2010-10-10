@@ -1,0 +1,57 @@
+<!--
+Copyright 2009-2010
+Santhosh Thottingal <santhosh.thottingal@gmail.com>
+This code is part of Silpa project.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+-->
+
+<html>
+  <head>
+    <title></title>
+    <style></style>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+    function chardetails(form)
+    {
+    var character= form.character.value;
+    var jsonRequest = {
+        "method" :  "modules.CharDetails.getdetails",
+         "params" : ["u"], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "/JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+          // Insert the returned HTML into the <div>.
+          alert($.toJSON(msg));
+          alert(msg.result);
+        }
+    });
+    
+    // Render it
+    return false;
+    }
+    </script>
+
+  </head>
+  <body>
+        <h2>Unicode Character Details</h2></hr>
+        <p>Enter a character to get the unicode details
+        </p>
+        <form action="" method="post" onsubmit="return chardetails(this);" >
+         <p align="center">
+        Character : <input type="text"  name="character" style="width:3em;"/>
+        <input type="hidden" name="action" value="CharDetails">
+        <input  type="submit" id="Char_Details" value="Get Details"  style="width:12em;"/>
+        </br>
+        </p>
+        </form>
+  </body>
+</html>

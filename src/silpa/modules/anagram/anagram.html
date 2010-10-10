@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title></title>
+    <style></style>
+	<script type="text/javascript">
+	function fortune(form)
+	{
+	$('#progress') .html("Checking. Please Wait..");
+	$('#result').html("");
+	var pattern= form.input_text.value;
+	var anshint= form.ans_hint.value;
+	var service = new rpc.ServiceProxy("services.py", {asynchronous:false});
+	try {
+	   var result = service.modules.Anagram.check_answer(anshint);
+	}
+	catch(e){
+		$('#errormessage').html("");
+	}
+	$('#progress').html("");
+	// Render it
+	$('#result').html("<b>"+ result + "</b>");
+	return false;
+	}
+	</script>
+
+  </head>
+  <body>
+		<h2>Malayalam Anagram</h2></hr>
+		<p>Find out the original word from the scrambled word given below.
+		</p>
+		<form action="" method="post" onsubmit="return anagram(this);" >
+		<br/>
+		<input type="hidden" name="ans_hint">
+		<input type="hidden" name="action" value="Anagram">
+		<input type="text" cols='100' name='input_text' id='input_text'/>
+		<br/>
+		<input type="submit" id="anagram" value="Submit"  style="width:12em;"/>
+		<br/>
+		</form>
+        <hr/>
+        <div id="progress"></div>
+        <div id="successmessage"></div>
+        <div id="errormessage"></div>
+        <div id="result"></div>
+  </body>
+</html>
