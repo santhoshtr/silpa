@@ -1,8 +1,0 @@
-#This is comment
-$remove_punctuation=true
-$filter_lang=ml_IN
-"ന്‍റ" =  "ന്റ"
-"ന്‍പ" ="മ്"പ
-"ററ"= "റ്റ"
-"റ്‍"  = "ര്‍"
-
