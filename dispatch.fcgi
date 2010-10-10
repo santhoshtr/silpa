@@ -1,4 +1,4 @@
-#!/home/smcweb/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright 2009-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 # http://www.smc.org.in
@@ -21,9 +21,10 @@ import traceback
 import sys,os
 import cgitb
 import cgi
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 sys.path.append(os.path.dirname(__file__))
 cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
-from common import *
+from silpa.common import *
 from silpa import Silpa
 
 def application(environ, start_response):
