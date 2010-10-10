@@ -60,7 +60,6 @@ class Silpa():
             request_uri = request.get('action')  
         from common.silparesponse import SilpaResponse
         self._response=SilpaResponse()
-        print request_uri 
         if request_uri :
             #Check if the action is defined.
             if self._module_manager.find_module(request_uri ):
