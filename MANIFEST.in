@@ -1,5 +1,6 @@
-include dispatch.fcgi silpa.sh
-recursive-include src *.ttf *.dic *.js *.css *.html *.map *.conf
+include dispatch.fcgi silpa.sh 
+recursive-include src *.ttf *.dic *.js *.css *.html *.map *.conf *.txt
+include src/silpa/modules/guesslanguages/trigrams/*
 recursive-include js *.js
 recursive-include css *.css
 recursive-include doc *.html 
