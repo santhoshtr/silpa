@@ -1,0 +1,51 @@
+SILPA: Swatantra Indian Language Processing Application
+========================================================
+SILPA can act as Indian Language processing Library in Python.
+It can also run as a server software providing front end to the
+all existing modules.
+
+
+How to Install:
+---------------------------
+
+1. Get the source code either from git repository in savannah or download the archive
+        
+        git clone git://git.sv.gnu.org/silpa.git
+        
+              or
+        
+        wget http://git.savannah.gnu.org/cgit/silpa.git/snapshot/silpa-master.tar.gz
+        
+2. Go to the folder silpa, Bootstrap the buildout system
+
+        sudo python bootstrap.py
+        
+3. Create the eggs
+  
+        bin/buildout setup . build
+        
+4. Install the library
+
+        sudo bin/buildout setup . install
+        
+Modules:
+---------------------------
+SILPA has currently provides following indic language modules
+
+1. Guess Language
+2. Aproximate Search
+3. Encoding Converter
+4. Sort
+5. Spell Checker
+6. Dictionary
+7. Transliteration
+8. Hypenation
+9. Syllabalizer
+10. N-Gram
+11. Random Quotes
+12. Indic Soundex
+13. Character Details
+14. Katapayyadi Numbers
+15. Webfonts
+16. Stemmer
+17. Charachter Details
