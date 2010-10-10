@@ -58,14 +58,14 @@ class Webfonts(SilpaModule):
         user_agent= self.request.get('HTTP_USER_AGENT')
         if user_agent.find("MSIE")>0:
             css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-            css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' + self.available_fonts[self.font]['eot'])    
+            css=css.replace('$$FONTURL$$', "http://"+http_host +'/src/silpa/modules/webfonts/font/' + self.available_fonts[self.font]['eot'])    
         else:
             if user_agent.find("Chrome")>0:    
                 css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('woff');}"
-                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' +  self.available_fonts[self.font]['woff'])
+                css=css.replace('$$FONTURL$$', "http://"+http_host +'/src/silpa/modules/webfonts/font/' +  self.available_fonts[self.font]['woff'])
             else:
                 css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-                css=css.replace('$$FONTURL$$', "http://"+http_host +'/modules/webfonts/font/' +  self.available_fonts[self.font]['ttf'])    
+                css=css.replace('$$FONTURL$$', "http://"+http_host +'/src/silpa/modules/webfonts/font/' +  self.available_fonts[self.font]['ttf'])    
 
         css=css.replace('$$FONTFAMILY$$',self.font)
         return css
