@@ -50,7 +50,7 @@ class Fortune(SilpaModule):
         
     @ServiceMethod          
     def fortune(self, database, pattern=None ):
-        filename = os.path.join(os.path.dirname(__file__), 'database', database)
+        filename = os.path.join(os.path.dirname(__file__), 'database', database+".dic")
         fortunes_file = codecs. open(filename,encoding='utf-8', errors='ignore')
         """ Pick a random fortune from a file """
         fortunes_list = self.fortunes(fortunes_file, pattern)
