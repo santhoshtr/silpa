@@ -128,6 +128,8 @@ function glyphs(range, fontname){
  var tablemarkup='';
  tablemarkup="<table class='glyphs' cols=8 width=100% border=1px id='glyphtable"+fontname+"' ><tr>";
  var cols=0;
+ start = start*1;
+ end = end*1;
  for(var i=start; i<=end;i++){
 		cols++;
 		tablemarkup+="<td width=12.5%>&#"+ i  +";</td>";
