@@ -241,7 +241,59 @@ fonts = {
                     "Scripts":"English,Gujarati",
                     "Language":"Gujarati",
 					"Glyphs":"2689:2801"
-                  }
+                  },
+      "Ubuntu-B":{
+                                        "Name":"Ubuntu Bold Font",
+                    "License":"UFL v1.0 (Ubuntu Font License)",
+                    "Author":"Canonical Ltd.",
+                    "ttf":"Ubuntu-B.ttf",
+                    "eot":"Ubuntu-B.eot",
+                    "woff":"Ubuntu-B.woff",
+                    "Variants":"Bold",
+                    "Scripts":"English,Greek,Latin,Cyrillic,Latin",
+                    "Language":"English",
+                                       "Glyphs":"65:122"
+        
+                 },
+      "Ubuntu-BI":{
+                                        "Name":"Ubuntu Bold Italic Font",
+                    "License":"UFL v1.0 (Ubuntu Font License)",
+                    "Author":"Canonical Ltd.",
+                    "ttf":"Ubuntu-BI.ttf",
+                    "eot":"Ubuntu-BI.eot",
+                    "woff":"Ubuntu-BI.woff",
+                    "Variants":"Bold Italic",
+                    "Scripts":"English,Greek,Latin,Cyrillic,Latin",
+                    "Language":"English",
+                                       "Glyphs":"65:122"
+        
+                 },
+       "Ubuntu-I":{
+                                        "Name":"Ubuntu Italic Font",
+                    "License":"UFL v1.0 (Ubuntu Font License)",
+                    "Author":"Canonical Ltd.",
+                    "ttf":"Ubuntu-I.ttf",
+                    "eot":"Ubuntu-I.eot",
+                    "woff":"Ubuntu-I.woff",
+                    "Variants":"Italic",
+                    "Scripts":"English,Greek,Latin,Cyrillic,Latin",
+                    "Language":"English",
+                                       "Glyphs":"65:122"
+        
+                 },
+       "Ubuntu-R":{
+                                        "Name":"Ubuntu Regular Font",
+                    "License":"UFL v1.0 (Ubuntu Font License)",
+                    "Author":"Canonical Ltd.",
+                    "ttf":"Ubuntu-R.ttf",
+                    "eot":"Ubuntu-R.eot",
+                    "woff":"Ubuntu-R.woff",
+                    "Variants":"Regular",
+                    "Scripts":"English,Greek,Latin,Cyrillic,Latin",
+                    "Language":"English",
+                                       "Glyphs":"65:122"
+        
+                 }
         }
 """
 lohit-bn,Bengali,অআঈউঊঋঌএ ঐওঔকচটতপ 
