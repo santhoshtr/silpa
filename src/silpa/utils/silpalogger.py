@@ -27,7 +27,7 @@ import silpautils
 __all__ = ['silpalogger']
 
 conf_values = silpautils.load_configuration()
-LOG_FOLDER = conf_values.get("SILPA_SITE_LOG_FILDER","../logs")
+LOG_FOLDER = conf_values.get("SILPA_LOG_FOLDER","logs")
 LOG_FILE = os.path.join(LOG_FOLDER,"silpa.log")
 silpautils.ensure_dir(LOG_FOLDER)
 BACKUPS = 10
