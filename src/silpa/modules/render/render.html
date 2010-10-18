@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <script type="text/javascript">
+    function rendercontent(form)
+    {
+    $('#progress').html("Please Wait..");
+    $('#result').html("");
+    var text= form.text.value;
+    var width= form.width.value;
+    var height= form.height.value;
+    var jsonRequest = {
+         "method" :  "modules.Render.render",
+         "params" : [text,width,height], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            var resultobj =eval( '(' + msg.result + ')');
+            alert(resultobj);
+            $('#progress').html("");
+            var resulthtml="<img src='"+ resultobj+"'/>";
+            $('#result').html(resulthtml);
+        },
+        error: function(msg) { alert(msg); }
+    });
+    return false;
+   }	       
+    </script>
+  </head>
+  <body>
+        <h2>Script Renderer </h2></hr>
+        <form action="" method="post"  onsubmit="return rendercontent(this); " >
+        <textarea  name='text' id='id1'></textarea>
+         Width: <input type="text"  name="width" value="600" style="width:5em;"/>
+         Height: <input type="text"  name="height" value="100" style="width:5em;"/>
+         <input  type="submit" id="Render" value="Render"  name="action" style="width:5em;"/>
+         </br>
+        </form>
+       <div id="progress"></div>
+        <div id="successmessage"></div>
+        <div id="errormessage"></div>
+        <div id="result"></div>
+    </body>
+</html>
