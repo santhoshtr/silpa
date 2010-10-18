@@ -21,7 +21,7 @@
         dataType: "json",
         success: function(msg) {
             var resultobj =eval( '(' + msg.result + ')');
-            alert(resultobj);
+            
             $('#progress').html("");
             var resulthtml="<img src='"+ resultobj+"'/>";
             $('#result').html(resulthtml);
