@@ -26,59 +26,53 @@ import fonts
 class Webfonts(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), 'index.html')  
-        self.font=None
-
+        self.font = None
+        self.fontfile =  None
         #List of available fonts
         self.available_fonts=fonts.fonts
         
     def set_request(self,request):
         self.request=request
         self.font = self.request.get('font')
+        self.fontfile = self.request.get('fontfile')
         
     def is_self_serve(self) :       
-        if self.font:
+        if self.font or self.fontfile:
             return True
         else:
             return False
             
     def get_mimetype(self):
-        return "text/css"
+        if self.font:
+            return "text/css"
+            
+        if self.fontfile:    
+            return 'application/octet-stream'
         
     def serve(self,font=None):
         """
-        Provide the css for the given font. CSS will differ for IE and Other browsers
+        serve the font file
         """
-        http_host =self.request.get('HTTP_HOST')
-        request_uri =self.request.get('REQUEST_URI')
-        if request_uri!=None:
-            http_host+="/silpa"
-            
+        if self.fontfile:
+             return codecs.open(os.path.join(os.path.dirname(__file__),"font",self.fontfile)).read()
+        """
+        Provide the css for the given font.
+        """     
         if not self.available_fonts.has_key(self.font):
             return "Error!, Font not available"
         # user_agent= self.request.get('HTTP_USER_AGENT')
-        font_url = "http://"+http_host+"/src/silpa/modules/webfonts/font/"
+        font_url = "?fontfile="
         css = '''@font-face {
-	font-family: '$$FONTFAMILY$$';
-	src: url('$$FONTURLEOT$$');
-	src: local('☺'), url('$$FONTURLWOFF$$') format('woff'), url('$$FONTURLTTF$$') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+    font-family: '$$FONTFAMILY$$';
+    src: url('$$FONTURLEOT$$');
+    src: local('☺'), url('$$FONTURLWOFF$$') format('woff'), url('$$FONTURLTTF$$') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 '''
         css = css.replace("$$FONTURLEOT$$",font_url + self.available_fonts[self.font]['eot'])
         css = css.replace("$$FONTURLWOFF$$",font_url + self.available_fonts[self.font]['woff'])
         css = css.replace("$$FONTURLTTF$$",font_url + self.available_fonts[self.font]['ttf'])
-        # if user_agent.find("MSIE")>0:
-        #     css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src:local('$$FONTFAMILY$$'), url('$$FONTURL$$');}"
-        #     css=css.replace('$$FONTURL$$', "http://"+http_host +'/src/silpa/modules/webfonts/font/' + self.available_fonts[self.font]['eot'])    
-        # else:
-        #     if user_agent.find("Chrome")>0:    
-        #         css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('woff');}"
-        #         css=css.replace('$$FONTURL$$', "http://"+http_host +'/src/silpa/modules/webfonts/font/' +  self.available_fonts[self.font]['woff'])
-        #     else:
-        #         css = "@font-face {font-family: '$$FONTFAMILY$$';font-style: normal;font-weight: normal;src: local('$$FONTFAMILY$$'), url('$$FONTURL$$') format('truetype');}"
-        #         css=css.replace('$$FONTURL$$', "http://"+http_host +'/src/silpa/modules/webfonts/font/' +  self.available_fonts[self.font]['ttf'])    
-
         css=css.replace('$$FONTFAMILY$$',self.font)
         return css
         
@@ -94,12 +88,12 @@ class Webfonts(SilpaModule):
             return results
         else:
             for language in languages:
-				try:
-					for font in self.available_fonts:
-						if self.available_fonts[font]['Language']  == language:
-							results.append({font:self.available_fonts[font]})
-				except KeyError:
-					pass    
+                try:
+                    for font in self.available_fonts:
+                        if self.available_fonts[font]['Language']  == language:
+                            results.append({font:self.available_fonts[font]})
+                except KeyError:
+                    pass    
         return results    
         
     def get_module_name(self):
