@@ -27,6 +27,11 @@ table.glyphs td {
 	text-align:center;
 	color:#36F;
 }
+
+div .slider{
+	display: relative;
+	width: 300px;
+}
 </style>
 <script type="text/javascript">
 function search_fonts(){
@@ -115,10 +120,28 @@ function search_fonts(){
 }    
 
 function preview(fontname){
- var previewmarkup="<textarea id='previewtext"+fontname+"'></textarea>";
+ var previewmarkup="<table width=100%><tr><td>Font size</td><td> <div class='slider' id='slider"+fontname+"'></div></td>";
+ previewmarkup+="<td>Font Syle:<select id='fontStyle'"+fontname+"' name='fontStyle'>";
+ /* TODO : Change the font style as per the selection */
+ previewmarkup+="<option value='1'>Regular</option>";
+ previewmarkup+="<option value='2'>Bold Italic</option>";
+ previewmarkup+="<option value='3'>Bold</option>";
+ previewmarkup+="<option value='4'>Italic</option></select>";
+ previewmarkup+="</td></tr></table>";
+ previewmarkup+="<textarea id='previewtext"+fontname+"'></textarea></div>";
  $("#preview"+fontname).html(previewmarkup);
  $("#previewtext"+fontname).css('font-family', fontname) ;
  $("#previewtext"+fontname).css('font-size', '14px');
+ $("#slider"+fontname).slider({ 
+	 animate: true ,
+	 max: 60,
+	 min : 8,
+	 step : 2,
+	 slide: function(event, ui) { 
+		$("#previewtext"+fontname).css('font-size',  $("#slider"+fontname).slider("value")); 
+	 }
+
+  }) ;
  return false;
 }
 
@@ -210,4 +233,7 @@ function embed(csslink, fontname){
   <div id="successmessage"></div>
   <div id="errormessage"></div>
   <div id="result"></div>
+  <!--TODO : Keep this css inside the code base-->
+  
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
  </body>
