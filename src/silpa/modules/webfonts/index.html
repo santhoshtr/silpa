@@ -121,12 +121,11 @@ function search_fonts(){
 
 function preview(fontname){
  var previewmarkup="<table width=100%><tr><td>Font size</td><td> <div class='slider' id='slider"+fontname+"'></div></td>";
- previewmarkup+="<td>Font Syle:<select id='fontStyle'"+fontname+"' name='fontStyle'>";
+ previewmarkup+="<td>Font Syle:<select id='fontStyle"+fontname+"' name='fontStyle'>";
  /* TODO : Change the font style as per the selection */
- previewmarkup+="<option value='1'>Regular</option>";
- previewmarkup+="<option value='2'>Bold Italic</option>";
- previewmarkup+="<option value='3'>Bold</option>";
- previewmarkup+="<option value='4'>Italic</option></select>";
+ previewmarkup+="<option value='regular'>Regular</option>";
+ previewmarkup+="<option value='bold'>Bold</option>";
+ previewmarkup+="<option value='italic'>Italic</option></select>";
  previewmarkup+="</td></tr></table>";
  previewmarkup+="<textarea id='previewtext"+fontname+"'></textarea></div>";
  $("#preview"+fontname).html(previewmarkup);
@@ -142,6 +141,11 @@ function preview(fontname){
 	 }
 
   }) ;
+  $('#fontStyle'+fontname ).change(function(){
+  var optionSelectedValue = $('#fontStyle'+fontname + ' option:selected').val();
+  $("#previewtext"+fontname).css('font-style', optionSelectedValue) ;
+ });
+
  return false;
 }
 
