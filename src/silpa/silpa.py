@@ -78,7 +78,7 @@ class Silpa():
                     #populate the form with the query values
                     self._response = self._response.populate_form(request)
                     if(module_instance.is_self_serve()):
-                        start_response('200 OK', [('Content-Type', module_instance.get_mimetype())])
+                        start_response('200 OK', [('Content-Type', module_instance.get_mimetype()),('Access-Control-Allow-Origin','*')])
                         return [module_instance.serve()]
                     start_response('200 OK', [('Content-Type', 'text/html')])
                     return [str(self._response).encode('utf-8')]
