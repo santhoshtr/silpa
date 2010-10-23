@@ -23,13 +23,25 @@
             var resultobj =eval( '(' + msg.result + ')');
             
             $('#progress').html("");
-            var resulthtml="<img src='"+ resultobj+"'/>";
+            var resulthtml="<img src='"+ resultobj+"' style='border:solid;border-width:2px;' />";
             $('#result').html(resulthtml);
         },
         error: function(msg) { alert(msg); }
     });
     return false;
-   }	       
+   }	  
+   $(document).ready(function() {
+    $('#format' ).change(function(){
+		alert("Only PNG Image implemented now.");
+	});
+	
+	$('#fontsize' ).change(function(){
+		alert("Not implemented");
+	});
+    $('#fontcolor' ).change(function(){
+		alert("Not implemented.");
+	});  
+	});
     </script>
   </head>
   <body>
@@ -37,8 +49,23 @@
         <form action="" method="post"  onsubmit="return rendercontent(this); " >
         <textarea  name='text' id='id1'></textarea>
          Width: <input type="text"  name="width" value="600" style="width:5em;"/>
-         Height: <input type="text"  name="height" value="100" style="width:5em;"/>
-         <input  type="submit" id="Render" value="Render"  name="action" style="width:5em;"/>
+         Height: <input type="text"  name="height" value="800" style="width:5em;"/>
+         Font Size: <input type="text"  name="fontsize"  id="fontsize" value="10" style="width:5em;"/>
+         Font Color: <select id="fontcolor">
+			 <option value="Black">Black</option>
+			 <option value="Blue">Blue</option>
+			 <option value="Red">Red</option>
+			 <option value="Yellow">Yellow</option>
+			 <option value="Green">Green</option>
+         </select>
+         Output Format: <select id="format">
+			 <option value="png">PNG Image</option>
+			 <option value="svg">SVG Image</option>
+			 <option value="pdf">PDF</option>
+			 </select>
+		 <p align=center>
+			<input  type="submit" id="Render" value="Render"  name="action" style="width:5em;"/>
+         </p>	 
          </br>
         </form>
        <div id="progress"></div>
