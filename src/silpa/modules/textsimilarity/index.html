@@ -1,0 +1,52 @@
+    <script type="text/javascript">
+    function similarity(form)
+    {
+    $('#progress') .html("Processing. Please Wait..");
+    $('#result').html("");
+    var text1= form.text1.value;
+    var text2= form.text2.value;
+    var jsonRequest = {
+                "method" :  "modules.TextSimilarity.compare",
+                 "params" : [text1,text2], 
+                 "id" : ""
+                 };             
+
+    
+     $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            $('#progress').html("");
+            // Render it
+            $('#result') .html("<b>"+ msg.result + "</b>");               
+            
+        },
+        error: function(msg) { alert(msg); }
+    });   
+    return false;
+    }; 
+    
+    </script>
+		<h2>Text Similarity</h2>
+		<p>This module will compare two texts for their similarity. Based on the similarity it will give a number between 0 and 1. 1 means both text are similary. 0 means texts are completely
+		different. A value in between 0 and 1 indicates how much they are similar.
+		</p>
+		<p>The algorithm uses an n-grams model and <a href="http://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity.</a></p>
+        <form id="similarity_form" action="" method="post" onsubmit="return similarity(this);">
+		<table width=100%>
+			<tr>
+				<td> <textarea type="text" name="text1"></textarea></td>
+				<td> </td>
+				<td> <textarea type="text" name="text2"></textarea></td>
+			</tr>
+		</table>
+			<input  type="submit" id="Soundex" value="Compare"/>
+        </form>
+        <hr/>
+        <div id="progress"></div>
+        <div id="successmessage"></div>
+        <div id="errormessage"></div>
+        <div id="result"></div>
