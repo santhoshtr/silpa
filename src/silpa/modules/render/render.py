@@ -91,7 +91,6 @@ class Render(SilpaModule):
                     context.rel_move_to(-xstart, line_height )
                     position_y += line_height 
             first_line = False
-        pc.show_layout(paragraph_layout)
         filename = str(uuid.uuid1())[0:5]
         outputfile = os.path.join(os.path.dirname(__file__),"tmp",filename+".png")
         surface.write_to_png(outputfile)
