@@ -45,7 +45,7 @@ class Ngram(SilpaModule):
 					window_end = syllable_count	
 				ngrams.append(syllables[window_start:window_end])
 				window_start = window_start+1
-		return 	dumps(ngrams)
+		return 	ngrams
 	@ServiceMethod							
 	def letterNgram(self, word, window_size=2):
 		window_size =  int(window_size)
@@ -62,7 +62,7 @@ class Ngram(SilpaModule):
 				window_end = letter_count	
 			ngrams.append(word[window_start:window_end])
 			window_start = window_start+1
-		return 	dumps(ngrams)	
+		return 	ngrams
 	@ServiceMethod							
 	def wordNgram(self,text, window_size=2):
 		window_size =  int(window_size)
@@ -79,7 +79,7 @@ class Ngram(SilpaModule):
 			words[window_start:window_end]	
 			ngrams.append(words[window_start:window_end])
 			window_start = window_start+1
-		return 	dumps(ngrams)
+		return 	ngrams
 	def get_module_name(self):
 		return "Ngram Library"
 	def get_info(self):
