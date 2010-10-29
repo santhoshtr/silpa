@@ -33,7 +33,13 @@
             dataType: "json",
             success: function(msg) {
                 $('#progress').html("");
-                $('#result').html(msg.result);
+                var resultObj = eval(msg.result);
+                if(resultObj.length != 0){
+                    $('#result').html("<ul id='list'></ul>")
+                    $.each(resultObj, function(index,item){
+                        $('#list').append($( "<li>" + item +"</li>" ));                        
+                    });
+                }
             },
             error: function(msg) { alert(msg); }
         });   
