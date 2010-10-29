@@ -7,6 +7,7 @@
 	<script type="text/javascript">
 	function syllabalise(form)
 	{
+        $("#progress").html("Syllabifying Please Wait....")
 		var text= form.word.value;
 		var jsonRequest = {
         "method" :  "modules.Syllabalizer.syllabalize",
