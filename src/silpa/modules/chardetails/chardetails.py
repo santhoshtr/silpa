@@ -30,28 +30,28 @@ class CharDetails(SilpaModule):
     @ServiceMethod          
     def getdetails(self, text):
         chardetails={}
-        details={}
         for character in text:
-            details['Name']= name(character) 
-            details['HTML Entity']=str(ord(character)) 
-            details['Code point']= repr(character)
+            chardetails[character] = {}
+            chardetails[character]['Name']= name(character) 
+            chardetails[character]['HTML Entity']=str(ord(character)) 
+            chardetails[character]['Code point']= repr(character)
             try:
-                details['Numeric Value'] = numeric (character)
+                chardetails[character]['Numeric Value'] = numeric (character)
             except:
                 pass    
             try:        
-                details['Decimal Value']=decimal (character)
+                chardetails[character]['Decimal Value']=decimal (character)
             except:
                 pass    
             try:        
-                details['Digit']=digit(mychar)
+                chardetails[character]['Digit']=digit(mychar)
             except:
                 pass    
-            details['Alphabet']=str(character.isalpha())
-            details['Digit']=str(character.isdigit())
-            details['AlphaNumeric']=str(character.isalnum())
-            details['Canonical Decomposition']=  decomposition(character)
-            chardetails[character] = details
+            chardetails[character]['Alphabet']=str(character.isalpha())
+            chardetails[character]['Digit']=str(character.isdigit())
+            chardetails[character]['AlphaNumeric']=str(character.isalnum())
+            chardetails[character]['Canonical Decomposition']=  decomposition(character)
+            
         chardetails['Characters'] = list(text)
         return chardetails
     
