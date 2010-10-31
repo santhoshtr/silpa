@@ -24,7 +24,8 @@
             success: function(msg) {
                 $('#progress').html("");
                 // Render it
-                $('#result') .html("<pre>"+ msg.result + "</pre>");
+                var result = $.parseJSON(msg.result).replace("\n", "&#13;");
+                $('#result') .html("<pre>"+ result + "</pre>");
             },
             error: function(msg) { alert(msg.message); }
         });
@@ -41,6 +42,7 @@
         Word : <input type="text" id="word" name="word"/>
         Dictionary :<select id="dictionary" name="dictionary" style="width:12em;">
           <option value="en-hi" id="en-hi" >English-Hindi</option>
+          <option value="hi-en" id="hi-en" >Hindi-English</option>
           <option value="en-ml" id="en-ml" >English-Malayalam</option>
         </select>
         <input type="hidden" name="action" value="Dictionary">
