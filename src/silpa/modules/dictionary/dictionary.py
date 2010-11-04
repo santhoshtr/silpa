@@ -59,6 +59,14 @@ class Dictionary(SilpaModule):
             return meaningstring
         return meaningstring.decode("utf-8")
         
+    def set_request(self,request):
+        self.request=request
+        self.word = self.request.get('word')   
+        self.dictionary = self.request.get('dictionary')   
+        
+    def get_json_result(self):
+        return self.getdef(self.word, self.dictionary)
+            
     def get_module_name(self):
         return "Dictionary"
         
