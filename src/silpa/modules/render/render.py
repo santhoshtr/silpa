@@ -25,7 +25,7 @@ import cairo
 import uuid
 import pango
 import pangocairo
-
+from wiki2pdf  import Wikiparser
 class Render(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), "render.html")
@@ -33,24 +33,38 @@ class Render(SilpaModule):
     def set_request(self,request):
         self.request=request
         self.image = self.request.get('image')
+        self.pdf = self.request.get('pdf')
         
     def is_self_serve(self) :       
-        if self.image:
+        if self.image or self.pdf:
             return True
         else:
             return False
 
     def get_mimetype(self):
-        return "image/png"
+        if self.image:
+            return "image/png"
+        if self.pdf:    
+            return "application/pdf"
 
     def serve(self):
         """
         Provide the css for the given font. CSS will differ for IE and Other browsers
         """
-        return codecs.open(os.path.join(os.path.dirname(__file__),"tmp",self.image)).read()
+        if self.image:
+            return codecs.open(os.path.join(os.path.dirname(__file__),"tmp",self.image)).read()
+        else:    
+            return codecs.open(os.path.join(os.path.dirname(__file__),"tmp",self.pdf)).read()
 
     @ServiceMethod  
-    def render(self, text, width=600, height=100):
+    def wiki2pdf(self, url):
+        parser = Wikiparser(url) #"http://ml.wikipedia.org/wiki/Computer"
+        parser.parse()
+        filename =  url.split("/")[-1] +".pdf"
+        return "?pdf="+filename
+        
+    @ServiceMethod  
+    def render_svg(self, text, width=600, height=100):
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
         context = cairo.Context(surface)
         width  = int(width)
@@ -58,7 +72,7 @@ class Render(SilpaModule):
         position_x = int(width)*0.1
         position_y = int(width)*0.1
         context.set_source_rgba (0.0, 0.0, 0.0, 1.0)
-        pc =pangocairo.CairoContext(context)
+        pc = pangocairo.CairoContext(context)
         paragraph_layout = pc.create_layout()
         paragraph_font_description = pango.FontDescription()
         paragraph_font_description.set_family("Sans")

@@ -9,7 +9,7 @@
     var width= form.width.value;
     var height= form.height.value;
     var jsonRequest = {
-         "method" :  "modules.Render.render",
+         "method" :  "modules.Render.render_image",
          "params" : [text,width,height], 
          "id" : ""
     };
@@ -42,10 +42,45 @@
 		alert("Not implemented.");
 	});  
 	});
+    
+    function renderpdf(form){
+        $('#progress').html("Please Wait..");
+    $('#result').html("");
+    var url= form.wikiurl.value;
+    var jsonRequest = {
+         "method" :  "modules.Render.wiki2pdf",
+         "params" : [url], 
+         "id" : ""
+    };
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "JSONRPC",
+        data: $.toJSON(jsonRequest), 
+        dataType: "json",
+        success: function(msg) {
+            var resultobj =eval( '(' + msg.result + ')');
+            
+            $('#progress').html("");
+            alert(resultobj);
+            var resulthtml= "<a href= '" + resultobj+"' target='_new'>Open or Download PDF</a>";
+            $('#result').html(resulthtml);
+        },
+        error: function(msg) { alert("An Error occured!"); }
+    });
+    return false;
+    }    
     </script>
   </head>
   <body>
         <h2>Script Renderer </h2></hr>
+        <p>This is an <b>experimental</b> online service based on <a href="https://savannah.nongnu.org/projects/pypdflib">pypdflib library</a> in development</p>
+        <h3>Generate PDF of a wiki page</h3>
+        <form id="wiki2pdfform" action="" method="post"  onsubmit="return renderpdf(this); " >
+            Wiki URL: <input type="text" name="wikiurl" value="http://ml.wikipedia.org/wiki/Mango"  style="width:30em;"/>
+            <input  type="submit" id="Render" value="Convert to PDF"  name="action" style="width:10em;"/>
+        </form>
+        <h3>Convert Text to Image</h3>
         <form action="" method="post"  onsubmit="return rendercontent(this); " >
         <textarea  name='text' id='id1'></textarea>
          Width: <input type="text"  name="width" value="600" style="width:5em;"/>
