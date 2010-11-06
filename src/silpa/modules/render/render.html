@@ -44,7 +44,7 @@
 	});
     
     function renderpdf(form){
-        $('#progress').html("Please Wait..");
+        $('#pdfprogress').html("Please Wait..");
     $('#result').html("");
     var url= form.wikiurl.value;
     var jsonRequest = {
@@ -61,10 +61,10 @@
         success: function(msg) {
             var resultobj =eval( '(' + msg.result + ')');
             
-            $('#progress').html("");
+            $('#pdfprogress').html("");
             alert(resultobj);
             var resulthtml= "<a href= '" + resultobj+"' target='_new'>Open or Download PDF</a>";
-            $('#result').html(resulthtml);
+            $('#pdfresult').html(resulthtml);
         },
         error: function(msg) { alert("An Error occured!"); }
     });
@@ -79,7 +79,10 @@
         <form id="wiki2pdfform" action="" method="post"  onsubmit="return renderpdf(this); " >
             Wiki URL: <input type="text" name="wikiurl" value="http://ml.wikipedia.org/wiki/Mango"  style="width:30em;"/>
             <input  type="submit" id="Render" value="Convert to PDF"  name="action" style="width:10em;"/>
+            <div id="pdfprogress"/>
+            <div id="pdfresult"/>
         </form>
+        
         <h3>Convert Text to Image</h3>
         <form action="" method="post"  onsubmit="return rendercontent(this); " >
         <textarea  name='text' id='id1'></textarea>
