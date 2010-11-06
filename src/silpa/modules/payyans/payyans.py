@@ -53,7 +53,7 @@ class Payyans(SilpaModule):
         prebase_letter = ""
         ascii_text=""
         self.direction = "u2a"
-        self.mapping_filename=os.path.join(os.path.dirname(__file__), 'maps' , font+".map")
+        self.mapping_filename = os.path.join(os.path.dirname(__file__), 'maps' , font+".map")
         self.rulesDict = self.LoadRules()
         while index < len(unicode_text):
             '''കൂട്ടക്ഷരങ്ങള്‍ക്കൊരു കുറുക്കുവഴി'''
@@ -94,7 +94,7 @@ class Payyans(SilpaModule):
         postbase_letter = ""    # "‌‌്യ", "്വ"
         unicode_text = ""
         next_ucode_letter = ""
-        self.direction="a2u"
+        self.direction = "a2u"
         self.mapping_filename=os.path.join(os.path.dirname(__file__), 'maps' , font+".map")
         self.rulesDict = self.LoadRules()
         while index < len(ascii_text):
@@ -176,8 +176,8 @@ class Payyans(SilpaModule):
         '''
         ഈ സംഭവമാണു് മാപ്പിങ്ങ് ഫയല്‍ എടുത്തു് വായിച്ചു പഠിക്കുന്നതു്.
         '''
-        if(self.rulesDict):
-            return self.rulesDict
+        #if(self.rulesDict):
+        #    return self.rulesDict
         rules_dict = dict()
         line = []
         line_number = 0
