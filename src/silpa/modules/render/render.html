@@ -8,9 +8,10 @@
     var text= form.text.value;
     var width= form.width.value;
     var height= form.height.value;
+    var type = $('#format').val()
     var jsonRequest = {
-         "method" :  "modules.Render.render_image",
-         "params" : [text,width,height], 
+         "method" :  "modules.Render.render_text",
+         "params" : [text,type,width,height],
          "id" : ""
     };
     $.ajax({
@@ -23,7 +24,11 @@
             var resultobj =eval( '(' + msg.result + ')');
             
             $('#progress').html("");
-            var resulthtml="<img src='"+ resultobj+"' style='border:solid;border-width:2px;' />";
+            var resulthtml=""
+            if (type=="png")
+                resulthtml="<img src='"+ resultobj+"' style='border:solid;border-width:2px;' />";
+            else        
+                resulthtml= "<a href= '" + resultobj+"' target='_new'>Open or Download " + type +"</a>";    
             $('#result').html(resulthtml);
         },
         error: function(msg) { alert(msg); }
@@ -31,9 +36,6 @@
     return false;
    }	  
    $(document).ready(function() {
-    $('#format' ).change(function(){
-		alert("Only PNG Image implemented now.");
-	});
 	
 	$('#fontsize' ).change(function(){
 		alert("Not implemented");
@@ -88,14 +90,14 @@
          Width: <input type="text"  name="width" value="600" style="width:5em;"/>
          Height: <input type="text"  name="height" value="800" style="width:5em;"/>
          Font Size: <input type="text"  name="fontsize"  id="fontsize" value="10" style="width:5em;"/>
-         Font Color: <select id="fontcolor">
+         Font Color: <select id="fontcolor" name="fontcolor">
 			 <option value="Black">Black</option>
 			 <option value="Blue">Blue</option>
 			 <option value="Red">Red</option>
 			 <option value="Yellow">Yellow</option>
 			 <option value="Green">Green</option>
          </select>
-         Output Format: <select id="format">
+         Output Format: <select id="format" name="format">
 			 <option value="png">PNG Image</option>
 			 <option value="svg">SVG Image</option>
 			 <option value="pdf">PDF</option>

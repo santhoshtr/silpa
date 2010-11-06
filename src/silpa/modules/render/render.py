@@ -34,7 +34,7 @@ class Render(SilpaModule):
         self.request=request
         self.image = self.request.get('image')
         self.pdf = self.request.get('pdf')
-        
+        self.file_type= self.request.get('type')
     def is_self_serve(self) :       
         if self.image or self.pdf:
             return True
@@ -43,7 +43,7 @@ class Render(SilpaModule):
 
     def get_mimetype(self):
         if self.image:
-            return "image/png"
+            return "image/"+ self.file_type
         if self.pdf:    
             return "application/pdf"
 
@@ -64,8 +64,18 @@ class Render(SilpaModule):
         return "?pdf="+filename
         
     @ServiceMethod  
-    def render_svg(self, text, width=600, height=100):
-        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
+    def render_text(self, text,file_type='png', width=600, height=100):
+        surface = None
+        filename = str(uuid.uuid1())[0:5]+"."+file_type
+        outputfile = os.path.join(os.path.dirname(__file__),"tmp",filename )
+        if file_type == 'png':
+            surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
+        else:
+            if file_type == 'svg':
+                surface = cairo.SVGSurface(outputfile,int(width),int(height))
+            elif file_type == 'pdf':
+                surface = cairo.PDFSurface(outputfile,int(width),int(height))
+                
         context = cairo.Context(surface)
         width  = int(width)
         font_size = 10
@@ -105,10 +115,13 @@ class Render(SilpaModule):
                     context.rel_move_to(-xstart, line_height )
                     position_y += line_height 
             first_line = False
-        filename = str(uuid.uuid1())[0:5]
-        outputfile = os.path.join(os.path.dirname(__file__),"tmp",filename+".png")
-        surface.write_to_png(outputfile)
-        return "?image="+filename+".png"
+            
+        if file_type == 'png':
+            surface.write_to_png(outputfile)
+        else:
+            context.show_page()
+            
+        return "?image="+filename+"&type="+file_type
 
         
     def get_module_name(self):
