@@ -65,7 +65,7 @@ class Dictionary(SilpaModule):
         self.dictionary = self.request.get('dictionary')   
         
     def get_json_result(self):
-        return self.getdef(self.word, self.dictionary)
+        return dumps(self.getdef(self.word, self.dictionary))
             
     def get_module_name(self):
         return "Dictionary"
