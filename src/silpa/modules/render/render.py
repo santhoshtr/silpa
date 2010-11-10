@@ -60,7 +60,7 @@ class Render(SilpaModule):
     def wiki2pdf(self, url):
         parser = Wikiparser(url) #"http://ml.wikipedia.org/wiki/Computer"
         parser.parse()
-        filename =  url.split("/")[-1] +".pdf"
+        filename =  urllib.unquote(url.split("/")[-1]) +".pdf"
         return "?pdf="+filename
         
     @ServiceMethod  
