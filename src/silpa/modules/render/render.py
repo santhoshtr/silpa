@@ -23,6 +23,7 @@ from common import *
 from utils import *
 import cairo
 import uuid
+import urllib
 import pango
 import pangocairo
 from wiki2pdf  import Wikiparser
@@ -37,9 +38,11 @@ class Render(SilpaModule):
         self.image = self.request.get('image')
         self.pdf = self.request.get('pdf')
         self.file_type= self.request.get('type')
+        self.wiki_url= self.request.get('wiki')
+
         
     def is_self_serve(self) :       
-        if self.image or self.pdf:
+        if self.image or self.pdf or self.wiki_url:
             return True
         else:
             return False
@@ -47,24 +50,27 @@ class Render(SilpaModule):
     def get_mimetype(self):
         if self.image:
             return "image/"+ self.file_type
-        if self.pdf:    
+        if self.pdf or self.wiki_url:    
             return "application/pdf"
 
     def serve(self):
         """
         Provide the css for the given font. CSS will differ for IE and Other browsers
         """
+        
         if self.image:
             return codecs.open(os.path.join(os.path.dirname(__file__),"tmp",self.image)).read()
         else:    
-            return codecs.open(os.path.join(os.path.dirname(__file__),"tmp",self.pdf)).read()
+            if self.wiki_url:
+				self.pdf = self.wiki2pdf(self.wiki_url).replace("?pdf=", "")
+            return codecs.open(os.path.join(os.path.dirname(__file__), "tmp",self.pdf)).read()
 
     @ServiceMethod  
     def wiki2pdf(self, url):
-        parser = Wikiparser(url) #"http://ml.wikipedia.org/wiki/Computer"
+        filename =  str(uuid.uuid1())[0:5] +".pdf"
+        parser = Wikiparser(url,filename) #"http://ml.wikipedia.org/wiki/Computer"
         parser.parse()
-        filename =  url.split("/")[-1] +".pdf"
-        return "?pdf="+filename
+        return ("?pdf="+filename)
         
     @ServiceMethod  
     def render_text(self, text,file_type='png', width=600, height=100):
