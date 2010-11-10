@@ -23,6 +23,7 @@ from common import *
 from utils import *
 import cairo
 import uuid
+import urllib
 import pango
 import pangocairo
 from wiki2pdf  import Wikiparser
@@ -58,10 +59,10 @@ class Render(SilpaModule):
 
     @ServiceMethod  
     def wiki2pdf(self, url):
-        parser = Wikiparser(url) #"http://ml.wikipedia.org/wiki/Computer"
+        filename =  str(uuid.uuid1())[0:5] +".pdf"
+        parser = Wikiparser(url,filename) #"http://ml.wikipedia.org/wiki/Computer"
         parser.parse()
-        filename =  urllib.unquote(url.split("/")[-1]) +".pdf"
-        return "?pdf="+filename
+        return ("?pdf="+filename)
         
     @ServiceMethod  
     def render_text(self, text,file_type='png', width=600, height=100):

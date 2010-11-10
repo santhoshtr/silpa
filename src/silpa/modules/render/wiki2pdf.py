@@ -23,6 +23,7 @@
 
 import sys
 import os
+sys.path.append("/sda5/dev/pypdflib/src/")  #not 
 from pypdflib.writer import PDFWriter
 from pypdflib.widgets import *
 from pypdflib.styles import *
@@ -47,13 +48,13 @@ lang_codes = {'en':'en_US',
               'te':'te_IN'}
 
 class Wikiparser(SGMLParser):
-    def __init__(self, url, verbose=0):
+    def __init__(self, url, filename, verbose=0):
         "Initialise an object, passing 'verbose' to the superclass."
         SGMLParser.__init__(self, verbose)
         self.hyperlinks = []
         self.url = url
         self.language = detect_language(url)
-        self.pdf = PDFWriter(os.path.join(os.path.dirname(__file__),"tmp",self.url.split("/")[-1] +".pdf"), StandardPaper.A4)
+        self.pdf = PDFWriter(os.path.join(os.path.dirname(__file__),"tmp",filename), StandardPaper.A4)
         header = Header(text_align = pango.ALIGN_CENTER)
         #TODO Alignment not working.
         header.set_text(urllib.unquote(self.url))
@@ -104,6 +105,7 @@ class Wikiparser(SGMLParser):
     def end_h1(self):
         self.h1=False
         h1= Text(self.buffer,font="FreeSerif",font_size=16) 
+        h1.color = StandardColors.Blue
         self.pdf.add_text(h1)
         self.buffer = None
         
@@ -115,6 +117,7 @@ class Wikiparser(SGMLParser):
         self.h2=False
         if self.buffer and self.buffer.strip()>"":
             h2= Text(self.buffer,font="FreeSerif",font_size=14) 
+            h2.color = StandardColors.Blue
             self.pdf.add_text(h2)
         self.buffer = None
         
