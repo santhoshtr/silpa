@@ -26,6 +26,8 @@ import uuid
 import pango
 import pangocairo
 from wiki2pdf  import Wikiparser
+from modules.hyphenator import hyphenator
+
 class Render(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), "render.html")
@@ -35,6 +37,7 @@ class Render(SilpaModule):
         self.image = self.request.get('image')
         self.pdf = self.request.get('pdf')
         self.file_type= self.request.get('type')
+        
     def is_self_serve(self) :       
         if self.image or self.pdf:
             return True
@@ -77,6 +80,7 @@ class Render(SilpaModule):
                 surface = cairo.PDFSurface(outputfile,int(width),int(height))
                 
         context = cairo.Context(surface)
+        text = hyphenator.getInstance().hyphenate(text,u'\u00AD')
         width  = int(width)
         font_size = 10
         position_x = int(width)*0.1
@@ -120,7 +124,7 @@ class Render(SilpaModule):
             surface.write_to_png(outputfile)
         else:
             context.show_page()
-            
+
         return "?image="+filename+"&type="+file_type
 
         
