@@ -28,6 +28,7 @@ import pango
 import pangocairo
 from wiki2pdf  import Wikiparser
 from modules.hyphenator import hyphenator
+from styles import get_color
 
 class Render(SilpaModule):
     def __init__(self):
@@ -73,7 +74,7 @@ class Render(SilpaModule):
         return ("?pdf="+filename)
         
     @ServiceMethod  
-    def render_text(self, text,file_type='png', width=600, height=100):
+    def render_text(self, text,file_type='png', width=600, height=100,color="Black"):
         surface = None
         filename = str(uuid.uuid1())[0:5]+"."+file_type
         outputfile = os.path.join(os.path.dirname(__file__),"tmp",filename )
@@ -89,21 +90,29 @@ class Render(SilpaModule):
         text = hyphenator.getInstance().hyphenate(text,u'\u00AD')
         width  = int(width)
         font_size = 10
+        
         position_x = int(width)*0.1
         position_y = int(width)*0.1
-        context.set_source_rgba (0.0, 0.0, 0.0, 1.0)
+        
+        rgba = get_color(color)
+
+        context.set_source_rgba (rgba.red,rgba.green,rgba.blue,rgba.alpha)
+        
         pc = pangocairo.CairoContext(context)
+        
         paragraph_layout = pc.create_layout()
         paragraph_font_description = pango.FontDescription()
         paragraph_font_description.set_family("Sans")
-        paragraph_font_description.set_size((int)(font_size * pango.SCALE))
+
+        paragraph_font_description.set_size((int)(int(font_size) * pango.SCALE))
         paragraph_layout.set_font_description(paragraph_font_description)
         paragraph_layout.set_width((int)((width - 2*width*0.1) * pango.SCALE))
         paragraph_layout.set_justify(True)
         paragraph_layout.set_text(text+"\n")
         context.move_to(width*0.1,width*0.1)
         pango_layout_iter = paragraph_layout.get_iter();
-        itr_has_next_line=True
+
+
         while not pango_layout_iter.at_last_line():
             first_line = True
             context.move_to(width*0.1, position_y)
