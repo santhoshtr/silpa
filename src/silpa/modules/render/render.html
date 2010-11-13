@@ -3,47 +3,41 @@
     <script type="text/javascript">
     function rendercontent(form)
     {
-    $('#progress').html("Please Wait..");
-    $('#result').html("");
-    var text= form.text.value;
-    var width= form.width.value;
-    var height= form.height.value;
-    var type = $('#format').val()
-    var jsonRequest = {
-         "method" :  "modules.Render.render_text",
-         "params" : [text,type,width,height],
-         "id" : ""
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: "JSONRPC",
-        data: $.toJSON(jsonRequest), 
-        dataType: "json",
-        success: function(msg) {
-            var resultobj =eval( '(' + msg.result + ')');
-            
-            $('#progress').html("");
-            var resulthtml=""
-            if (type=="png")
-                resulthtml="<img src='"+ resultobj+"' style='border:solid;border-width:2px;' />";
-            else        
-                resulthtml= "<a href= '" + resultobj+"' target='_new'>Open or Download " + type +"</a>";    
-            $('#result').html(resulthtml);
-        },
-        error: function(msg) { alert(msg); }
-    });
-    return false;
+        $('#progress').html("Please Wait..");
+        $('#result').html("");
+        var text= form.text.value;
+        var width= form.width.value;
+        var height= form.height.value;
+        var size = form.fontsize.value;
+        var type = $('#format').val();
+        var color = $('#fontcolor').val();
+        
+        var jsonRequest = {
+            "method" :  "modules.Render.render_text",
+            "params" : [text,type,width,height,color],
+            "id" : ""
+        };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "JSONRPC",
+            data: $.toJSON(jsonRequest), 
+            dataType: "json",
+            success: function(msg) {
+                var resultobj =eval( '(' + msg.result + ')');
+                
+                $('#progress').html("");
+                var resulthtml=""
+                if (type=="png")
+                    resulthtml="<img src='"+ resultobj+"' style='border:solid;border-width:2px;' />";
+                else        
+                    resulthtml= "<a href= '" + resultobj+"' target='_new'>Open or Download " + type +"</a>";    
+                $('#result').html(resulthtml);
+            },
+            error: function(msg) { alert(msg); }
+        });
+        return false;
    }	  
-   $(document).ready(function() {
-	
-	$('#fontsize' ).change(function(){
-		alert("Not implemented");
-	});
-    $('#fontcolor' ).change(function(){
-		alert("Not implemented.");
-	});  
-	});
     
     function renderpdf(form){
         $('#pdfprogress').html("Please Wait..");
