@@ -4,6 +4,22 @@
     <meta content="">
     <style></style>
     <script type="text/javascript">
+    var baseURL = 'http://ml.wiktionary.org';
+	function showPage(page,text) {
+	  var sourceurl = baseURL + '/wiki/' + page;
+	  $('#pagetitle').text(page);
+	  $('#wikiInfo').html(text);
+	  $('#sourceurl').attr('href',sourceurl);
+	  $('#licenseinfo').show();
+	  $('.editsection').hide();
+	  $('.audiofile').hide();
+	  // now you can modify content of #wikiInfo as you like
+	  $('#wikiInfo').find('a:not(.references a):not(.extiw):not([href^="#"])').attr('href',
+		function() { return baseURL + $(this).attr('href');
+	  });
+	  // ...
+	}
+
     function fetchmeaning(form)
     {
         $('#progress') .html("Searching. Please Wait..");
@@ -25,12 +41,25 @@
                 $('#progress').html("");
                 // Render it
                 var result = $.parseJSON(msg.result).replace("\n", "&#13;");
-                $('#result') .html("<pre>"+ result + "</pre>");
+                $('#result') .html("<h2>Definitions from SILPA Dictionary</h2><pre>"+ result + "</pre><h2>Definitions from Wiktionary</h2>");
             },
             error: function(msg) { alert(msg.message); }
         });
+		baseURL = "http://"+dictionary.split("-")[1]+".wiktionary.org";	  
+		$.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+word,  
+		function(json) {
+			if(json.parse.revid > 0) {
+				showPage(word,json.parse.text['*']);
+			} else {
+				$('#wikiInfo').html('word not found');
+				$('#licenseinfo').hide();
+		}
+		});
+		
+		
         return false;
     }
+    
     </script>
   </head>
   <body>
@@ -44,6 +73,12 @@
           <option value="en-hi" id="en-hi" >English-Hindi</option>
           <option value="hi-en" id="hi-en" >Hindi-English</option>
           <option value="en-ml" id="en-ml" >English-Malayalam</option>
+          <option value="en-te" id="en-te" >English-Telugu</option>
+          <option value="en-ta" id="en-ta" >English-Tamil</option>
+          <option value="en-kn" id="en-kn" >English-Kannada</option>
+          <option value="en-or" id="en-or" >English-Oriya</option>
+          <option value="en-gn" id="en-bn" >English-Bengali</option>
+          <option value="en-gu" id="en-gu" >English-Gujarati</option>
         </select>
         <input type="hidden" name="action" value="Dictionary">
         </br>
@@ -56,7 +91,12 @@
         <div id="successmessage"></div>
         <div id="errormessage"></div>
         <div id="result"></div>
-        <h3 name="Dictionary">Python Dictioanry API</h3>
+        <div id="wikiInfo"></div>
+        <div id="licenseinfo" style="font-size:small; display:none;">
+			Modified original content <a id='sourceurl'>from Wiktionary</a>.
+			Content is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike License</a>.
+		</div>
+        <h3 name="Dictionary">Python Dictionary API</h3>
         Dictionary APIs provide dictionary lookup service.
         <ul>
           <li>Method: modules.Dictionary.getdef</li>
