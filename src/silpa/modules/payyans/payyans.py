@@ -64,7 +64,7 @@ class Payyans(SilpaModule):
                     letter = letter.encode('utf-8')
                     '''കിട്ടിയ അക്ഷരങ്ങളുടെ അപ്പുറത്തും ഇപ്പുറത്തും സ്വരചിഹ്നങ്ങള്‍ ഫിറ്റ് ചെയ്യാനുള്ള ബദ്ധപ്പാട്'''
                     if letter == 'ൈ':   # പിറകില്‍ രണ്ടു സാധനം പിടിപ്പിക്കുക
-                        ascii_text = ascii_text[:-1] + ascii_letter*2 + ascii_text[-1:]
+                        ascii_text = ascii_text[:-1] + ascii_letter + ascii_text[-1:]
                     elif (letter == 'ോ') | (letter == 'ൊ') | (letter == 'ൌ'):       #മുമ്പിലൊന്നും പിറകിലൊന്നും
                         ascii_text = ascii_text[:-1] + ascii_letter[0] + ascii_text[-1:] + ascii_letter[1]
                     elif (letter == 'െ') | (letter == 'േ') |(letter == '്ര'):       #പിറകിലൊന്നുമാത്രം
