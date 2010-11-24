@@ -32,7 +32,7 @@ class Syllabalizer(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'syllabalizer.html')
     
-    def syllabalize_ml(self,text):
+    def syllabify_ml(self,text):
         signs = [
         u'\u0d02', u'\u0d03', u'\u0d3e', u'\u0d3f', u'\u0d40', u'\u0d41',
         u'\u0d42', u'\u0d43', u'\u0d44', u'\u0d46', u'\u0d47', u'\u0d48',
@@ -56,7 +56,7 @@ class Syllabalizer(SilpaModule):
                     lst_chars.append(char)
 
         return lst_chars
-    def syllabalize_kn(self,text):
+    def syllabify_kn(self,text):
         signs = [
         u'\u0c82', u'\u0c83', u'\u0cbd', u'\u0cbe', u'\u0cbf', u'\u0cc0', u'\u0cc1',
         u'\u0cc2', u'\u0cc3', u'\u0cc4', u'\u0cc6', u'\u0cc7', u'\u0cc8',
@@ -80,7 +80,7 @@ class Syllabalizer(SilpaModule):
                     lst_chars.append(char)
 
         return lst_chars    
-    def syllabalize_bn(self,text):
+    def syllabify_bn(self,text):
         signs = [
         u'\u0981', u'\u0982', u'\u0983', u'\u09bd', u'\u09be', u'\u09bf', u'\u09c0', u'\u09c1',
         u'\u09c2', u'\u09c3', u'\u09c4', u'\u09c6', u'\u09c7', u'\u09c8',
@@ -105,11 +105,36 @@ class Syllabalizer(SilpaModule):
 
         return lst_chars        
     
-    def syllabalize_hi(self,text):
+    def syllabify_hi(self,text):
         signs = [
         u'\u0902', u'\u0903', u'\u093e', u'\u093f', u'\u0940', u'\u0941',
         u'\u0942', u'\u0943', u'\u0944', u'\u0946', u'\u0947', u'\u0948',
         u'\u094a', u'\u094b', u'\u094c', u'\u094d']
+        limiters = ['.','\"','\'','`','!',';',',','?']
+
+        virama = u'\u094d'
+        lst_chars = []
+        for char in text:
+            if char in limiters:
+                lst_chars.append(char)
+            elif char in signs:
+                lst_chars[-1] = lst_chars[-1] + char
+            else:
+                try:
+                    if lst_chars[-1][-1] == virama:
+                        lst_chars[-1] = lst_chars[-1] + char
+                    else:
+                        lst_chars.append(char)
+                except IndexError:
+                    lst_chars.append(char)
+
+        return lst_chars    
+    
+    def syllabify_ta(self,text):
+        signs = [
+        u'\u0b81', u'\u0b82', u'\u0b83', u'\u0bbd', u'\u0bbe', u'\u0bbf', u'\u0bc0', u'\u0bc1',
+        u'\u0bc2', u'\u0bc3', u'\u0bc4', u'\u0bc6', u'\u0bc7', u'\u0bc8',
+        u'\u0bca', u'\u0bcb', u'\u0bcc', u'\u0bcd', u'\u0bd7']
         limiters = ['.','\"','\'','`','!',';',',','?']
 
         virama = u'\u0bcd'
@@ -128,35 +153,10 @@ class Syllabalizer(SilpaModule):
                 except IndexError:
                     lst_chars.append(char)
 
-        return lst_chars    
-    
-    def syllabalize_ta(self,text):
-        signs = [
-        u'\u0b81', u'\u0b82', u'\u0b83', u'\u0bbd', u'\u0bbe', u'\u0bbf', u'\u0bc0', u'\u0bc1',
-        u'\u0bc2', u'\u0bc3', u'\u0bc4', u'\u0bc6', u'\u0bc7', u'\u0bc8',
-        u'\u0bca', u'\u0bcb', u'\u0bcc', u'\u0bcd', u'\u0bd7']
-        limiters = ['.','\"','\'','`','!',';',',','?']
-
-        chandrakkala = u'\u0bcd'
-        lst_chars = []
-        for char in text:
-            if char in limiters:
-                lst_chars.append(char)
-            elif char in signs:
-                lst_chars[-1] = lst_chars[-1] + char
-            else:
-                try:
-                    if lst_chars[-1][-1] == chandrakkala:
-                        lst_chars[-1] = lst_chars[-1] + char
-                    else:
-                        lst_chars.append(char)
-                except IndexError:
-                    lst_chars.append(char)
-
         return lst_chars            
     #Source: http://www.python-forum.org/pythonforum/viewtopic.php?f=14&t=5810#p42091
     #Author: Cabu
-    def syllabalize_en(self,text):
+    def syllabify_en(self,text):
         text = " " + text + " "
         vowel_list       = ['a', 'e', 'i', 'o', 'u', 'y']
         vowel_pairs      = ['ai', 'au', 'aw', 'ee','ea', 'oa', 'oi', 'ou', 'oo', 'ow', 'oy', 'uu']
@@ -219,28 +219,33 @@ class Syllabalizer(SilpaModule):
         # Return the words splitted
         return text
     def get_module_name(self):
-        return "Syllabalizer"
+        return "Syllabification"
+        
     def get_info(self):
-        return  "Syllabalize each word in the given text"
+        return  "Syllabify each word in the given text"
         
     @ServiceMethod  
-    def syllabalize(self,text):
-        lang=detect_lang(text)[text]
+    def syllabify(self,text):
+        if text.strip()=="":
+            return []
+        lang=detect_lang(text.split(" ")[0])[text.split(" ")[0]]
         if(lang=="ml_IN"):
-            return self.syllabalize_ml(text)
+            return self.syllabify_ml(text)
         if(lang=="hi_IN"):
-            return self.syllabalize_hi(text)
+            return self.syllabify_hi(text)
         if(lang=="kn_IN"):
-            return self.syllabalize_kn(text)    
+            return self.syllabify_kn(text)    
         if(lang=="bn_IN"):
-            return self.syllabalize_bn(text)        
+            return self.syllabify_bn(text)        
         if(lang=="ta_IN"):
-            return self.syllabalize_ta(text)        
+            return self.syllabify_ta(text)        
         if(lang=="en_US"):
-            return self.syllabalize_en(text)
+            return self.syllabify_en(text)
         lst_chars=[]
+        
         for  char in text:
             lst_chars.append(char)
         return lst_chars    
+        
 def getInstance():
         return Syllabalizer()
