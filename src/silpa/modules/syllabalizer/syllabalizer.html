@@ -5,12 +5,12 @@
     <style></style>
     <script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript">
-	function syllabalise(form)
+	function syllabify(form)
 	{
         $("#progress").html("Syllabifying Please Wait....")
 		var text= form.word.value;
 		var jsonRequest = {
-        "method" :  "modules.Syllabalizer.syllabalize",
+        "method" :  "modules.Syllabalizer.syllabify",
          "params" : [text], 
          "id" : ""
          };
@@ -32,12 +32,12 @@
 	</script>
   </head>
   <body>
-	<h2>Syllabalizer</h2></hr>
-		<p>Enter the text for syllabalization.		 Language of each  word will be detected. 
+	<h2>Syllabification</h2></hr>
+		<p>A <a href=""http://en.wikipedia.org/wiki/Syllable>syllable</a> is a unit of organization for a sequence of speech sounds.Enter the text for syllabification.		 Language of each  word will be detected. 
 		</p>
-		<form action="" method="post" onsubmit="return syllabalise(this);">
-		<input  type="text" id='word' name='word'></textarea>
-		<input  type="submit" id="Syllabalize" value="Syllabalize"  name="action" style="width:12em;"/>
+		<form action="" method="post" onsubmit="return syllabify(this);">
+		<input  type="text" id='word' name='word'  style="width:20em;" />
+		<input  type="submit" id="Syllabify" value="Syllabify"  name="action" style="width:10em;"/>
 		</br>
 		</form> 
 	 </body>
