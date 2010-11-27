@@ -76,10 +76,10 @@ class ServiceHandler(object):
                 err = e
         #Invoke the method 
         if err == None:
-            try:
-                result = self.call(meth, args)
-            except Exception, e:
-                err = e
+            #try:
+            result = self.call(meth, args)
+            #except Exception, e:
+            #  err = e
         resultdata = self.translate_result(result, err, id_)
         
         return resultdata
@@ -157,9 +157,10 @@ class ServiceHandler(object):
             error = {"name": error.__class__.__name__, "message":error}
             result = None
         try:
-            data = dumps({"result":dumps(result), "id":id_, "error":error})
+            data = dumps({"result":result, "id":id_, "error":error})
         except JSONEncodeException, e:
             #translate the exception also to the error
+            
             error = {"name": "JSONEncodeException", "message":"Result Object Not Serializable"}
             data = dumps({"result":None, "id":id_, "error":error})
         return data
