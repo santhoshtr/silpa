@@ -23,7 +23,7 @@
         dataType: "json",
         success: function(msg) {
             $('#progress').html("");
-              var resultobj =eval( '(' + msg.result + ')');
+              var resultobj =  msg.result ;
             // Render it
               $('#result').append("<table id='resulttable' class='table1'><tr><th>Word</th><th>Stem</th></tr></table>");
               for (var key in resultobj) 

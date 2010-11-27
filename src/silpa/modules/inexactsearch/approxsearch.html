@@ -35,7 +35,7 @@
         dataType: "json",
         success: function(msg) {
             $('#progress').html("");
-            var resultobj=eval( '(' + msg.result + ')');
+            var resultobj=   msg.result;
             var words = text.split(" ");
             var highlighted_text= "";
             for(var i=0; i<words.length; i++) {

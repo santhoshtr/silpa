@@ -1,7 +1,6 @@
 <html>
   <head>
     <title></title>
-    <meta content="">
     <script type="text/javascript">
     function trans(form)
     {
@@ -27,7 +26,7 @@
             $('#result') .html("<textarea>"+ msg.message + "</textarea>");
         }
         else{
-        var result = $.parseJSON(msg.result).replace("\n", "&#13;");
+        var result = msg.result.replace("\n", "&#13;")
         $('#progress').html("");
         // Render it
         $('#result') .html("<textarea>"+ result + "</textarea>");
@@ -37,6 +36,15 @@
     });
      return false;
     }
+    
+    $(document).ready(function(){
+        $("textarea").addInputMenu();
+        //$("textarea").swanalekha({outlineStyle :'dashed 1px green'});
+        $("textarea").mozhi();
+    });
+
+</script>
+
     </script>
   </head>
   <body>

@@ -31,8 +31,9 @@
         dataType: "json",
         success: function(msg) {
             $('#progress').html("");
-            var result = $.parseJSON(msg.result).replace("\n", "&#13;");;
-             $('#result') .html("<p>"+result+"</p>");
+            //alert(msg.result);
+            var result = msg.result.replace("\n", "&#13;")
+            $('#result') .html("<p>"+result+"</p>");
         },
         error: function(msg) { alert(msg.message); }
     });

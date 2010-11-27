@@ -24,7 +24,7 @@
             data: $.toJSON(jsonRequest), 
             dataType: "json",
             success: function(msg) {
-                var resultobj =eval( '(' + msg.result + ')');
+                var resultobj =  msg.result 
                 
                 $('#progress').html("");
                 var resulthtml=""
@@ -55,7 +55,7 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-            var resultobj =eval( '(' + msg.result + ')');
+            var resultobj =  msg.result ;
             $('#pdfprogress').html("");
             var resulthtml= "<a href= '" + resultobj+"' target='_new'>Open or Download PDF</a>";
             $('#pdfresult').html(resulthtml);

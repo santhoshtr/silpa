@@ -19,7 +19,7 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-          var resultobj =eval( '(' + msg.result + ')');
+          var resultobj =  msg.result;
           $('#progress').html("");
           if(resultobj)   {
                  $('#result').html("<b>  Correct Spelling.</b>"); 

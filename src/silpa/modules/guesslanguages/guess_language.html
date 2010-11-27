@@ -23,7 +23,7 @@
         success: function(msg) {
             $('#progress').html("");
             // Render it
-            $('#result') .html("<b>"+ $.parseJSON(msg.result) + "</b>");
+            $('#result') .html("<b>"+ msg.result + "</b>");
         },
         error: function(msg) { alert(msg); }
     });

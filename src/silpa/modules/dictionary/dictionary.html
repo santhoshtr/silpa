@@ -40,7 +40,7 @@
             success: function(msg) {
                 $('#progress').html("");
                 // Render it
-                var result = $.parseJSON(msg.result).replace("\n", "&#13;");
+                var result = msg.result.replace("\n", "&#13;");
                 $('#result') .html("<h2>Definitions from SILPA Dictionary</h2><pre>"+ result + "</pre><h2>Definitions from Wiktionary</h2>");
             },
             error: function(msg) { alert(msg.message); }

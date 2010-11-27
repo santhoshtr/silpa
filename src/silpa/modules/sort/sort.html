@@ -19,7 +19,7 @@
         data: $.toJSON(jsonRequest), 
         dataType: "json",
         success: function(msg) {
-            var resultobj =eval( '(' + msg.result + ')');
+            var resultobj =  + msg.result;
             $('#progress').html("");
             $('#result').html("<table id='sortedtable' class='table1'><tr><th>UCA 5.2 Result</th><th>Modified UCA 5.2 Result</th></tr></table>");
             var silparesult = resultobj['SILPA'];
