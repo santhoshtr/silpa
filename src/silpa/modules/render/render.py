@@ -87,6 +87,7 @@ class Render(SilpaModule):
         surface = None
         width=int(width)
         height=int(height)
+        text= text.decode("utf-8")
         filename = str(uuid.uuid1())[0:5]+"."+file_type
         outputfile = os.path.join(os.path.dirname(__file__),"tmp",filename )
         if file_type == 'png':
