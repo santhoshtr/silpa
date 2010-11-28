@@ -27,6 +27,7 @@ sys.path.append(os.path.dirname(__file__))
 from common import *
 from utils import *
 from jsonrpc import handleCGI,ServiceHandler
+from urlparse import parse_qs
 
 class Silpa():
     
@@ -48,6 +49,18 @@ class Silpa():
         except:
             # To handle the python -m silpa server instances.
             request_uri = environ.get('PATH_INFO', '').lstrip('/')
+
+        if environ.get('REQUEST_METHOD','') == 'GET':
+            if  request.get('action') != None: 
+                request_uri = request.get('action')
+        else:
+            query_string = environ.get('QUERY_STRING',None)
+            if query_string:
+                key_values = parse_qs(query_string,True)
+                action = key_values.get('action',None)
+                if action:
+                    request_uri = action[0]
+            
         
         #JSON RPC requests
         if request_uri== "JSONRPC":
@@ -55,12 +68,10 @@ class Silpa():
                 start_response('200 OK', [('Content-Type', 'application/json')])
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
                 return [jsonreponse.encode('utf-8')]
-        
-        if  request.get('action') != None: 
-            request_uri = request.get('action')  
+          
         from common.silparesponse import SilpaResponse
         self._response=SilpaResponse()
-        if request_uri :
+        if request_uri and not request_uri == "/":
             #Check if the action is defined.
             if self._module_manager.find_module(request_uri ):
                 module_instance =  self._module_manager.get_module_instance(request_uri )
