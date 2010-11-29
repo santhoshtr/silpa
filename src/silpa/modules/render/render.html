@@ -96,6 +96,7 @@
 			 <option value="svg">SVG Image</option>
 			 <option value="pdf">PDF</option>
 			 </select>
+         <p>Note: Give height or width as 0 for auto sizing the output.</p>
 		 <p align=center>
 			<input  type="submit" id="Render" value="Render"  name="action" style="width:5em;"/>
          </p>	 
@@ -105,5 +106,67 @@
         <div id="successmessage"></div>
         <div id="errormessage"></div>
         <div id="result"></div>
+        <div id="documentation">
+        <h2>Module Information</h2> 
+        This module uses pango cairo python apis for rendering. To get this running , you should have python bindings of pango and cairo installed in your system.
+        For PDF generation, the module uses PyPDFLib library. This module is in developement and APIs are not stable or final.
+        <h2>Python API</h2>   
+        <p>You can use Silpa python APIs to renedr a custom text to any image format or PDF. After installing silpa, refer the following example for using the api.
+        The text can be in any script, including Right to Left scripts.
+        </p>
+        <code><pre class="code">
+        from silpa.modules import render
+        render=render.getInstance()
+        #Render the text to SVG format. width=100, height= 200 pixels
+        render.render_text("Your text goes here", "svg", 100,200)
+        #Render the text to png format. width=100, height will be automatcally set based the content size
+        render.render_text("Your text goes here", "png", 100 ,0)
+        # Render the text to a PDF
+        render.render_text("Your text goes here", "pdf", 500 , 500)
+        </pre>
+        </code>
+        <p>The render_text method return the name of the generated image.(TODO: Make the path of the image configurable)</p>
+        <h2>Python JSON RPC</h2>   
+        <p>You will require JSON RPC client from here: http://json-rpc.org/wiki/python-json-rpc</p>
+        <code><pre>
+        from jsonrpc import ServiceProxy
+        proxy = ServiceProxy("http://localhost/silpa/JSONRPC")
+        print s.modules.Render.render_text("Your text goes here", "svg", 100,200)
+        </pre></code>
+        <h2>PHP JSON RPC</h2>   
+        <p>A sample PHP client to use the Silpa's JSON RPC service is given below.</p>
+           <code><pre class="code">
+        
+        define ('HOSTNAME', 'http://silpa.smc.org.in/JSONRPC');
+        $url = HOSTNAME;
+        // Open the Curl session
+        $session = curl_init($url);
+        // If it's a POST, put the POST data in the body
+        $postvars = '{"method": "modules.Render.render_text", "params": ["Your text goes here", "png", 100,100], "id":"jsonrpc"}';
+        curl_setopt ($session, CURLOPT_POST, true);
+        curl_setopt ($session, CURLOPT_POSTFIELDS, $postvars);
+        // Don't return HTTP headers. Do return the contents of the call
+        curl_setopt($session, CURLOPT_HEADER, false);
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+        // Make the call
+        $json = curl_exec($session);
+        // The web service returns json. Set the Content-Type appropriately
+        header("Content-Type: application/json");
+        echo $json;
+        $obj =  json_decode($json,false);
+        $result  =  $obj->{"result"};
+        echo $result;
+        curl_close($session);
+        </pre>
+        </code>
+        <p>The result will contain the image name. the image can be accessed by http://silpa.smc.org.in/Render?image=abcd.png</p>
+        <h2>Wiki to PDF</h2>
+        The wiki2pdf method is accessible by the following JSON:
+        <code>
+        <pre class="code">
+            $postvars = '{"method": "modules.Render.wiki2pdf", "params": ["http://en.wikipedia.org/wiki/Kerala"], "id":"jsonrpc"}';
+        </pre>
+        </code>
+        </div>
     </body>
 </html>
