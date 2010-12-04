@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <script type="text/javascript">
+    function speak(form)
+    {
+    $('#progress') .html("Please Wait...");
+    $('#result').html("");
+    var text= form.text.value;
+    var jsonRequest = {
+            "method" :  "modules.TTS.text_to_ogg",
+            "params" : [text],
+            "id" : ""
+        };
+    
+    $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "JSONRPC",
+            data: $.toJSON(jsonRequest), 
+            dataType: "json",
+            success: function(msg) {
+                var resultobj =  msg.result 
+                
+                $('#progress').html("");
+
+                var resulthtml="<p><audio src='"+ resultobj+"' preload controls='true'>";
+                resulthtml+="Your browser does not support the audio element.";
+                resulthtml+="</audio></p>";
+                resulthtml+="<p><a href='"+resultobj+"'>Download the speech file.</a></p>";
+                $('#result').html(resulthtml);
+            },
+            error: function(msg) { alert(msg); }
+        });
+        return false;
+        
+    }
+    </script>
+  </head>
+  <body>
+
+        <h2>Text to Speech</h2></hr>
+        <p>Online version of <a href="http://dhvani.sourceforge.net">Dhvani</a> Indian Language text to speech system. Note that this module is experimental</p>
+        <form action="" method="post"  onsubmit="return speak(this); " >
+        <textarea  name='text' id='id1'></textarea>
+         Pitch: <input type="text"  name="pitch" value="0" disabled style="width:2em;"/>
+         Speed: <input type="text"  name="speed" value="0" disabled style="width:2em;"/>
+         Output format: <select id="format" name="format" style="width:5em;">
+         <option value="ogg">Ogg</option>
+         <option value="wave">Wave</option>
+         </select>
+         <input  type="submit" id="Speak" value="Speak"  name="action" style="width:5em;"/>
+        
+        </br>
+        </form>
+                </form>
+       <div id="progress"></div>
+        <div id="successmessage"></div>
+        <div id="errormessage"></div>
+        <div id="result"></div>
+    </body>
+</html>
