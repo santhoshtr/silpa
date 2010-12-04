@@ -27,7 +27,11 @@ sys.path.append(os.path.dirname(__file__))
 from common import *
 from utils import *
 from jsonrpc import handleCGI,ServiceHandler
-from urlparse import parse_qs
+
+try:
+    from urlparse import parse_qs
+except ImportError:
+    from cgi import parse_qs
 
 class Silpa():
     
