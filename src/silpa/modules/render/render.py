@@ -70,10 +70,10 @@ class Render(SilpaModule):
 			self.pdf = self.wiki2pdf(self.wiki_url).replace("?pdf=", "")
             
         if self.image:
-            return codecs.open(os.path.join(os.path.dirname(__file__),"tmp",self.image)).read()
+            return codecs.open(os.path.join("/tmp",self.image)).read()
                 
         if self.pdf:    
-            return codecs.open(os.path.join(os.path.dirname(__file__), "tmp",self.pdf)).read()
+            return codecs.open(os.path.join("/tmp",self.pdf)).read()
 
     @ServiceMethod  
     def wiki2pdf(self, url):
@@ -89,7 +89,7 @@ class Render(SilpaModule):
         height=int(height)
         text= text.decode("utf-8")
         filename = str(uuid.uuid1())[0:5]+"."+file_type
-        outputfile = os.path.join(os.path.dirname(__file__),"tmp",filename )
+        outputfile = os.path.join("/tmp",filename )
         if file_type == 'png':
             surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
         else:
