@@ -23,6 +23,18 @@ import os
 import uuid
 from common import *
 from utils import *
+
+from threading import Timer
+import subprocess
+import shlex
+
+WAIT_TIME = 10.0
+
+def dhvani(inputfile, outputfile):
+    cmd = "dhvani   -o "+ outputfile +" "+  inputfile 
+    p = subprocess.Popen(shlex.split(cmd),        stdout=subprocess.PIPE,             stderr=subprocess.PIPE)
+    p.wait()
+
 class TTS(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), "tts.html")
@@ -57,8 +69,7 @@ class TTS(SilpaModule):
         tempInfile.close()  
         filename= str(uuid.uuid1())[0:5]
         speechfile = os.path.join("/tmp",filename+".ogg")
-        cmd = "dhvani  "+ tempInfileName + " -o "+ speechfile
-        os.system(cmd)
+        dhvani (tempInfileName , speechfile)
         return "?speech="+filename+".ogg"
         
     def get_module_name(self):
