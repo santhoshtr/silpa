@@ -89,4 +89,4 @@ def ensure_dir(d):
        d Absolute Path to the directory
     '''
     if not os.path.exists(d):
-        os.mkdir(d)
+        os.makedirs(d)
