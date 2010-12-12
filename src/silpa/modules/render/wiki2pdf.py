@@ -23,7 +23,7 @@
 
 import sys
 import os
-sys.path.append("/sda5/dev/pypdflib/src/")  #not 
+sys.path.append("/sda5/dev/pypdflib/src/")  #not good
 from pypdflib.writer import PDFWriter
 from pypdflib.widgets import *
 from pypdflib.styles import *
@@ -54,7 +54,7 @@ class Wikiparser(SGMLParser):
         self.hyperlinks = []
         self.url = url
         self.language = detect_language(url)
-        self.pdf = PDFWriter(os.path.join(os.path.dirname(__file__),"tmp",filename), StandardPaper.A4)
+        self.pdf = PDFWriter(os.path.join("/tmp",filename), StandardPaper.A4)
         header = Header(text_align = pango.ALIGN_CENTER)
         #TODO Alignment not working.
         header.set_text(urllib.unquote(self.url))
