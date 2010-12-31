@@ -64,8 +64,8 @@ fonts = {
                     } ,                    
               "LohitMalayalam":{
 					"Name": u"ലോഹിത് മലയാളം",
-                    "License":"GPL",
-                    "Author" :"Suresh P",
+                    "License":"GPL v2",
+                    "Author" :"Red Hat Inc.",
                     "ttf" : "LohitMalayalam.ttf",
                     "eot" : "LohitMalayalam.eot",
                     "woff" : "LohitMalayalam.woff",
