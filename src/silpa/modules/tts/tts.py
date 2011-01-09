@@ -43,6 +43,9 @@ class TTS(SilpaModule):
         self.request=request
         self.speech = self.request.get('speech')
         self.text = self.request.get('text')
+
+    def set_start_response(self,start_response):
+        self.start_response = start_response
         
     def is_self_serve(self) :       
         if self.speech or self.text:
@@ -58,6 +61,10 @@ class TTS(SilpaModule):
                                 
     def serve(self):                            
         if self.speech:
+            self.start_response('200 OK', [
+                    ('Content-disposition','attachment; filename='+ self.speech),
+                    ('Content-Type', self.get_mimetype()),
+                    ('Access-Control-Allow-Origin','*')])            
             return codecs.open(os.path.join("/tmp",self.speech)).read()
                 
                                                 
