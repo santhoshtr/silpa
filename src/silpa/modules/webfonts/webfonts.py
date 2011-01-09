@@ -35,6 +35,9 @@ class Webfonts(SilpaModule):
         self.request=request
         self.font = self.request.get('font')
         self.fontfile = self.request.get('fontfile')
+
+    def set_start_response(self,start_response):
+        self.start_response = start_response
         
     def is_self_serve(self) :       
         if self.font or self.fontfile:
@@ -53,8 +56,12 @@ class Webfonts(SilpaModule):
         """
         serve the font file
         """
+        self.start_response('200 OK', [
+                    ('Content-Type', self.get_mimetype()),
+                    ('Access-Control-Allow-Origin','*')])
+        
         if self.fontfile:
-             return codecs.open(os.path.join(os.path.dirname(__file__),"font",self.fontfile)).read()
+            return codecs.open(os.path.join(os.path.dirname(__file__),"font",self.fontfile)).read()
         """
         Provide the css for the given font.
         """     
