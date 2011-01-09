@@ -41,6 +41,9 @@ class Render(SilpaModule):
         self.file_type= self.request.get('type')
         self.wiki_url= self.request.get('wiki')
         self.text = self.request.get('text')
+
+    def set_start_response(self,start_response):
+        self.start_response = start_response
         
     def is_self_serve(self) :       
         if self.image or self.text or self.pdf or self.wiki_url:
@@ -59,21 +62,26 @@ class Render(SilpaModule):
             return "application/pdf"
 
     def serve(self):
-        """
-        Provide the css for the given font. CSS will differ for IE and Other browsers
-        """
+
         if self.text:
             #TODO: BUG: For unicode text, junk characters coming
             self.image = self.render_text(self.text, 'png').replace("?image=", "")
         
         if self.wiki_url:
-			self.pdf = self.wiki2pdf(self.wiki_url).replace("?pdf=", "")
-            
+            self.pdf = self.wiki2pdf(self.wiki_url).replace("?pdf=", "")
+
+        filename = None
+        
         if self.image:
-            return codecs.open(os.path.join("/tmp",self.image)).read()
-                
-        if self.pdf:    
-            return codecs.open(os.path.join("/tmp",self.pdf)).read()
+            filename = os.path.join("/tmp",self.image)
+        elif self.pdf:
+            filename = os.path.join("/tmp",self.pdf)
+            
+        self.start_response('200 OK', [
+                    ('Content-disposition','attachment; filename='+ filename.split('/')[-1]),
+                    ('Content-Type', self.get_mimetype()),
+                    ('Access-Control-Allow-Origin','*')])
+        return codecs.open(filename).read()
 
     @ServiceMethod  
     def wiki2pdf(self, url):
