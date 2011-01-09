@@ -81,6 +81,7 @@ class Silpa():
                 module_instance =  self._module_manager.get_module_instance(request_uri )
                 if(module_instance):
                     module_instance.set_request(request)
+                    module_instance.set_start_response(start_response)
                     
                     #if this is a json request
                     if request.get('json'):
@@ -93,7 +94,6 @@ class Silpa():
                     #populate the form with the query values
                     self._response = self._response.populate_form(request)
                     if(module_instance.is_self_serve()):
-                        start_response('200 OK', [('Content-Type', module_instance.get_mimetype()),('Access-Control-Allow-Origin','*')])
                         return [module_instance.serve()]
                     start_response('200 OK', [('Content-Type', 'text/html')])
                     return [str(self._response).encode('utf-8')]
