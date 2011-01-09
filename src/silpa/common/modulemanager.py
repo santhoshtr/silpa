@@ -92,6 +92,12 @@ class ModuleManager:
         A not-so-good fix to avoid an exception when calling all modules screen
         """
         return
+    def set_start_response(self,start_response):
+        """
+        A not-so-good fix to avoid an exception when calling all modules screen
+        """
+        return
+    
     def is_self_serve(self):    
         return False
     def get_service_methods(self):
