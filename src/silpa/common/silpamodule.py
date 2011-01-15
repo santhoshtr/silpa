@@ -36,6 +36,12 @@ class SilpaModule:
         return open(self.template,'r').read()
     def set_request(self,request):
         self.request=request
+    
+    def set_start_response(self,start_response):
+        """
+        TODO Add the implementaion here
+        """
+        return    
     def get_json_result(self):
         return ""
     def is_self_serve(self) :       
