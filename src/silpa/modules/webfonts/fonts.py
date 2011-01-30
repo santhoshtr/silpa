@@ -77,7 +77,7 @@ fonts = {
               "SamyakMalayalam":{
 					"Name": u"സമ്യക്‍ മലയാളം",
                     "License":"GPL",
-                    "Author" :"Suresh P",
+                    "Author" :"",
                     "ttf" : "SamyakMalayalam.ttf",
                     "eot" : "SamyakMalayalam.eot",
                     "woff" : "SamyakMalayalam.woff",

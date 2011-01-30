@@ -21,8 +21,13 @@
 import codecs
 import mimetypes
 import os
+
 def get_template():
     return open(os.path.dirname(__file__)+"/../"+get_template_name()).read()
+
+def get_index_page():
+    return open(os.path.dirname(__file__)+"/../web/index.html").read()
+
 
 def get_template_name():
     return load_configuration()["SILPA_TEMPLATE"]    
@@ -45,12 +50,6 @@ def get_modules_list():
             action_dict[item.replace("SILPA_ACTION.","")] = conf_dict[item]
     return  action_dict 
 
-def get_static_content(page):
-    try:
-        return codecs.open(get_root_folder() + "/" + page).read()#, encoding='utf-8', errors='ignore'
-    except:
-        print  "Oops! Requested resource not found! " + page  
-        return "Oops! Requested resource not found! " + page  
     
 def load_configuration():
     conf_dict={}
