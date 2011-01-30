@@ -19,7 +19,6 @@ import cgitb
 import os
 import cgi
 import sys
-import codecs
 from common import *
 from utils import *
 import fonts
@@ -27,30 +26,25 @@ class Webfonts(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), 'index.html')  
         self.font = None
-        self.fontfile =  None
         #List of available fonts
         self.available_fonts=fonts.fonts
         
     def set_request(self,request):
         self.request=request
         self.font = self.request.get('font')
-        self.fontfile = self.request.get('fontfile')
 
     def set_start_response(self,start_response):
         self.start_response = start_response
         
     def is_self_serve(self) :       
-        if self.font or self.fontfile:
+        if self.font:
             return True
-        else:
-            return False
+        return False
             
     def get_mimetype(self):
         if self.font:
             return "text/css"
             
-        if self.fontfile:    
-            return 'application/octet-stream'
         
     def serve(self,font=None):
         """
@@ -60,15 +54,13 @@ class Webfonts(SilpaModule):
                     ('Content-Type', self.get_mimetype()),
                     ('Access-Control-Allow-Origin','*')])
         
-        if self.fontfile:
-            return codecs.open(os.path.join(os.path.dirname(__file__),"font",self.fontfile)).read()
         """
         Provide the css for the given font.
         """     
         if not self.available_fonts.has_key(self.font):
             return "Error!, Font not available"
         # user_agent= self.request.get('HTTP_USER_AGENT')
-        font_url = "?fontfile="
+        font_url = "modules/webfonts/font/"
         css = '''@font-face {
     font-family: '$$FONTFAMILY$$';
     src: url('$$FONTURLEOT$$');

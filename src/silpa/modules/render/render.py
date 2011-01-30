@@ -32,12 +32,11 @@ from styles import get_color
 
 class Render(SilpaModule):
     def __init__(self):
-        self.template=os.path.join(os.path.dirname(__file__), "render.html")
+        self.template = os.path.join(os.path.dirname(__file__), "render.html")
+        self.tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
 
     def set_request(self,request):
         self.request=request
-        self.image = self.request.get('image')
-        self.pdf = self.request.get('pdf')
         self.file_type= self.request.get('type')
         self.wiki_url= self.request.get('wiki')
         self.text = self.request.get('text')
@@ -45,50 +44,12 @@ class Render(SilpaModule):
     def set_start_response(self,start_response):
         self.start_response = start_response
         
-    def is_self_serve(self) :       
-        if self.image or self.text or self.pdf or self.wiki_url:
-            return True
-        else:
-            return False
-
-    def get_mimetype(self):
-        if self.image:
-            return "image/"+ self.image.split(".")[-1]
-            
-        if  self.text:    
-            return "image/png"
-            
-        if self.pdf or self.wiki_url:    
-            return "application/pdf"
-
-    def serve(self):
-
-        if self.text:
-            #TODO: BUG: For unicode text, junk characters coming
-            self.image = self.render_text(self.text, 'png').replace("?image=", "")
-        
-        if self.wiki_url:
-            self.pdf = self.wiki2pdf(self.wiki_url).replace("?pdf=", "")
-
-        filename = None
-        
-        if self.image:
-            filename = os.path.join("/tmp",self.image)
-        elif self.pdf:
-            filename = os.path.join("/tmp",self.pdf)
-            
-        self.start_response('200 OK', [
-                    ('Content-disposition','attachment; filename='+ filename.split('/')[-1]),
-                    ('Content-Type', self.get_mimetype()),
-                    ('Access-Control-Allow-Origin','*')])
-        return codecs.open(filename).read()
-
     @ServiceMethod  
     def wiki2pdf(self, url):
         filename =  str(uuid.uuid1())[0:5] +".pdf"
         parser = Wikiparser(url,filename) #"http://ml.wikipedia.org/wiki/Computer"
         parser.parse()
-        return ("?pdf="+filename)
+        return ("modules/render/tmp/"+filename)
         
     @ServiceMethod  
     def render_text(self, text,file_type='png', width=0, height=0,color="Black"):
@@ -97,15 +58,13 @@ class Render(SilpaModule):
         height=int(height)
         text= text.decode("utf-8")
         filename = str(uuid.uuid1())[0:5]+"."+file_type
-        outputfile = os.path.join("/tmp",filename )
+        outputfile = os.path.join(self.tmp_folder, filename )
         if file_type == 'png':
             surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
-        else:
-            if file_type == 'svg':
-                surface = cairo.SVGSurface(outputfile,int(width),int(height))
-            elif file_type == 'pdf':
-                surface = cairo.PDFSurface(outputfile,int(width),int(height))
-                
+        if file_type == 'svg':
+            surface = cairo.SVGSurface(outputfile,int(width),int(height))
+        if file_type == 'pdf':
+            surface = cairo.PDFSurface(outputfile,int(width),int(height))
         context = cairo.Context(surface)
         text = hyphenator.getInstance().hyphenate(text,u'\u00AD')
         width  = int(width)
@@ -114,13 +73,9 @@ class Render(SilpaModule):
         top_margin = 10
         position_x = left_margin
         position_y = top_margin
-        
         rgba = get_color(color)
-
         context.set_source_rgba (rgba.red,rgba.green,rgba.blue,rgba.alpha)
-        
         pc = pangocairo.CairoContext(context)
-        
         paragraph_layout = pc.create_layout()
         paragraph_font_description = pango.FontDescription()
         paragraph_font_description.set_family("Sans")
@@ -167,13 +122,11 @@ class Render(SilpaModule):
             surface.write_to_png(outputfile)
         else:
             context.show_page()
+        return "modules/render/tmp/"+filename
 
-        return "?image="+filename
-
-        
     def get_module_name(self):
         return "Script Renderer"
-        
+
     def get_info(self):
         return  "Provides rendered images for Complex scripts"    
         

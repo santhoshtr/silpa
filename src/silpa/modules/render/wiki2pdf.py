@@ -54,7 +54,8 @@ class Wikiparser(SGMLParser):
         self.hyperlinks = []
         self.url = url
         self.language = detect_language(url)
-        self.pdf = PDFWriter(os.path.join("/tmp",filename), StandardPaper.A4)
+        tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
+        self.pdf = PDFWriter(os.path.join(tmp_folder, filename), StandardPaper.A4)
         header = Header(text_align = pango.ALIGN_CENTER)
         #TODO Alignment not working.
         header.set_text(urllib.unquote(self.url))

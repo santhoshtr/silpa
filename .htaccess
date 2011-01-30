@@ -1,9 +1,8 @@
 Header add Access-Control-Allow-Origin *
 DirectoryIndex dispatch.fcgi
 RewriteEngine on
-RewriteCond %{REQUEST_URI} !dispatch.fcgi$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*) dispatch.fcgi?action=$1&%{QUERY_STRING}
+RewriteRule ^(.*) dispatch.fcgi/$1 [L,QSA]
 RewriteRule ^.git - [F,L]
 

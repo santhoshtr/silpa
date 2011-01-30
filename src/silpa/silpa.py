@@ -28,46 +28,22 @@ from common import *
 from utils import *
 from jsonrpc import handleCGI,ServiceHandler
 
-try:
-    from urlparse import parse_qs
-except ImportError:
-    from cgi import parse_qs
-
 class Silpa():
     
     def __init__(self):
         self._module_manager = ModuleManager()
         self._response=None
         self._jsonrpc_handler=ServiceHandler(self) 
-        self.time_format = "%a, %d %b %Y %H:%M:%S %Z"
         
     def serve(self,environ, start_response):
         """
         The method to serve all the requests.
         """
         request = SilpaRequest(environ)
-        try:
-            request_uri = environ['REQUEST_URI']
-            # TODO there should be a better way to handle the below line
-            request_uri  = request_uri .replace("/silpa/","") #remove app name from uri . 
-        except:
-            # To handle the python -m silpa server instances.
-            request_uri = environ.get('PATH_INFO', '').lstrip('/')
-
-        if environ.get('REQUEST_METHOD','') == 'GET':
-            if  request.get('action') != None: 
-                request_uri = request.get('action')
-        else:
-            query_string = environ.get('QUERY_STRING',None)
-            if query_string:
-                key_values = parse_qs(query_string,True)
-                action = key_values.get('action',None)
-                if action:
-                    request_uri = action[0]
-            
+        request_uri = environ.get('PATH_INFO', '').lstrip('/')
         
         #JSON RPC requests
-        if request_uri== "JSONRPC":
+        if request_uri == "JSONRPC":
                 data = request.get_body()
                 start_response('200 OK', [('Content-Type', 'application/json')])
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
@@ -75,42 +51,33 @@ class Silpa():
           
         from common.silparesponse import SilpaResponse
         self._response=SilpaResponse()
-        if request_uri and not request_uri == "/":
-            #Check if the action is defined.
-            if self._module_manager.find_module(request_uri ):
-                module_instance =  self._module_manager.get_module_instance(request_uri )
-                if(module_instance):
-                    module_instance.set_request(request)
-                    module_instance.set_start_response(start_response)
-                    
-                    #if this is a json request
-                    if request.get('json'):
-                        jsonreponse = module_instance.get_json_result()
-                        start_response('200 OK', [('Content-Type', 'application/json')])
-                        return [jsonreponse.encode('utf-8')]
-                        
-                    #normal request for the page, may contain request parameters(GET)    
-                    self._response.form = module_instance.get_form()
-                    #populate the form with the query values
-                    self._response = self._response.populate_form(request)
-                    if(module_instance.is_self_serve()):
-                        return [module_instance.serve()]
-                    start_response('200 OK', [('Content-Type', 'text/html')])
-                    return [str(self._response).encode('utf-8')]
-                    
-            #It is a static content request.
-            # Content type depends on the mimetype
-            start_response('200 OK', [('Content-Type', get_mimetype(request_uri)),('Expires',(datetime.datetime.now()+ datetime.timedelta(+10)).strftime(self.time_format))])
-            if request_uri .endswith(".html"):
-                # HTML pages need to be embedded inside the content area
-                self._response.content=get_static_content("doc/"+request_uri)
-                return [str(self._response).encode('utf-8')]
-            else: 
-                # Images, css, javascript etc..
-                return [get_static_content(request_uri)]
+        #Check if the action is defined.
+        if self._module_manager.find_module(request_uri ):
+            module_instance =  self._module_manager.get_module_instance(request_uri )
+            if(module_instance):
+                module_instance.set_request(request)
+                module_instance.set_start_response(start_response)
                 
-        else: #No action. Show home page
-            self._response.content= get_static_content('doc/index.html')
+                #if this is a json request
+                if request.get('json'):
+                    jsonreponse = module_instance.get_json_result()
+                    start_response('200 OK', [('Content-Type', 'application/json')])
+                    return [jsonreponse.encode('utf-8')]
+                    
+                #normal request for the page, may contain request parameters(GET)    
+                self._response.form = module_instance.get_form()
+                #populate the form with the query values
+                self._response = self._response.populate_form(request)
+                if(module_instance.is_self_serve()):
+                    return [module_instance.serve()]
+                start_response('200 OK', [('Content-Type', 'text/html')])
+                return [str(self._response).encode('utf-8')]
+        
+        if(request_uri == "index.html" or request_uri == ""):
             start_response('200 OK', [('Content-Type', 'text/html')])
-            return [str(self._response).encode('utf-8')]
+            self._response.content = get_index_page()
+        else:
+            self._response.content ='Requested URL not found.'
+            start_response('404 Not found', [('Content-Type', 'text/html')])
+        return [str(self._response).encode('utf-8')]
 
