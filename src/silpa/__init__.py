@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright 2009-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
 # http://www.smc.org.in
