@@ -32,13 +32,17 @@ class Katapayadi(SilpaModule):
     def get_number(self, word):
         word = word.strip()
         word = word.split(" ")[0]
-        lang_ka_bases = {'hi_IN': 0x0915,'bn_IN': 0x0995, 'pa_IN':0x0A15,'gu_IN':0x0A95 , 'or_IN': 0x0B15,'ta_IN': 0x0B95,'te_IN' : 0x0C15,    'ka_IN' :0x0C95 ,'ml_IN': 0x0D15}        
+        lang_ka_bases = {'hi_IN': 0x0915,'bn_IN': 0x0995, 'pa_IN':0x0A15,'gu_IN':0x0A95 , 'or_IN': 0x0B15,'ta_IN': 0x0B95,'te_IN' : 0x0C15, 'ka_IN' :0x0C95 ,'ml_IN': 0x0D15}        
         from modules import syllabalizer
         syllablizer_handle = syllabalizer.getInstance()
         syllables = syllablizer_handle.syllabify(word)
         number = ""
-        src_lang_code = detect_lang(word)[word]
-        base =  lang_ka_bases[src_lang_code]
+        # Check if the dectected language is in list. If not, display unsupported langusge
+        try:
+            src_lang_code = detect_lang(word)[word]
+            base =  lang_ka_bases[src_lang_code]
+        except:
+            return "Unsupported Language"
         for cluster in syllables:
             number = self.__get_number_for_syllable(cluster,base)  + number 
         return  int(number)
