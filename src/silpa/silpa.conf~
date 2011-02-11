@@ -49,5 +49,5 @@ SILPA_ACTION.Render=modules.render #Renderer Module
 SILPA_ACTION.Webfonts=modules.webfonts 
 SILPA_ACTION.TextSimilarity=modules.textsimilarity 
 #SILPA_ACTION.OCR=modules.ocr #OCR Module
-SILPA_ACTION.Shingling=modules.shingling #shingling
+#SILPA_ACTION.Shingling=modules.shingling #shingling
 #End of Silpa configuration file
