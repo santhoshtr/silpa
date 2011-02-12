@@ -23,7 +23,7 @@
 
 import sys
 import os
-sys.path.append("/sda5/dev/pypdflib/src/")  #not good
+sys.path.append("/media/C0DE/dev/pypdflib/src")  #not good
 from pypdflib.writer import PDFWriter
 from pypdflib.widgets import *
 from pypdflib.styles import *
@@ -33,6 +33,7 @@ from pyquery import PyQuery as pq
 import urllib
 import urlparse
 import urllib2
+from urllib import urlretrieve
 
 lang_codes = {'en':'en_US',
               'ml':'ml_IN',
@@ -95,9 +96,18 @@ class Wikiparser(SGMLParser):
             
                 
     def start_img(self, attrs):         
-        src = [value for key, value in attrs if key=='src'] 
+        src = [value for key, value in attrs if key == 'src'] 
         if src:
             self.images.extend(src)
+            
+    def end_img(self):
+        for wiki_image in self.images:
+            image  = Image()  
+            outpath = self.grab_image(wiki_image, "/tmp")
+            image.set_image_file(outpath)
+            self.pdf.add_image(image)
+        self.images = []
+
             
     def start_h1(self, attrs):         
         self.h1=True
@@ -179,7 +189,35 @@ class Wikiparser(SGMLParser):
         self.buffer = None
     def set_header(self,text):
         self.header = text
-        
+    def grab_image(self, imageurl, outputfolder):
+        """
+        Get the image from wiki
+        """
+        output_filename = None
+        try:
+            link= imageurl.strip()
+            parts = link.split("/")
+            filename = parts[len(parts)-1]
+            output_filename = os.path.join(outputfolder , filename)
+            #output_filename=urllib.unquote(output_filename)
+            print("GET IMAGE " + link + " ==> " + output_filename)
+            if os.path.isfile(output_filename):
+                print("File " + output_filename + " already exists")
+                return output_filename
+            opener = urllib2.build_opener()
+            opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+            infile = opener.open(link)
+            page = infile.read()
+            f= open(output_filename,"w")
+            f.write(page)
+            f.close()
+        except KeyboardInterrupt:
+            sys.exit()
+        except urllib2.HTTPError:
+            print("Error: Cound not download the image")
+            pass
+        return  output_filename
+
     def parse(self):
         opener = urllib2.build_opener()
         o = urlparse.urlparse(self.url)
