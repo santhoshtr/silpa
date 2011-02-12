@@ -21,13 +21,16 @@ import cgi
 import sys
 from common import *
 from utils import *
+from common.silparesponse import SilpaResponse
 import fonts
+
 class Webfonts(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), 'index.html')  
         self.font = None
         #List of available fonts
         self.available_fonts=fonts.fonts
+        self.response = SilpaResponse(self.template)
         
     def set_request(self,request):
         self.request=request
@@ -36,24 +39,20 @@ class Webfonts(SilpaModule):
     def set_start_response(self,start_response):
         self.start_response = start_response
         
-    def is_self_serve(self) :       
-        if self.font:
-            return True
-        return False
             
-    def get_mimetype(self):
+    def get_response(self):
         if self.font:
-            return "text/css"
-            
-        
+            css =  self.serve(self.font)
+            self.response.content = css
+            self.response.response_code = "200 OK" 
+            self.response.header  = [('Content-Type', 'text/css'),('Access-Control-Allow-Origin','*')]
+        return self.response
+                
     def serve(self,font=None):
         """
         serve the font file
         """
-        self.start_response('200 OK', [
-                    ('Content-Type', self.get_mimetype()),
-                    ('Access-Control-Allow-Origin','*')])
-        
+            
         """
         Provide the css for the given font.
         """     
@@ -62,13 +61,13 @@ class Webfonts(SilpaModule):
         # user_agent= self.request.get('HTTP_USER_AGENT')
         font_url = "modules/webfonts/font/"
         css = '''@font-face {
-    font-family: '$$FONTFAMILY$$';
-    src: url('$$FONTURLEOT$$');
-    src: local('☺'), url('$$FONTURLWOFF$$') format('woff'), url('$$FONTURLTTF$$') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-'''
+            font-family: '$$FONTFAMILY$$';
+            src: url('$$FONTURLEOT$$');
+            src: local('☺'), url('$$FONTURLWOFF$$') format('woff'), url('$$FONTURLTTF$$') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        '''
         css = css.replace("$$FONTURLEOT$$",font_url + self.available_fonts[self.font]['eot'])
         css = css.replace("$$FONTURLWOFF$$",font_url + self.available_fonts[self.font]['woff'])
         css = css.replace("$$FONTURLTTF$$",font_url + self.available_fonts[self.font]['ttf'])

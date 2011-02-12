@@ -27,7 +27,8 @@ import os
 class Katapayadi(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'katapayadi.html')
-    
+        self.response = SilpaResponse(self.template)
+        
     @ServiceMethod
     def get_number(self, word):
         word = word.strip()

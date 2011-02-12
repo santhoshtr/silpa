@@ -10,6 +10,7 @@ class TestGuessLangauge(unittest.TestCase):
 		self.guess_language=guesslanguages.getInstance()
 
     def testGuessLanguage(self):
+        self.assertEqual(self.guess_language.guessLanguage(u"cat"),"English")
         self.assertEqual(self.guess_language.guessLanguage(u"ಪ್ರಸಕ್ತವಾಗಿ"),"Kannada")
         self.assertEqual(self.guess_language.guessLanguage(u"ക്രമീകരണം"),"Malayalam")
         self.assertEqual(self.guess_language.guessLanguage("Reference desk – Serving as virtual librarians, Wikipedia volunteers tackle your questions on a wide range of subjects.")	,"English")

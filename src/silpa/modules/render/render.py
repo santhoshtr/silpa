@@ -29,20 +29,37 @@ import pangocairo
 from wiki2pdf  import Wikiparser
 from modules.hyphenator import hyphenator
 from styles import get_color
+from common.silparesponse import SilpaResponse
 
 class Render(SilpaModule):
     def __init__(self):
         self.template = os.path.join(os.path.dirname(__file__), "render.html")
         self.tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
-
+        self.response = SilpaResponse(self.template)
+        
+        
     def set_request(self,request):
         self.request=request
+        self.response.populate_form(self.request)
         self.file_type= self.request.get('type')
         self.wiki_url= self.request.get('wiki')
         self.text = self.request.get('text')
-
+        
     def set_start_response(self,start_response):
         self.start_response = start_response
+    
+    def get_response(self):
+        if self.text != None:
+            if self.file_type==None:
+                self.file_type = "png"
+            image_url =  self.render_text(self.text, self.file_type)
+            self.response.response_code = "303 see other" 
+            self.response.header  = [('Location', image_url)]
+        if self.wiki_url != None:    
+            pdf_url = self.wiki2pdf(self.wiki_url)
+            self.response.response_code = "303 see other" 
+            self.response.header  = [('Location', pdf_url)]
+        return self.response
         
     @ServiceMethod  
     def wiki2pdf(self, url):
@@ -78,7 +95,7 @@ class Render(SilpaModule):
         pc = pangocairo.CairoContext(context)
         paragraph_layout = pc.create_layout()
         paragraph_font_description = pango.FontDescription()
-        paragraph_font_description.set_family("Sans")
+        paragraph_font_description.set_family("Serif")
         paragraph_font_description.set_size((int)(int(font_size) * pango.SCALE))
         paragraph_layout.set_font_description(paragraph_font_description)
         if width>0:

@@ -21,10 +21,11 @@ import sys
 import os
 import string
 import codecs
-from common import SilpaModule,ServiceMethod,dumps
+from common import SilpaModule,ServiceMethod
 from utils import detect_lang, silpautils, silpalogger
 from modules.inexactsearch import inexactsearch
 from indexer import DictionaryIndex
+from common.silparesponse import SilpaResponse
 import urllib
 
 class Spellchecker(SilpaModule):
@@ -34,6 +35,7 @@ class Spellchecker(SilpaModule):
         self.NWORDS = None
         self.lang = None
         self.dictionaries = {}
+        self.response = SilpaResponse(self.template)
         
     def words(self,text): 
         #no need to check for punctuation since we are loading a proof read wordlist
@@ -47,7 +49,7 @@ class Spellchecker(SilpaModule):
             index = DictionaryIndex()
             self.dictionaries[self.lang] = index.load_index(self.lang+".dic")
     
-
+    
     def get_wordlist(self,word=""):
         index = self.dictionaries.get(self.lang,None)
         if index == None:
@@ -198,7 +200,7 @@ class Spellchecker(SilpaModule):
         return "Spellchecker"
         
     def get_info(self):
-        return  "Indic Spellchecker"
+        return "Indic Spellchecker"
 
 def getInstance():
         return Spellchecker()

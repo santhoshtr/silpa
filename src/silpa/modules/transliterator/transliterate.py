@@ -34,6 +34,7 @@ class Transliterator(SilpaModule):
         self.template=os.path.join(os.path.dirname(__file__),\
                                        'transliterate.html')
         self.cmu = CMUDict()
+        self.response = SilpaResponse(self.template)
 
     def transliterate_en_ml(self, word):   
         """

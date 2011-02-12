@@ -26,6 +26,7 @@ from unicodedata import *
 class CharDetails(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'chardetails.html')
+        self.response = SilpaResponse(self.template)
     
     @ServiceMethod          
     def getdetails(self, text):

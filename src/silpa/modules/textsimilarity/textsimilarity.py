@@ -175,6 +175,7 @@ class CharNgramSpaces(CharNgrams):
 class TextSimilarity(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), "index.html")
+        self.response = SilpaResponse(self.template)
 
     @ServiceMethod  
     def compare(self, text1, text2):
