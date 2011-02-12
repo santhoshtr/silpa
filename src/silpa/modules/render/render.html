@@ -72,7 +72,7 @@
          pdf rendering library which can support all complex scripts. It is in development and this service is <b>not bug-free</b> now.</p>
         <h3>Generate PDF of a wiki page</h3>
         <form id="wiki2pdfform" action="" method="post"  onsubmit="return renderpdf(this); " >
-            Wiki URL: <input type="text" name="wikiurl" value="http://ml.wikipedia.org/wiki/Mango"  style="width:30em;"/>
+            Wiki URL: <input type="text" name="wikiurl" value="http://ml.wikipedia.org/wiki/Mango"  style="width:30em;" id="wikiurl"/>
             <input  type="submit" id="Render" value="Convert to PDF"  name="action" style="width:10em;"/>
             <div id="pdfprogress"></div>
             <div id="pdfresult" ></div>

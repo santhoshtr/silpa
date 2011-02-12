@@ -26,7 +26,8 @@ import cgi
 sys.path.append(os.path.dirname(__file__))
 from common import *
 from utils import *
-from jsonrpc import handleCGI,ServiceHandler
+from jsonrpc import ServiceHandler
+from common.silparesponse import SilpaResponse
 
 class Silpa():
     
@@ -49,8 +50,8 @@ class Silpa():
                 jsonreponse = self._jsonrpc_handler.handleRequest(data)
                 return [jsonreponse.encode('utf-8')]
           
-        from common.silparesponse import SilpaResponse
-        self._response=SilpaResponse()
+        
+        
         #Check if the action is defined.
         if self._module_manager.find_module(request_uri ):
             module_instance =  self._module_manager.get_module_instance(request_uri )
@@ -64,20 +65,16 @@ class Silpa():
                     start_response('200 OK', [('Content-Type', 'application/json')])
                     return [jsonreponse.encode('utf-8')]
                     
-                #normal request for the page, may contain request parameters(GET)    
-                self._response.form = module_instance.get_form()
-                #populate the form with the query values
-                self._response = self._response.populate_form(request)
-                if(module_instance.is_self_serve()):
-                    return [module_instance.serve()]
-                start_response('200 OK', [('Content-Type', 'text/html')])
-                return [str(self._response).encode('utf-8')]
+                response = module_instance.get_response()
+                start_response(response.response_code, response.header)
+                return [str(response.content).encode('utf-8')]
         
+        response=SilpaResponse()
         if(request_uri == "index.html" or request_uri == ""):
             start_response('200 OK', [('Content-Type', 'text/html')])
-            self._response.content = get_index_page()
+            response.content.content = get_index_page()
         else:
-            self._response.content ='Requested URL not found.'
+            response.content.content ='Requested URL not found.'
             start_response('404 Not found', [('Content-Type', 'text/html')])
-        return [str(self._response).encode('utf-8')]
+        return [str(response.content).encode('utf-8')]
 

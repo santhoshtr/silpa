@@ -31,7 +31,11 @@ if __name__ == '__main__':
     print sc.check(u"തമിഴ്നാട്") 
     print sc.check(u"തമിഴ്‌നാട്") 
     print sc.suggest(u"തമിഴ്നാട്")
-
+    print sc.suggest("sugest")
+    print sc.suggest("suggestwhat")
+    print sc.suggest(u"കൂടിയോകൂടിയോ")
+    print sc.check(u"ലഭിക്കാവുന്ന")
+    print sc.check(u"കൂടിയോ")
 #print sc.check(u"")
 #print sc.suggest(u"അംഗങ്ങളാകുന്നുവ")
 #print sc.suggest("calculateq")

@@ -29,7 +29,7 @@ from common import *
 class Soundex(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'soundex.html')
-    
+        self.response = SilpaResponse(self.template)
     def soundexCode(self,char):
         index=0
         lang= language(char)

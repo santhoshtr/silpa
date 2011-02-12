@@ -536,6 +536,7 @@ def normalize(u):
 class LangGuess(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'guess_language.html')
+        self.response = SilpaResponse(self.template)
         _load_models()    
         
     @ServiceMethod          

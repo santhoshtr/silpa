@@ -22,6 +22,7 @@ class SilpaModule:
     def __init__(self):
         self.template=None
         self.request=None
+        self.response = None
     def get_errormessage(self):
         return None
     def get_successmessage(self):
@@ -44,7 +45,8 @@ class SilpaModule:
         return False
     def get_mimetype(self):
         return "text/html"
-        
+    def get_response(self):
+        return self.response
 def ServiceMethod(fn):
     fn.IsServiceMethod = True
     return fn

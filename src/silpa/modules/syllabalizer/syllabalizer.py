@@ -31,7 +31,8 @@ from utils import *
 class Syllabalizer(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'syllabalizer.html')
-    
+        self.response = SilpaResponse(self.template)
+        
     def syllabify_ml(self,text):
         signs = [
         u'\u0d02', u'\u0d03', u'\u0d3e', u'\u0d3f', u'\u0d40', u'\u0d41',

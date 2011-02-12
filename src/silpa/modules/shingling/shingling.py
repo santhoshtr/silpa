@@ -26,29 +26,30 @@ from utils import *
 from modules import ngram
 
 class Shingling(SilpaModule):
-	def __init__(self):
-		self.template=os.path.join(os.path.dirname(__file__), 'shingling.html')
-		
-	@ServiceMethod							
-	def wshingling(self,text, window_size=4):
-		window_size=int(window_size)
-                s = ngram.getInstance()	
-                ngrams=s.wordNgram(text,window_size)
-                size=len(ngrams)
-                shingling=[]
-                for x in ngrams:
-                    if x not in shingling:
-                        shingling.append(x)
-                return shingling
+    def __init__(self):
+        self.template=os.path.join(os.path.dirname(__file__), 'shingling.html')
+        self.response  = SilpaResponse(self.template)
+        
+    @ServiceMethod                            
+    def wshingling(self,text, window_size=4):
+        window_size=int(window_size)
+        s = ngram.getInstance()    
+        ngrams=s.wordNgram(text,window_size)
+        size=len(ngrams)
+        shingling=[]
+        for x in ngrams:
+            if x not in shingling:
+                shingling.append(x)
+        return shingling
 
-	def get_module_name(self):
-		return "Shingling Library"
-	def get_info(self):
-		return 	"Shingling Library for English and Indian languages"	
+    def get_module_name(self):
+        return "Shingling Library"
+    def get_info(self):
+        return "Shingling Library for English and Indian languages"    
 
 
 
 def getInstance():
-	return Shingling()
+    return Shingling()
 
 

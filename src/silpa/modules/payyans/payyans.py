@@ -46,6 +46,8 @@ class Payyans(SilpaModule):
         self.rulesDict=None
         self.pdf=0
         self.template=os.path.join(os.path.dirname(__file__), 'payyans.html')
+        self.response = SilpaResponse(self.template)
+        
     @ServiceMethod  
     def Unicode2ASCII(self, unicode_text, font):
         unicode_text =  normalize(unicode_text)

@@ -168,6 +168,7 @@ class Hyphenator(SilpaModule):
     right = 2
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'hyphenator.html')
+        self.response = SilpaResponse(self.template)
         self.hd=None
         self.guess_language=guesslanguages.getInstance()
     def loadHyphDict(self,lang, cache=True):
