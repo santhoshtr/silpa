@@ -61,8 +61,6 @@ class Webfonts(SilpaModule):
             return "Error!, Font not available"
         http_host =self.request.get('HTTP_HOST')
         request_uri =self.request.get('REQUEST_URI')
-        if request_uri!=None:
-            http_host+="/silpa"
         font_url = "http://"+http_host+"/modules/webfonts/font/"
         css = '''@font-face {
             font-family: '$$FONTFAMILY$$';
