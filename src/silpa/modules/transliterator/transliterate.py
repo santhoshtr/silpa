@@ -211,14 +211,14 @@ class Transliterator(SilpaModule):
                 tx_str = tx_str.replace(u'\u0BC3' , u"ிரு")
                 tx_str = tx_str.replace(u'ஂ',u'ம்')
             #If target is malayalam, we need to add the virama    
-            if ( (target_lang == "ml_IN") 
+        if ( (target_lang == "ml_IN") 
                 and (src_lang == "hi_IN" or 
                 src_lang == "gu_IN" or
                 src_lang == "pa_IN" or
                 src_lang == "bn_IN")
                 and tx_str[-1].isalpha()
                 ):
-                tx_str = tx_str+u"്"
+            tx_str = tx_str+u"്"
         return tx_str
 
     def transliterate_indic_en(self,word,src_lang):
