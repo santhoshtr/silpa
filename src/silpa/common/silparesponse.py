@@ -20,17 +20,35 @@
 from utils import *
 from PyMeld import Meld
 
-class SilpaResponse(Meld):
-    def __init__(self):
-        Meld.__init__(self,get_template())
+class SilpaResponse():
+    
+    def __init__(self, content_template=None):
+        self.content = Meld(get_template())
+        if content_template:
+            self.content.form = open(content_template,'r').read()
+        self.mime_type = 'text/html'
+        self.response_code = "200 OK"
+        self.header = [('Content-Type', self.mime_type)]
+        
+    def get_mimetype(self):
+        return self.mime_type
+        
+    def get_header(self):
+        return self.header
+
+    def set_mimetype(self, mime_type): 
+        self.mime_type = mime_type
+        
     def populate_form(self,request):
         #try to populate the html form with the values from the request.
+        if request == None:
+            return 
         for key in request:
             try:
                 value = request.get(key)
-                field = self.__getattr__(key)
+                field = self.content.__getattr__(key)
                 field.value = value
-                self.__getattr__(value).selected= 'selected' 
+                self.content.__getattr__(value).selected= 'selected' 
             except:
                 pass
         return self   

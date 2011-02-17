@@ -68,11 +68,12 @@
   </head>
   <body>
         <h2>Script Renderer </h2></hr>
-        <p>This is an <b>experimental</b> online service based on <a href="https://savannah.nongnu.org/projects/pypdflib">pypdflib library</a> in development. This library projects objective is to develop an opensource
+        <p>This is an <b>experimental</b> online service based on
+         <a href="https://savannah.nongnu.org/projects/pypdflib">PyPDFLib library</a> in development. This library projects objective is to develop an opensource
          pdf rendering library which can support all complex scripts. It is in development and this service is <b>not bug-free</b> now.</p>
         <h3>Generate PDF of a wiki page</h3>
         <form id="wiki2pdfform" action="" method="post"  onsubmit="return renderpdf(this); " >
-            Wiki URL: <input type="text" name="wikiurl" value="http://ml.wikipedia.org/wiki/Mango"  style="width:30em;"/>
+            Wiki URL: <input type="text" name="wikiurl" value="http://ml.wikipedia.org/wiki/Mango"  style="width:30em;" id="wikiurl"/>
             <input  type="submit" id="Render" value="Convert to PDF"  name="action" style="width:10em;"/>
             <div id="pdfprogress"></div>
             <div id="pdfresult" ></div>
@@ -110,6 +111,8 @@
         <h2>Module Information</h2> 
         This module uses pango cairo python apis for rendering. To get this running , you should have python bindings of pango and cairo installed in your system.
         For PDF generation, the module uses PyPDFLib library. This module is in development and APIs are not stable or final.
+        <h3>Bugs? Suggestions? Let us know!</h3>   
+        If you see any bug in this application or you have any suggestion for improvement, just mail to <a href="mailto:pypdflib-dev@nongnu.org">pypdflib-dev@nongnu.org</a> with details. You can also report the  bug at <a href="https://savannah.nongnu.org/bugs/?group=pypdflib">PyPDFLib bug tracker</a>
         <h2>Python API</h2>   
         <p>You can use Silpa python APIs to renedr a custom text to any image format or PDF. After installing silpa, refer the following example for using the api.
         The text can be in any script, including Right to Left scripts.

@@ -26,7 +26,7 @@ class Sort(SilpaModule):
         self.template=os.path.join(os.path.dirname(__file__), "sort.html")
         self.silpacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-5.2-silpa.txt"))
         self.ucacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-5.2.txt"))
-        
+        self.response = SilpaResponse(self.template)
     @ServiceMethod  
     def sort(self, text):
         words = text.split()

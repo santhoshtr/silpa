@@ -25,7 +25,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 sys.path.append(os.path.dirname(__file__))
 cgitb.enable(True,os.path.join(os.path.dirname(__file__), "logs"))
 from silpa.common import *
-from silpa import Silpa
 
 def application(environ, start_response):
     return urlrelay.URLRelay().__call__(environ, start_response)

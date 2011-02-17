@@ -30,6 +30,20 @@ class Dictionary(SilpaModule):
     
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'dictionary.html')    
+        self.response = SilpaResponse(self.template)        
+        
+    def get_json_result(self):
+        error=None
+        _id = 0
+        try:
+            if self.request.get('word'):
+                definition = self.getdef(self.request.get('word'),self.request.get('dictionary'))
+            data = dumps({"result":definition, "id":_id, "error":error})
+        except JSONEncodeException:
+            #translate the exception also to the error
+            error = {"name": "JSONEncodeException", "message":"Result Object Not Serializable"}
+            data = dumps({"result":None, "id":id_, "error":error})
+        return data
         
     def get_form(self):
         page = open(self.template,'r').read()
@@ -48,25 +62,16 @@ class Dictionary(SilpaModule):
         src = dictionary.split("-")[0]
         dest = dictionary.split("-")[1]
         dictdata = self.get_free_dict(src,dest)
-        word =  word.encode("utf-8")
         if dictdata:
             dict = DictDB(dictdata)
             meanings =  dict.getdef(word)
             for meaning in meanings:
                 meaningstring += meaning
-        if meaningstring == "":
+        if meaningstring == "None":
             meaningstring = "No definition found"
             return meaningstring
         return meaningstring.decode("utf-8")
         
-    def set_request(self,request):
-        self.request=request
-        self.word = self.request.get('word')   
-        self.dictionary = self.request.get('dictionary')   
-        
-    def get_json_result(self):
-        return dumps(self.getdef(self.word, self.dictionary))
-            
     def get_module_name(self):
         return "Dictionary"
         

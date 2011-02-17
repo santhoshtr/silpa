@@ -23,7 +23,7 @@ import os
 import uuid
 from common import *
 from utils import *
-
+from common.silparesponse import SilpaResponse
 from threading import Timer
 import subprocess
 import shlex
@@ -38,6 +38,8 @@ def dhvani(inputfile, outputfile):
 class TTS(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), "tts.html")
+        self.response = SilpaResponse(self.template)
+
         
     def set_request(self,request):
         self.request=request

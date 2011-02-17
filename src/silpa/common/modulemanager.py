@@ -20,7 +20,7 @@
 
 import sys
 from utils import *
-
+from common import *
 class ModuleManager:
 
     def import_module(self,name):
@@ -72,9 +72,6 @@ class ModuleManager:
                 response = response+"<td>Error while retrieving module details</td></tr>"   
         return  response+"</table>" 
 
-    def get_form(self):
-        return  self.get_modules_info_as_html()
-
     def get_all_modules(self):
         """
         return a list of all the modules available in the system
@@ -92,14 +89,18 @@ class ModuleManager:
         A not-so-good fix to avoid an exception when calling all modules screen
         """
         return
+        
     def set_start_response(self,start_response):
         """
         A not-so-good fix to avoid an exception when calling all modules screen
         """
         return
     
-    def is_self_serve(self):    
-        return False
+    def get_response(self):    
+        response = SilpaResponse()
+        response.content.content = self.get_modules_info_as_html()
+        return  response
+        
     def get_service_methods(self):
         """
         Return the dictionary of service methods defined in all modules

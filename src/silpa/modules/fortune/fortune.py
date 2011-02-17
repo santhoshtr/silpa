@@ -28,6 +28,7 @@ from common import *
 class Fortune(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'fortune.html')
+        self.response = SilpaResponse(self.template)
     
     def fortunes(self, infile, pattern=None):
         """ Yield fortunes as lists of lines """

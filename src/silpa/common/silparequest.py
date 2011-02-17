@@ -47,6 +47,8 @@ class SilpaRequest(object):
         return self._environ.get(key,None)
         
     def __iter__(self):
+        if self._formvalues==None:
+            self._formvalues=self._parse_query(self._environ)
         return self._formvalues.__iter__()
         
     def _parse_query(self, environ) :   

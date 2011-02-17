@@ -15,3 +15,10 @@ print tx.transliterate(u"ശാരദ സന്ധ്യകള്‍ മരവ�
 print tx.transliterate(u"ശാരദ സന്ധ്യകള്‍ മരവൂരി ചുറ്റൂം", "IPA")
 print tx.transliterate(u"some english text", "IPA")
 print tx.transliterate("how was the match?", "hi_IN")
+print tx.transliterate(u"അവനു്", "ta_IN")
+print tx.transliterate(u"നഖം", "ta_IN").encode("utf-8")
+print tx.transliterate(u"അവനു്", "en_IN")
+print tx.transliterate(u"അവനു്?", "ISO15919")
+print tx.transliterate(u"അവനു്", "IPA")
+print tx.transliterate("help", "en_IN")
+
