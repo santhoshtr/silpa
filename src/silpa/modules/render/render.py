@@ -83,7 +83,10 @@ class Render(SilpaModule):
         if file_type == 'pdf':
             surface = cairo.PDFSurface(outputfile,int(width),int(height))
         context = cairo.Context(surface)
-        text = hyphenator.getInstance().hyphenate(text,u'\u00AD')
+        try:
+            text = hyphenator.getInstance().hyphenate(text,u'\u00AD')
+        except:
+            print("error while hyphenating. Proceeding without Hyphenation")    
         width  = int(width)
         font_size = 10
         left_margin = 10
