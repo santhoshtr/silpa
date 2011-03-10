@@ -191,7 +191,7 @@ class Wikiparser(HTMLParser):
         if self.buffer and self.buffer.strip() > "":
             if self.ul:
                 li = Text(markup = "• " + self.buffer,font="FreeSerif", font_size=10)
-            elif self.reference:
+            elif self.ol:
                 self.ref_counter+=1
                 li = Text(markup = str(self.ref_counter) + ". "+ self.buffer.replace("↑",""), font = "FreeSerif", font_size=10)
             else:
@@ -223,6 +223,7 @@ class Wikiparser(HTMLParser):
 
     def end_ol(self):
         self.ol = False
+        self.ref_counter = 0
         if self.reference:
             self.reference= False
             #self.sup = False
