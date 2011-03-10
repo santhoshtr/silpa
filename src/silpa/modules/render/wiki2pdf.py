@@ -22,13 +22,13 @@
 
 
 import sys
-import os
-sys.path.append("/media/C0DE/dev/pypdflib/src")  #not good
+sys.path.append("/media/C0DE/dev/pypdflib/src/")  #not good!
 from pypdflib.writer import PDFWriter
 from pypdflib.widgets import *
 from pypdflib.styles import *
 import pango
-from sgmllib import SGMLParser
+import os
+from HTMLParser import HTMLParser
 from pyquery import PyQuery as pq
 import urllib
 import urlparse
@@ -48,34 +48,33 @@ lang_codes = {'en':'en_US',
               'ta':'ta_IN',
               'te':'te_IN'}
 
-class Wikiparser(SGMLParser):
+class Wikiparser(HTMLParser):
     def __init__(self, url, filename, verbose=0):
         "Initialise an object, passing 'verbose' to the superclass."
-        SGMLParser.__init__(self, verbose)
+        HTMLParser.__init__(self)
         self.hyperlinks = []
         self.url = url
         self.language = detect_language(url)
         tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
         self.pdf = PDFWriter(os.path.join(tmp_folder, filename), StandardPaper.A4)
-        header = Header(text_align = pango.ALIGN_CENTER)
+        header = Header(text_align=pango.ALIGN_CENTER)
         #TODO Alignment not working.
         header.set_text(urllib.unquote(self.url))
         self.pdf.set_header(header)
-        self.pdf.move_context(0,500)
-        h1= Text(urllib.unquote(self.url.split("/")[-1]),font="FreeSerif",font_size=32) 
+        self.pdf.move_context(0, 500)
+        h1 = Text(urllib.unquote(self.url.split("/")[-1]), font="serif", font_size=32) 
         h1.color = StandardColors.Blue
         self.pdf.add_text(h1)
-        
-        h2= Text(urllib.unquote(self.url),font="FreeSerif",font_size=16) 
+        h2 = Text(urllib.unquote(self.url), font="serif", font_size=16) 
         h2.color = StandardColors.Blue
         self.pdf.add_text(h2)
-        footer = Footer(text_align = pango.ALIGN_CENTER)
+        footer = Footer(text_align=pango.ALIGN_CENTER)
         footer.set_text("wiki2pdf")
         self.pdf.set_footer(footer)
         self.pdf.page_break()
         
     def reset(self):                              
-        SGMLParser.reset(self)
+        HTMLParser.reset(self)
         self.images = []
         #TODO Alignment not working.
         self.h1 = False
@@ -86,15 +85,66 @@ class Wikiparser(SGMLParser):
         self.ul = False
         self.ol = False
         self.span = False
+        self.reference = False
+	self.ref_counter = 0
         self.buffer = None
+        self.sup = False
         
-    def handle_data(self,data):
+    def handle_data(self, data):
         if data.strip() == "": return
-        if self.p or self.h1 or self.h2 or self.a or self.span:
-            if self.buffer!=None:
-                self.buffer+= data
-            
-                
+	if self.p or self.h1 or self.h2 or self.a or self.span or self.li:
+            if self.buffer != None:
+                self.buffer += data
+    def handle_starttag(self, tag, attrs):
+        if tag == 'img':
+            self.start_img(attrs)
+        elif tag == 'h1':
+            self.start_h1(attrs)
+        elif tag == 'h2':
+            self.start_h2(attrs)
+        elif tag == 'li':
+            self.start_li(attrs)
+        elif tag == 'p':
+            self.start_p(attrs)
+        elif tag == 'a':
+            self.start_a(attrs)
+        elif tag == 'ul':
+            self.start_ul(attrs)
+        elif tag == 'ol':
+            self.start_ol(attrs)
+        elif tag == 'span':
+	    self.start_span(attrs)
+        elif tag == 'sup' or tag == 'sub' or tag == 'b' or tag == 'i' or tag == 's' or tag == 'small' or tag == 'big' or tag == 'tt' or tag == 'u':
+            if self.reference == False:
+               if self.buffer != None:
+                  self.buffer += "<"+tag+">"
+                  self.sup = True
+
+
+    def handle_endtag(self, tag):
+        if tag == 'img':
+            self.end_img()
+        elif tag == 'h1':
+            self.end_h1()
+        elif tag == 'h2':
+            self.end_h2()
+        elif tag == 'li':
+            self.end_li()
+        elif tag == 'p':
+            self.end_p()
+        elif tag == 'a':
+            self.end_a()
+        elif tag == 'ul':
+            self.end_ul()
+        elif tag == 'ol':
+            self.end_ol()
+        elif tag == 'span':
+            self.end_span()
+        elif tag == 'sup' or tag == 'sub' or tag == 'b' or tag == 'i' or tag == 's' or tag == 'small' or tag == 'big' or tag == 'tt' or tag == 'u':
+            if self.sup and self.buffer != None:
+                self.buffer += "</"+str(tag)+">"
+        
+
     def start_img(self, attrs):         
         src = [value for key, value in attrs if key == 'src'] 
         if src:
@@ -107,42 +157,45 @@ class Wikiparser(SGMLParser):
             image.set_image_file(outpath)
             self.pdf.add_image(image)
         self.images = []
-
-            
+        
     def start_h1(self, attrs):         
-        self.h1=True
-        self.buffer=""
+        self.h1 = True
+        self.buffer = ""
         
     def end_h1(self):
-        self.h1=False
-        h1= Text(self.buffer,font="FreeSerif",font_size=16) 
+        self.h1 = False
+        h1 = Text(self.buffer, font="FreeSerif", font_size=16) 
         h1.color = StandardColors.Blue
         self.pdf.add_text(h1)
         self.buffer = None
         
     def start_h2(self, attrs):         
-        self.h2=True
-        self.buffer=""
+        self.h2 = True
+        self.buffer = ""
         
     def end_h2(self):
-        self.h2=False
-        if self.buffer and self.buffer.strip()>"":
-            h2= Text(self.buffer,font="FreeSerif",font_size=14) 
+        self.h2 = False
+        if self.buffer and self.buffer.strip() > "":
+            h2 = Text(self.buffer, font="FreeSerif", font_size=14) 
             h2.color = StandardColors.Blue
             self.pdf.add_text(h2)
         self.buffer = None
         
     def start_li(self, attrs):         
-        self.li=True
-        self.buffer=""
+        self.li = True
+        self.buffer = ""
         
     def end_li(self):
-        self.li=False
-        if self.buffer and self.buffer.strip()>"":
+        self.li = False
+#        print self.buffer
+        if self.buffer and self.buffer.strip() > "":
             if self.ul:
-                li= Text("• "+self.buffer,font_size=10) 
+                li = Text(markup = "• " + self.buffer,font="FreeSerif", font_size=10)
+            elif self.reference:
+                self.ref_counter+=1
+                li = Text(markup = str(self.ref_counter) + ". "+ self.buffer.replace("↑",""), font = "FreeSerif", font_size=10)
             else:
-                li= Text(self.buffer,font_size=10)     
+                li = Text(markup = self.buffer,font="FreeSerif", font_size=10)     
             self.pdf.add_text(li)
         self.buffer = None
                 
@@ -151,33 +204,56 @@ class Wikiparser(SGMLParser):
         
     def end_a(self):
         self.a = False
+    
+#    def start_sup(self, attrs):         
+#        self.sup = True
+#        self.buffer += "<sup>"
+#        
+#    def end_sup(self):
+#        print "test"
+#        self.buffer += "</sup>"
+
         
-    def start_ol(self,attrs):
-        self.ol=True    
+    def start_ol(self, attrs):
+        self.ol = True
+        for tups in attrs:
+	    if 'class' in tups:
+		if tups[1] == 'references':
+                    self.reference = True
+
     def end_ol(self):
-        self.ol=False
+        self.ol = False
+        if self.reference:
+            self.reference= False
+            #self.sup = False
         
-    def start_ul(self,attrs):
-        self.ul=True    
+    def start_ul(self, attrs):
+        self.ul = True    
     def end_ul(self):
-        self.ul=False
+        self.ul = False
             
     def start_span(self, attrs):         
-        self.span=True
-        if self.buffer==None:
-            self.buffer=""  
+        self.span = True
+        if self.buffer == None:
+            self.buffer = ""  
         
     def end_span(self):
-        self.buffer+=" "
-        self.span=False
+        self.buffer += " "
+        self.span = False
             
-    def start_p(self,attrs):
-        self.p=True
-        self.buffer=""
+    def start_p(self, attrs):
+        self.p = True
+        self.buffer = ""
         
     def end_p(self) :
-        self.p=False
-        para = Paragraph(text=self.buffer, font="FreeSerif",font_size=10,)
+        self.p = False
+        if self.sup:
+            para = Paragraph(markup=self.buffer,text = self.buffer, font="FreeSerif", font_size=10,)
+            self.sup = False
+        else:
+            #print self.buffer
+            para = Paragraph(text=self.buffer, font="FreeSerif", font_size=10,)
+           
         para.set_justify(True)
         if self.language:
             para.language = self.language
@@ -185,10 +261,15 @@ class Wikiparser(SGMLParser):
             para.language = None
             
         para.set_hyphenate(True)
-        self.pdf.add_paragraph(para)   
+        self.pdf.add_paragraph(para) 
+#        f= open("computer_para.txt","aw")
+#        f.write(self.buffer)
+#        f.write("\n")
+#        f.close()  
         self.buffer = None
-    def set_header(self,text):
+    def set_header(self, text):
         self.header = text
+
     def grab_image(self, imageurl, outputfolder):
         """
         Get the image from wiki
@@ -217,19 +298,18 @@ class Wikiparser(SGMLParser):
             print("Error: Cound not download the image")
             pass
         return  output_filename
-
     def parse(self):
         opener = urllib2.build_opener()
-        o = urlparse.urlparse(self.url)
-        base = o.scheme+"://"+o.netloc
-        filename = self.url.split("/")[-1] 
-        quotedfilename = urllib.quote(filename.encode('utf-8')) 
-        link = base +"/wiki/"+quotedfilename
-        print "Get : " + link
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-        infile = opener.open(link)
+        infile = opener.open(self.url)
         page = infile.read()
         page = cleanup(page)
+#        f= open("computer.txt","w")
+#        f.write(page)
+#        f.close()
+#        f = open("computer.txt","r")
+#        page=f.read()
+#        f.close()
         "Parse the given string 's'."
         self.feed(page)
         self.close()
@@ -242,7 +322,7 @@ def cleanup(page):
     """
     document = pq(page)
     #If you want to remove any other section, just add the class or id of the section below with comma seperated
-    unwanted_sections_list="""
+    unwanted_sections_list = """
     div#jump-to-nav, div.top, div#column-one, div#siteNotice, div#purl, div#head,div#footer, div#head-base, div#page-base, div#stub, div#noprint,
     div#disambig,div.NavFrame,#colophon,.editsection,.toctoggle,.tochidden,.catlinks,.navbox,.sisterproject,.ambox,
     .toccolours,.topicondiv#f-poweredbyico,div#f-copyrightico,div#featured-star,li#f-viewcount,
@@ -269,15 +349,6 @@ def detect_language(url):
         url = url.split("http://")[1]
         
     url_pieces = url.split(".")
-    return lang_codes.get(url_pieces[0],None)
-    
+    return lang_codes.get(url_pieces[0], None)
+   
 
-    
-    
-if __name__=="__main__":
-    if len(sys.argv)>1:
-        parser = Wikiparser(sys.argv[1]) #"http://ml.wikipedia.org/wiki/Computer"
-        parser.parse()    
-    else:
-        print("Usage: wiki2pdf url")    
-        print("Example: wiki2pdf http://en.wikipedia.org/wiki/Computer")    
