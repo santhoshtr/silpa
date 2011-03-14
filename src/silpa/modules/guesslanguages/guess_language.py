@@ -177,6 +177,7 @@ NAME_MAP = {
     "nl" : "Dutch",
     "nn" : "Nynorsk",
     "no" : "Norwegian",
+    "or_IN" : "Oriya(Odiya)",
     "nso" : "Sepedi",
     "pa_IN" : "Punjabi",
     "pl_PL" : "Polish",

@@ -24,8 +24,8 @@ from pyuca import Collator
 class Sort(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), "sort.html")
-        self.silpacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-5.2-silpa.txt"))
-        self.ucacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-5.2.txt"))
+        self.silpacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-silpa-6.0.0.txt"))
+        self.ucacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-6.0.0.txt"))
         self.response = SilpaResponse(self.template)
     @ServiceMethod  
     def sort(self, text):
