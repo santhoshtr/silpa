@@ -72,6 +72,11 @@ class Dictionary(SilpaModule):
             return meaningstring
         return meaningstring.decode("utf-8")
         
+    @ServiceMethod
+    def getdef_image(self,word,dictionary,file_type='png', width=0, height=0,color="Black"):
+        return render.getInstance().render_text(self.getdef(word,dictionary),file_type,width,height,color)
+
+    
     def get_module_name(self):
         return "Dictionary"
         
