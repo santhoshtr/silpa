@@ -66,7 +66,7 @@ class Dictionary(SilpaModule):
         dictdata = self.get_free_dict(src,dest)
         if dictdata:
             dict = DictDB(dictdata)
-            meanings =  dict.getdef(word)
+            meanings =  dict.getdef(word.lower())
             for meaning in meanings:
                 meaningstring += meaning
         if meaningstring == "None":
