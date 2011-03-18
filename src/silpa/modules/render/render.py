@@ -69,10 +69,11 @@ class Render(SilpaModule):
         return ("modules/render/tmp/"+filename)
         
     @ServiceMethod  
-    def render_text(self, text,file_type='png', width=0, height=0,color="Black"):
+    def render_text(self, text,file_type='png', width=0, height=0,color="Black",font_size=12):
         surface = None
         width=int(width)
         height=int(height)
+        font_size=int(font_size)
         text= text.decode("utf-8")
         filename = str(uuid.uuid1())[0:5]+"."+file_type
         outputfile = os.path.join(self.tmp_folder, filename )
@@ -88,7 +89,6 @@ class Render(SilpaModule):
         except:
             print("error while hyphenating. Proceeding without Hyphenation")    
         width  = int(width)
-        font_size = 10
         left_margin = 10
         top_margin = 10
         position_x = left_margin
@@ -137,9 +137,9 @@ class Render(SilpaModule):
                 width = line_width
             if height==0:    
                 height = position_y                
-            return self.render_text(text,file_type, width + 2.5*left_margin, height,color)
+            return self.render_text(text,file_type, width + 2.5*left_margin, height,color,font_size)
         if file_type == 'png':
-            surface.write_to_png(outputfile)
+            surface.write_to_png(str(outputfile))
         else:
             context.show_page()
         return "modules/render/tmp/"+filename

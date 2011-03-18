@@ -33,7 +33,40 @@ class Dictionary(SilpaModule):
     def __init__(self):
         self.template=os.path.join(os.path.dirname(__file__), 'dictionary.html')    
         self.response = SilpaResponse(self.template)        
+        self.imageyn=None
+        self.text=None
+        self.dictionaryname=None
+        self.fontsize=12
+        self.imagewidth=200
+        self.imageheight=300
+
+    def set_request(self,request):
+        self.request=request
+        self.response.populate_form(self.request)
+        self.text=self.request.get('text')
+        self.imageyn=self.request.get('image')
+        if self.request.get('fontsize')!=None:
+            self.fontsize= int( self.request.get('fontsize'))
+        if self.request.get('imagewidth')!=None:
+            self.imagewidth=int(self.request.get('imagewidth'))
+        if self.request.get('imageheight')!=None:
+            self.imageheight=int(self.request.get('imageheight'))
+        self.dictionaryname=self.request.get('dict')
         
+    def get_response(self):
+        if self.imageyn != None:            
+            if self.imageyn.lower()=="y":                
+                image_url =  self.getdef_image(self.text,self.dictionaryname,"png",self.imagewidth,self.imageheight,"Black",13)
+                self.response.response_code = "303 see other" 
+                self.response.header  = [('Location', image_url)]
+            else:                
+                wordmeaning=self.getdef(self.text,self.dictionaryname)                
+                self.response.content = wordmeaning.decode("utf-8")
+                self.response.response_code = "200 OK"
+                self.response.mime_type="text/plain;charset=UTF-8"
+                self.response.header = [('Content-Type','text/plain;charset=UTF-8')]
+        return self.response
+
     def get_json_result(self):
         error=None
         _id = 0
@@ -75,8 +108,8 @@ class Dictionary(SilpaModule):
         return meaningstring.decode("utf-8")
         
     @ServiceMethod
-    def getdef_image(self,word,dictionary,file_type='png', width=0, height=0,color="Black"):
-        return render.getInstance().render_text(self.getdef(word,dictionary),file_type,width,height,color)
+    def getdef_image(self,word,dictionary,file_type='png', width=0, height=0,color="Black",fontsize=10):
+        return render.getInstance().render_text(self.getdef(word,dictionary),file_type,width,height,color,fontsize)
 
     
     def get_module_name(self):
