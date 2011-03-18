@@ -40,8 +40,8 @@ class Dictionary(SilpaModule):
         self.imageyn=None
         self.text=None
         self.dictionaryname=None
-        self.fontsize=12
-        self.imagewidth=200
+        self.fontsize=16
+        self.imagewidth=300
         self.imageheight=300
 
     def set_request(self,request):
@@ -60,7 +60,7 @@ class Dictionary(SilpaModule):
     def get_response(self):
         if self.imageyn != None:            
             if self.imageyn.lower()=="y":                
-                image_url =  self.getdef_image(self.text,self.dictionaryname,"png",self.imagewidth,self.imageheight,"Black",13)
+                image_url =  self.getdef_image(self.text,self.dictionaryname,"png",self.imagewidth,self.imageheight,"Black",self.fontsize)
                 self.response.response_code = "303 see other" 
                 self.response.header  = [('Location', image_url)]
             else:                
