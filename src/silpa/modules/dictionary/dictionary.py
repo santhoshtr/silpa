@@ -26,7 +26,11 @@ from common import *
 import os
 from dictdlib import DictDB
 from jsonrpc import *
-from modules.render import render
+
+try:
+    from modules.render import render
+except:
+    print("Failed to import render module")
 
 class Dictionary(SilpaModule):
     
