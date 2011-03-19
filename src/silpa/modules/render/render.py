@@ -90,7 +90,7 @@ class Render(SilpaModule):
             print("error while hyphenating. Proceeding without Hyphenation")    
         width  = int(width)
         left_margin = 10
-        top_margin = 10
+        top_margin = 20
         position_x = left_margin
         position_y = top_margin
         rgba = get_color(color)
