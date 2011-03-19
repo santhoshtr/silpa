@@ -23,6 +23,7 @@
 
 
 from common import *
+from utils import silpalogger
 import os
 from dictdlib import DictDB
 from jsonrpc import *
@@ -30,7 +31,7 @@ from jsonrpc import *
 try:
     from modules.render import render
 except:
-    print("Failed to import render module")
+    silpalogger.exception("Failed to import render module")
 
 class Dictionary(SilpaModule):
     
