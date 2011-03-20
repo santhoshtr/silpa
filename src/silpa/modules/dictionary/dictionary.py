@@ -104,7 +104,9 @@ class Dictionary(SilpaModule):
         dictdata = self.get_free_dict(src,dest)
         if dictdata:
             dict = DictDB(dictdata)
-            meanings =  dict.getdef(word.lower())
+            clean_word = word.lower()
+            clean_word = clean_word.strip()
+            meanings =  dict.getdef(clean_word)
             for meaning in meanings:
                 meaningstring += meaning
         if meaningstring == "None":
