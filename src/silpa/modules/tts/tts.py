@@ -109,6 +109,7 @@ class TTS(SilpaModule):
         self.format = "wav"
         self.option = dhvani_init()
         self.template = os.path.join(os.path.dirname(__file__),"tts.html")
+        self.tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
         self.response = SilpaResponse(self.template)
 
     def set_request(self,request):
@@ -137,13 +138,13 @@ class TTS(SilpaModule):
                     ('Content-disposition','attachment; filename='+self.speech),
                     ('Content-Type',self.get_mimetype()),
                     ('Access-Control-Allow-Origin','*')])
-            return codecs.open(os.path.join("/tmp",self.speech)),read()
+            return codecs.open(os.path.join(self.tmp_folder,self.speech)),read()
         
     @ServiceMethod
-    def text_to_speech(self,text,pitch=0,speed=16000,format="ogg"):
+    def text_to_speech(self,text,pitch=0,speed=16000, format="ogg"):
         self.rate = speed
         self.pitch = pitch
-        self.format = format
+        self.output_format = format
 
         #TODO: Construct the file with input text and call internal
         #      method
@@ -159,15 +160,14 @@ class TTS(SilpaModule):
     def _file_to_speech(self):
         self.option.rate = c_int(int(self.rate))
         self.option.pitch = c_float(float(self.pitch))
-        self.format = format
 
-        if self.format == "ogg":
+        if self.output_format == "ogg":
             self.option.output_file_format = DHVANI_OGG_FORMAT
         else:
             self.option.output_file_format = DHVANI_WAV_FORMAT
 
-        filename= str(uuid.uuid1())[0:5]
-        speechfile = os.path.join("/tmp",filename +"." + self.format)
+        output_filename= str(uuid.uuid1())[0:5]+"."+self.output_format
+        speechfile = os.path.join(self.tmp_folder, output_filename)
         self.option.speech_to_file = 1
 
         self.option.output_file_name = c_char_p(speechfile)
@@ -182,9 +182,9 @@ class TTS(SilpaModule):
         fp.close()
 
         if return_type == DHVANI_OK:
-            return "speech?"+filename+"."+self.format
+            return "modules/tts/tmp/"+output_filename
         else:
-            return "Something went wrong"
+            return 
 
     def get_module_name(self):
         return "Text to speech"
