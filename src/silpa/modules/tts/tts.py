@@ -146,8 +146,6 @@ class TTS(SilpaModule):
         self.pitch = pitch
         self.output_format = format
 
-        #TODO: Construct the file with input text and call internal
-        #      method
         self.option.rate = c_int(int(self.rate))
         self.option.pitch = c_float(float(self.pitch))
 
