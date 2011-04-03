@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys,os
-sys.path.append("../../")
+sys.path.append("../src/")
 from silpa.modules import transliterator
 tx=transliterator.getInstance()
+print tx.transliterate(u"இலவச,", "ml_IN").encode("utf-8")
 print tx.transliterate(u"இலவச,", "ml_IN").encode("utf-8")
 print tx.transliterate(u"-സന്ധ്യ", "ta_IN").encode("utf-8")
 print tx.transliterate(u" 8 *", "ta_IN").encode("utf-8")
