@@ -29,7 +29,7 @@
                 resulthtml+="<p><a href='"+resultobj+"'>Download the speech file.</a></p>";
                 $('#result').html(resulthtml);
             },
-            error: function(msg) { alert(msg); }
+            error: function(msg) { alert("An error occured while converting text to speech."); }
         });
         return false;
         

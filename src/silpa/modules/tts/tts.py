@@ -104,10 +104,7 @@ temp_input_file_name = os.path.join("/tmp","tmpInFile")
 
 class TTS(SilpaModule):
     def __init__(self):
-        self.rate = 16000
-        self.pitch = 0
-        self.format = "wav"
-        self.option = dhvani_init()
+        self.dh = dhvani_init()
         self.template = os.path.join(os.path.dirname(__file__),"tts.html")
         self.tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
         self.response = SilpaResponse(self.template)
@@ -120,11 +117,13 @@ class TTS(SilpaModule):
     def set_start_response(self,start_response):
         self.start_response = start_response
 
-    def is_self_serve(self):
-        if self.speech or self.text:
-            return True
-        else:
-            return False
+    def get_response(self):
+        if self.text != None:
+            speech_url =  self.text_to_speech(self.text)
+            self.response.response_code = "303 see other" 
+            self.response.header  = [('Location', speech_url)]
+        return self.response
+
 
     def get_mimetype(self):
         if self.format == "ogg":
@@ -136,55 +135,26 @@ class TTS(SilpaModule):
         if self.speech:
             self.start_response('200 OK',[
                     ('Content-disposition','attachment; filename='+self.speech),
-                    ('Content-Type',self.get_mimetype()),
-                    ('Access-Control-Allow-Origin','*')])
+                    ('Content-Type',self.get_mimetype())])
             return codecs.open(os.path.join(self.tmp_folder,self.speech)),read()
         
     @ServiceMethod
-    def text_to_speech(self,text,pitch=0,speed=16000, format="ogg"):
-        self.rate = speed
-        self.pitch = pitch
-        self.output_format = format
-
-        #TODO: Construct the file with input text and call internal
-        #      method
-        self.option.rate = c_int(int(self.rate))
-        self.option.pitch = c_float(float(self.pitch))
-
-        fp = open(temp_input_file_name,"w")
-        fp.write(text)
-        fp.close()
-
-        return self._file_to_speech()
-
-    def _file_to_speech(self):
-        self.option.rate = c_int(int(self.rate))
-        self.option.pitch = c_float(float(self.pitch))
-
-        if self.output_format == "ogg":
-            self.option.output_file_format = DHVANI_OGG_FORMAT
+    def text_to_speech(self,text,pitch=0, speed=16000, format="ogg"):
+        self.dh.rate = c_int(int(speed))
+        self.dh.pitch = c_float(float(pitch))
+        if format == "ogg":
+            self.dh.output_file_format = DHVANI_OGG_FORMAT
         else:
-            self.option.output_file_format = DHVANI_WAV_FORMAT
-
-        output_filename= str(uuid.uuid1())[0:5]+"."+self.output_format
+            self.dh.output_file_format = DHVANI_WAV_FORMAT
+        output_filename= str(uuid.uuid1())[0:5]+"."+format
         speechfile = os.path.join(self.tmp_folder, output_filename)
-        self.option.speech_to_file = 1
-
-        self.option.output_file_name = c_char_p(speechfile)
-
-        # Open the file (not necessary for using codecs lib)
-        fp = codecs.open(temp_input_file_name,encoding="utf-8",buffering=0)
-
-        # Now give the file descriptor to fdopen function
-        # and get back a FILE* pointer for dhvani_speak_file
-        file_pointer = fileopen(fp.fileno(),c_char_p("r"))
-        return_type = dhvani_speak_file(c_void_p(file_pointer),byref(self.option))
-        fp.close()
-
+        self.dh.speech_to_file = 1
+        self.dh.output_file_name = c_char_p(speechfile)
+        return_type = dhvani_say(c_char_p(text.encode("utf-8")),byref(self.dh))
         if return_type == DHVANI_OK:
             return "modules/tts/tmp/"+output_filename
         else:
-            return 
+            return return_type 
 
     def get_module_name(self):
         return "Text to speech"
