@@ -139,34 +139,11 @@ class TTS(SilpaModule):
             return codecs.open(os.path.join(self.tmp_folder,self.speech)),read()
         
     @ServiceMethod
-<<<<<<< HEAD
     def text_to_speech(self,text,pitch=0, speed=16000, format="ogg"):
         self.dh.rate = c_int(int(speed))
         self.dh.pitch = c_float(float(pitch))
         if format == "ogg":
             self.dh.output_file_format = DHVANI_OGG_FORMAT
-=======
-    def text_to_speech(self,text,pitch=0,speed=16000, format="ogg"):
-        self.rate = speed
-        self.pitch = pitch
-        self.output_format = format
-
-        self.option.rate = c_int(int(self.rate))
-        self.option.pitch = c_float(float(self.pitch))
-
-        fp = open(temp_input_file_name,"w")
-        fp.write(text)
-        fp.close()
-
-        return self._file_to_speech()
-
-    def _file_to_speech(self):
-        self.option.rate = c_int(int(self.rate))
-        self.option.pitch = c_float(float(self.pitch))
-
-        if self.output_format == "ogg":
-            self.option.output_file_format = DHVANI_OGG_FORMAT
->>>>>>> 8cfa1a37282aa0cc5de9fa8208bc73e6e4ade1df
         else:
             self.dh.output_file_format = DHVANI_WAV_FORMAT
         output_filename= str(uuid.uuid1())[0:5]+"."+format
