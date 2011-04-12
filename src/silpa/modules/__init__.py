@@ -12,5 +12,5 @@ for dir in dirs:
             silpalogger.info("Loading Module " + dir + " OK")
         except ImportError:
             print ( "Loading Module " + dir + " Failed")
-            silpalogger.info( "Loading Module " + dir + " Failed")
+            silpalogger.error( "Loading Module " + dir + " Failed")
 

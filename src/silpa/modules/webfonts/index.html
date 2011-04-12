@@ -7,6 +7,7 @@ table.glyphs {
 	border-collapse: collapse;
 	background-color: white;
 }
+
 table.glyphs th {
 	border-width: 1px;
 	padding: 5px;
@@ -15,6 +16,7 @@ table.glyphs th {
 	background-color: white;
 	-moz-border-radius: 6px 6px 6px 6px;
 }
+
 table.glyphs td {
 	border-width: 1px;
 	padding: 5px;
@@ -22,13 +24,13 @@ table.glyphs td {
 	border-color: blue;
 	background-color: white;
 	-moz-border-radius: 6px 6px 6px 6px;
-	font-size:150%;
-	margin-top:.6em;
-	text-align:center;
-	color:#36F;
+	font-size: 150%;
+	margin-top: .6em;
+	text-align: center;
+	color: #36F;
 }
 
-div .slider{
+div .slider {
 	display: relative;
 	width: 300px;
 }
@@ -57,20 +59,15 @@ function search_fonts(){
         success: function(msg) {
           var fonts = msg.result ;
             // Render it
-                     
             $("head").append("<style>");
-            var style = $("head").children(":last");
-            style.attr({
-              type: "text/css"
-            });
+            var headstyle = "<style type='tex/css'>";
             $("#fontslistheader").html("<h2>Found "+fonts.length+ "  fonts that suits your search!<h2>")
             $("#fontslist").html("");
             for(var index in fonts){
               var font_details = fonts[index];
               var fontname;
-              
               for (var key in font_details) 
-                fontname = key;
+	                fontname = key;
               var css_link = pathname + "?font="+fontname;
               css_link=css_link.replace("#","");
               $("head").append("<link>");
@@ -80,12 +77,12 @@ function search_fonts(){
                 type: "text/css",
                 href: css_link
               });
-
-              style.append("."+ font_details +"{ font-family:"+ fontname +",sans; font-size: 16px;}");
+              headstyle+= "."+ font_details +"{ font-family:"+ fontname +",sans; font-size: 16px;}</style>";
+              $(headstyle).appendTo("head");
               var fontdetailmarkup="";
               fontdetailmarkup+="<div id='fontdetail"+fontname+"' class='featurebox'>";
               fontdetailmarkup+="</div>";
-              $("#fontslist").append(fontdetailmarkup)
+              $(fontdetailmarkup).appendTo("#fontslist" );
               fontdetailmarkup="<div id='"+fontname+"' style='float: left;width: 50%;padding:20px;' >";
               fontdetailmarkup+="<h1 style='font-family:"+fontname+",sans;'>" + font_details[fontname]['Name']+"</h1>";
               fontdetailmarkup+="<div>License: "+font_details[fontname]['License']+"</div>";
@@ -106,7 +103,7 @@ function search_fonts(){
               fontdetailmarkup+="</div>";
 			  fontdetailmarkup+="<div id='embed"+fontname+"' style='clear:both;'>";
               fontdetailmarkup+="</div>";
-              $("#fontdetail"+fontname).append(fontdetailmarkup)
+              $(fontdetailmarkup).appendTo("#fontdetail"+fontname)
             }
            
             
@@ -118,124 +115,125 @@ function search_fonts(){
 }    
 
 function preview(fontname){
- var previewmarkup="<table width=100%><tr><td>Font size</td><td> <div class='slider' id='slider"+fontname+"'></div></td>";
- previewmarkup+="<td>Font Syle:<select id='fontStyle"+fontname+"' name='fontStyle'>";
- /* TODO : Change the font style as per the selection */
- previewmarkup+="<option value='regular'>Regular</option>";
- previewmarkup+="<option value='bold'>Bold</option>";
- previewmarkup+="<option value='italic'>Italic</option></select>";
- previewmarkup+="</td></tr></table>";
- previewmarkup+="<textarea id='previewtext"+fontname+"'></textarea></div>";
- $("#preview"+fontname).html(previewmarkup);
- $("#previewtext"+fontname).css('font-family', fontname) ;
- $("#previewtext"+fontname).css('font-size', '14px');
- $("#slider"+fontname).slider({ 
-	 animate: true ,
-	 max: 60,
-	 min : 8,
-	 step : 2,
-	 slide: function(event, ui) { 
-		$("#previewtext"+fontname).css('font-size',  $("#slider"+fontname).slider("value")); 
-	 }
-
-  }) ;
-  $('#fontStyle'+fontname ).change(function(){
-  var optionSelectedValue = $('#fontStyle'+fontname + ' option:selected').val();
-  $("#previewtext"+fontname).css('font-style', optionSelectedValue) ;
- });
-
- return false;
+	 var previewmarkup = "<table width=100%><tr><td>Font size</td><td> <div class='slider' id='slider"+fontname+"'><div/></td>";
+	 previewmarkup += "<td>Font Syle:<select id='fontStyle"+fontname+"' name='fontStyle'>";
+	 previewmarkup += "<option value='regular'>Regular</option>";
+	 previewmarkup += "<option value='bold'>Bold</option>";
+	 previewmarkup += "<option value='italic'>Italic</option></select>";
+	 previewmarkup += "</td></tr></table>";
+	 previewmarkup += "<textarea id='previewtext"+fontname+"'></textarea><div/>";
+	 $("#preview"+fontname).html(previewmarkup);
+	 $("#previewtext"+fontname).css('font-family', fontname) ;
+	 $("#previewtext"+fontname).css('font-size', '14px');
+	 $("#slider"+fontname).slider({ 
+		 animate: true ,
+		 max: 60,
+		 min : 8,
+		 step : 2,
+		 slide: function(event, ui) { 
+			$("#previewtext"+fontname).css('font-size',  $("#slider"+fontname).slider("value")); 
+		 }
+	  }) ;
+	  $('#fontStyle'+fontname ).change(function(){
+		  var optionSelectedValue = $('#fontStyle'+fontname + ' option:selected').val();
+		  $("#previewtext"+fontname).css('font-style', optionSelectedValue) ;
+		});
+	 return false;
 }
 
 function glyphs(range, fontname){
- var start = range.split(":") [0]	;
- var end = range.split(":") [1]	;
- var tablemarkup='';
- tablemarkup="<table class='glyphs' cols=8 width=100% border=1px id='glyphtable"+fontname+"' ><tr>";
- var cols=0;
- start = start*1;
- end = end*1;
- for(var i=start; i<=end;i++){
-		cols++;
-		tablemarkup+="<td width=12.5%>&#"+ i  +";</td>";
-		if(cols%8==0)	{
-			tablemarkup+="</tr><tr>";
-			cols=0;
-		}	
- }
- tablemarkup+="</tr></table>";
- $("#glyphs"+fontname).html(tablemarkup);
- $("#glyphtable"+fontname).css('font-family', fontname) ;
- $("#glyphtable"+fontname).css('font-size', '14px');
- return false;
+	 var start = range.split(":") [0]	;
+	 var end = range.split(":") [1]	;
+	 var tablemarkup='';
+	 tablemarkup="<table class='glyphs' cols=8 width=100% border=1px id='glyphtable"+fontname+"' ><tr>";
+	 var cols=0;
+	 start = start*1;
+	 end = end*1;
+	 for(var i=start; i<=end;i++){
+			cols++;
+			tablemarkup+="<td width=12.5%>&#"+ i  +";</td>";
+			if(cols%8==0)	{
+				tablemarkup+="</tr><tr>";
+				cols=0;
+			}	
+	 }
+	 tablemarkup+="</tr></table>";
+	 $("#glyphs"+fontname).html(tablemarkup);
+	 $("#glyphtable"+fontname).css('font-family', fontname) ;
+	 $("#glyphtable"+fontname).css('font-size', '14px');
+	 return false;
 }
 
 
 
 function embed(csslink, fontname){
- var embedmarkup="<p>To embed "+fontname+" font into your web page, copy the  following css link  and add to ";
- embedmarkup+=" the &lt;head&gt; of your html document.</p><p>The API will generate the necessary CSS ";
- embedmarkup+=" specific to the user's browser.</p>";
- embedmarkup+="<pre>&lt;link rel='stylesheet' type='text/css' href='"+csslink+"' /&gt;</pre>";
- $("#embed"+fontname).html(embedmarkup);
- return false;
+	 var embedmarkup="<p>To embed "+fontname+" font into your web page, copy the  following css link  and add to ";
+	 embedmarkup+=" the &lt;head&gt; of your html document.</p><p>The API will generate the necessary CSS ";
+	 embedmarkup+=" specific to the user's browser.</p>";
+	 embedmarkup+="<pre>&lt;link rel='stylesheet' type='text/css' href='"+csslink+"' /&gt;</pre>";
+	 $("#embed"+fontname).html(embedmarkup);
+	 return false;
 }
 
 </script>
 <body>
-        <h2>Webfonts</h2>
-        </hr>
-        <p>Webfonts allows web designers to use custom fonts in the pages without having the fonts installed in users computer.
-        This technique make usr of @font-face feature. Any modern webbrowser is capable of using webfonts
-        </p>
-        <p>
-        Silpa provides a set of indic fonts that you can use in your webpages. Users can see the pages in Indic languages even if the
-        font is not availabe in their computer. Silpa webfonts module simplifies the usage of webfonts for developers by hosting
-        available opensource fonts in our sever and providing the easy to use css links.
-        </p>
-        <h3>Search for Fonts</h3>
-          <form onsubmit="return  search_fonts(); ">
-        <div id="languageselection" style="display: block;">
-          
-            <div id="col1" style="float: left;width: 150px;">
-                <input type=checkbox name="scripts" value="Devanagari"/>Devanagari<br/>
-                <input type=checkbox name="scripts" value="Bengali"/>Bengali<br/>
-                <input type=checkbox name="scripts" value="Punjabi"/>Punjabi<br/>
-                <input type=checkbox name="scripts" value="Gujarati"/>Gujarati<br/>
-            </div>
-            
-            <div id="col2" style="float: left;width: 150px;">
-                <input type=checkbox name="scripts" value="Malayalam"/>Malayalam<br/>
-                <input type=checkbox name="scripts" value="Kannada"/>Kannada<br/>
-                <input type=checkbox name="scripts" value="Telugu"/>Telugu<br/>
-                <input type=checkbox name="scripts" value="Tamil"/>Tamil<br/>
-            </div>
-            
-            <div id="col3" style="float: left;width: 150px;">
-                <input type=checkbox name="scripts" value="Oriya">Oriya<br/>
-                <input type=checkbox name="scripts" value="English" checked/>English<br/>
-                
-            </div>
-        </div>
-       <div style='clear:both;'>
-					<input type="submit" id="searchfont" value="Search"  style="width:10em;"/>
-		</div>                
-        </form>
-        <div id="progress"></div>
-        <div style="clear: both;" id="fontslistheader"></div>
-        <div id="fontslist">
-        </div>
-        <br/>
-        <h3>Browser Compatibility</h3>
-        <p>As of now we guarantee 100% compatibility with Firefox browser. We are working on IE and Chrome compatibility. Be patient!</p>
-        
-        
-        
-  <hr/>
-  <div id="successmessage"></div>
-  <div id="errormessage"></div>
-  <div id="result"></div>
-  <!--TODO : Keep this css inside the code base-->
-  
-  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
- </body>
+<h2>Webfonts</h2>
+</hr>
+<p>Webfonts allows web designers to use custom fonts in the pages
+without having the fonts installed in users computer. This technique
+make usr of @font-face feature. Any modern webbrowser is capable of
+using webfonts</p>
+<p>Silpa provides a set of indic fonts that you can use in your
+webpages. Users can see the pages in Indic languages even if the font is
+not availabe in their computer. Silpa webfonts module simplifies the
+usage of webfonts for developers by hosting available opensource fonts
+in our sever and providing the easy to use css links.</p>
+<h3>Search for Fonts</h3>
+<form onsubmit="return  search_fonts(); ">
+<div id="languageselection" style="display: block;">
+
+<div id="col1" style="float: left; width: 150px;">
+<input type=checkbox name="scripts" value="Devanagari" />Devanagari<br />
+<input type=checkbox name="scripts" value="Bengali" />Bengali<br />
+<input type=checkbox name="scripts" value="Punjabi" />Punjabi<br />
+<input type=checkbox name="scripts" value="Gujarati" />Gujarati<br />
+</div>
+
+<div id="col2" style="float: left; width: 150px;">
+<input type=checkbox name="scripts" value="Malayalam" />Malayalam<br />
+<input type=checkbox name="scripts" value="Kannada" />Kannada<br />
+<input type=checkbox name="scripts" value="Telugu" />Telugu<br />
+<input type=checkbox name="scripts" value="Tamil" />Tamil<br />
+
+
+</div>
+
+<div id="col3" style="float: left; width: 150px;">
+<input	type=checkbox name="scripts" value="Oriya">Oriya<br />
+	<input type=checkbox name="scripts" value="Sourashtra" />Sourashtra<br />
+<input type=checkbox name="scripts" value="English" checked />English<br />
+
+</div>
+</div>
+<div style='clear: both;'><input type="submit" id="searchfont"
+	value="Search" style="width: 10em;" /></div>
+</form>
+<div id="progress"></div>
+<div style="clear: both;" id="fontslistheader"></div>
+<div id="fontslist"></div>
+<br />
+<h3>Browser Compatibility</h3>
+<p>All of the fonts are compatible with all browsers.  Chrome has <a href="http://code.google.com/p/chromium/issues/detail?id=78155">a bug</a> in rendering complex scripts</p>
+
+
+
+<hr />
+<div id="successmessage"></div>
+<div id="errormessage"></div>
+<div id="result"></div>
+<!--TODO : Keep this css inside the code base-->
+
+<link
+	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
+	rel="stylesheet" type="text/css" />
+</body>
