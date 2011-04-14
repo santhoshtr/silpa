@@ -32,7 +32,7 @@ table.glyphs td {
 
 div .slider {
 	display: relative;
-	width: 300px;
+	width: 500px;
 }
 </style>
 <script type="text/javascript">
@@ -93,7 +93,6 @@ function search_fonts(){
               fontdetailmarkup+="<div style='float: left;width: 150px;padding:50px;'>";
               fontdetailmarkup+="<a onClick=preview('"+fontname+"');>Preview</a><br/>";
               fontdetailmarkup+="<a onClick=glyphs('"+font_details[fontname]['Glyphs']+"','"+fontname+"');>View All Glyphs</a><br/>";
-              fontdetailmarkup+="<a onClick=embed('"+css_link+"','"+fontname+"');>Embed</a><br/>";
               fontdetailmarkup+="</div><div style='clear:both;'></div>";
               fontdetailmarkup+="<div id='preview"+fontname+"' style='clear:both;'>";
               fontdetailmarkup+="</div>";
@@ -101,11 +100,8 @@ function search_fonts(){
               fontdetailmarkup+="</div>";
               fontdetailmarkup+="<div id='credits"+fontname+"' style='clear:both;'>";
               fontdetailmarkup+="</div>";
-			  fontdetailmarkup+="<div id='embed"+fontname+"' style='clear:both;'>";
-              fontdetailmarkup+="</div>";
               $(fontdetailmarkup).appendTo("#fontdetail"+fontname)
             }
-           
             
             $('#progress').html("" );
         },
@@ -115,29 +111,85 @@ function search_fonts(){
 }    
 
 function preview(fontname){
-	 var previewmarkup = "<table width=100%><tr><td>Font size</td><td> <div class='slider' id='slider"+fontname+"'><div/></td>";
-	 previewmarkup += "<td>Font Syle:<select id='fontStyle"+fontname+"' name='fontStyle'>";
+	 var previewmarkup = "<b>Font size :</b> <div class='slider' id='sizeslider"+fontname+"'></div><br/>";
+	 previewmarkup += "<b>Letter Sapcing :</b> <div class='slider' id='letterspacingslider"+fontname+"'></div><br/>";
+	 previewmarkup += "<b>Word Sapcing :</b> <div class='slider' id='wordspacingslider"+fontname+"'></div><br/>";
+	 previewmarkup += "<b>Line Height :</b> <div class='slider' id='lineheightslider"+fontname+"'></div><br/>";
+	 previewmarkup += "<b>Font Syle:</b> <select id='fontStyle"+fontname+"' name='fontStyle'>";
 	 previewmarkup += "<option value='regular'>Regular</option>";
 	 previewmarkup += "<option value='bold'>Bold</option>";
-	 previewmarkup += "<option value='italic'>Italic</option></select>";
-	 previewmarkup += "</td></tr></table>";
-	 previewmarkup += "<textarea id='previewtext"+fontname+"'></textarea><div/>";
+	 previewmarkup += "<option value='italic'>Italic</option></select> ";
+	 previewmarkup += "<b>Shadow: </b><select id='fontShadow"+fontname+"' name='fontShadow'>";
+	 previewmarkup += "<option value='2px 2px 2px #aaa'>2px 2px 2px #aaa</option>";
+	 previewmarkup += "<option value='4px 4px 4px #bbb'>4px 4px 4px #bbb</option>";
+     previewmarkup += "<option value='6px 6px 6px #ccc'>6px 6px 6px #ccc</option>";
+     previewmarkup += "<option value='8px 8px 8px #ddd'>8px 8px 8px #ddd</option></select>";
+	 previewmarkup +="<div style='float: left; width: 90%;padding:5px;'>";
+	 previewmarkup += "<textarea id='previewtext"+fontname+"'></textarea>";
+	 previewmarkup += "</div>";
+	 previewmarkup +="<div>";
+	 previewmarkup +="<div id='embed"+fontname+"' style='float: left; width: 90%;padding:5px;'>";
+     previewmarkup +="</div>";
+	 previewmarkup += "</div>";
 	 $("#preview"+fontname).html(previewmarkup);
 	 $("#previewtext"+fontname).css('font-family', fontname) ;
 	 $("#previewtext"+fontname).css('font-size', '14px');
-	 $("#slider"+fontname).slider({ 
+	 $("#sizeslider"+fontname).slider({ 
 		 animate: true ,
 		 max: 60,
 		 min : 8,
 		 step : 2,
+		 value : 12,
 		 slide: function(event, ui) { 
-			$("#previewtext"+fontname).css('font-size',  $("#slider"+fontname).slider("value")); 
+			$("#previewtext"+fontname).css('font-size',  $("#sizeslider"+fontname).slider("value")); 
+			embed(fontname);
 		 }
+	  }) ;
+	  $("#letterspacingslider"+fontname).slider({ 
+		 animate: true ,
+		 max: 60,
+		 min : 8,
+		 step : 1,
+		 slide: function(event, ui) { 
+			$("#previewtext"+fontname).css('letter-spacing',  $("#letterspacingslider"+fontname).slider("value")); 
+			embed(fontname);
+		 }
+		 
+	  }) ;
+	  $("#wordspacingslider"+fontname).slider({ 
+		 animate: true ,
+		 max: 60,
+		 min : 8,
+		 step : 1,
+		 slide: function(event, ui) { 
+			$("#previewtext"+fontname).css('word-spacing',  $("#wordspacingslider"+fontname).slider("value")); 
+			embed(fontname);
+		 }
+		 
+	  }) ;
+	  $("#lineheightslider"+fontname).slider({ 
+		 animate: true ,
+		 max: 3,
+		 min : 0.5,
+		 step : 0.1,
+		 value : 1.0,
+		 slide: function(event, ui) { 
+			$("#previewtext"+fontname).css('line-height',  $("#lineheightslider"+fontname).slider("value")); 
+			embed(fontname);
+		 }
+		 
 	  }) ;
 	  $('#fontStyle'+fontname ).change(function(){
 		  var optionSelectedValue = $('#fontStyle'+fontname + ' option:selected').val();
 		  $("#previewtext"+fontname).css('font-style', optionSelectedValue) ;
+		  embed(fontname);
 		});
+	  $('#fontShadow'+fontname ).change(function(){
+		  var optionSelectedValue = $('#fontShadow'+fontname + ' option:selected').val();
+		  $("#previewtext"+fontname).css('text-shadow', optionSelectedValue) ;
+		  embed(fontname);
+	  });	
+	 embed(fontname);
 	 return false;
 }
 
@@ -166,11 +218,25 @@ function glyphs(range, fontname){
 
 
 
-function embed(csslink, fontname){
-	 var embedmarkup="<p>To embed "+fontname+" font into your web page, copy the  following css link  and add to ";
+function embed(fontname){
+	 var pathname = window.location;
+	 var csslink = pathname + "?font="+fontname;
+	 var embedmarkup="<br/><h3>Embedding "+fontname+" in your website:</h3>";
+	 embedmarkup+="<p>Adjust the above font style. Copy the  following css link  and add to ";
 	 embedmarkup+=" the &lt;head&gt; of your html document.</p><p>The API will generate the necessary CSS ";
 	 embedmarkup+=" specific to the user's browser.</p>";
 	 embedmarkup+="<pre>&lt;link rel='stylesheet' type='text/css' href='"+csslink+"' /&gt;</pre>";
+	 embedmarkup+="<pre>&lt;style&gt;</style></pre>";
+	 embedmarkup+="<pre>body { </pre>";
+	 embedmarkup+="<pre>   font-family:'"+fontname+"',serif; </pre>";
+	 embedmarkup+="<pre>   font-size: "+$("#sizeslider"+fontname).slider("value")+"px;";
+	 embedmarkup+="<pre>   font-style: "+$('#fontStyle'+fontname + ' option:selected').val()+";";
+	 embedmarkup+="<pre>   text-shadow: "+$('#fontShadow'+fontname + ' option:selected').val()+";";
+	 embedmarkup+="<pre>   letter-spacing: "+$("#letterspacingslider"+fontname).slider("value")+"em;";
+	 embedmarkup+="<pre>   word-spacing: "+$("#wordspacingslider"+fontname).slider("value")+"em;";
+	 embedmarkup+="<pre>   line-height: "+$("#lineheightslider"+fontname).slider("value")+";";
+	 embedmarkup+="<pre>} </pre>";
+	 embedmarkup+="<pre>&lt;/style&gt;</style></pre>";
 	 $("#embed"+fontname).html(embedmarkup);
 	 return false;
 }
