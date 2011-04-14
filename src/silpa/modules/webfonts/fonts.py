@@ -116,7 +116,7 @@ fonts = {
                     "Author" :"Hiran Venugopal", 
                     "ttf" : "Perizia.ttf", 
                     "eot" : "Perizia.eot", 
-                    "woff" : "Rufscript.woff", 
+                    "woff" : "Perizia.woff", 
                     "Variants": "Normal, Bold", 
                     "Scripts": "English", 
                     "Language":"English", 
