@@ -44,7 +44,11 @@ class Render(SilpaModule):
         self.file_type= self.request.get('type')
         self.wiki_url= self.request.get('wiki')
         self.text = self.request.get('text')
-        
+        self.font = self.request.get('font')
+        self.font_size = self.request.get('font_size')
+        self.color = self.request.get('color')
+        self.file_type = self.request.get('file_type')
+         
     def set_start_response(self,start_response):
         self.start_response = start_response
     
@@ -52,7 +56,13 @@ class Render(SilpaModule):
         if self.text != None:
             if self.file_type==None:
                 self.file_type = "png"
-            image_url =  self.render_text(self.text, self.file_type)
+            if self.font==None:
+                self.font = "Serif"   
+            if self.font_size==None:
+                self.font_size = 12      
+            if self.color==None:
+                self.color = "Black"          
+            image_url =  self.render_text(self.text, self.file_type, 0, 0 ,self.color, self.font, self.font_size)
             self.response.response_code = "303 see other" 
             self.response.header  = [('Location', image_url)]
         if self.wiki_url != None:    
@@ -69,7 +79,7 @@ class Render(SilpaModule):
         return ("modules/render/tmp/"+filename)
         
     @ServiceMethod  
-    def render_text(self, text,file_type='png', width=0, height=0,color="Black",font_size=12):
+    def render_text(self, text, file_type='png', width=0, height=0, color="Black", font='Serif', font_size=12):
         surface = None
         width=int(width)
         height=int(height)
@@ -98,7 +108,7 @@ class Render(SilpaModule):
         pc = pangocairo.CairoContext(context)
         paragraph_layout = pc.create_layout()
         paragraph_font_description = pango.FontDescription()
-        paragraph_font_description.set_family("Serif")
+        paragraph_font_description.set_family(font)
         paragraph_font_description.set_size((int)(int(font_size) * pango.SCALE))
         paragraph_layout.set_font_description(paragraph_font_description)
         if width>0:
@@ -137,7 +147,7 @@ class Render(SilpaModule):
                 width = line_width
             if height==0:    
                 height = position_y                
-            return self.render_text(text,file_type, width + 2.5*left_margin, height,color,font_size)
+            return self.render_text(text,file_type, width + 2.5*left_margin, height,color,font, font_size)
         if file_type == 'png':
             surface.write_to_png(str(outputfile))
         else:
