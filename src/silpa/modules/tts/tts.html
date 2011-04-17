@@ -45,14 +45,16 @@
         <p>Enter the text in any Indic language in the below text area. The text can be in multiple languages. English is not suported here.</p>
         <form action="" method="post"  onsubmit="return speak(this); " >
         <textarea  name='text' id='id1'></textarea>
-         Pitch: <input type="text"  name="pitch" value="0"  style="width:2em;"/>
-         Speed: <input type="text"  name="speed" value="0"  style="width:2em;"/>
+         Pitch: <input type="text"  name="pitch" value="0"  style="width:2em;"/> Change speech pitch. Value can be -60 to 60.
+         <br/>
+         Speed: <input type="text"  name="speed" value="0"  style="width:2em;"/>  Change speech. Value can be -100 to 100.
+		<br/>
          <!--Output format: <select id="format" name="format" style="width:5em;">
          <option value="ogg">Ogg</option>
          <option value="wave">Wave</option>
-         </select> -->
+         </select> -->        <p align="center">
          <input  type="submit" id="Speak" value="Speak"  name="action" style="width:5em;"/>
-        
+        </p>
         </br>
         </form>
                
