@@ -71,15 +71,15 @@ as of now.
 Download the <a href="source.html">source code</a> , extract it. 
 Suppose you extracted it to ~/silpa. Then from the home folder , run this command</p>
 <pre  class="code">
-$python src/silpa/__init__.py	
+$./silpa.sh	
 </pre>
 <p>
 This will start and http server at port 8080. Launch your browser to <a href="http://localhost:8080">http://localhost:8080</a> and start using silpa!. If you want to use another port other than the default 8080, use the following command to start.
 </p>
 <pre  class="code">
-$python src/silpa/__init__.py [port]	
+$./silpa.sh	 [port]	
 for eg:
-$python src/silpa/__init__.py 9999	
+$./silpa.sh	 9999	
 </pre>
 
 <h2 id="running_on_windows_without_installing">Running as standalone server in Windows Without installing</h2>
@@ -102,38 +102,16 @@ c:\>python src\silpa\__init__.py 9999
 If you gave 9999 as port, then point your browser to <a href="http://localhost:9999">http://localhost:9999</a>
 
 <h2 id="install">Installing the Silpa Python Library</h2>
-Silpa uses buildout tool for build process.
 <h3 id="install_in_gnu_linux">In GNU/Linux</h3>
 <p>
 You should have python 2.5 or later version installed in your machine.
 Note that silpa does not work with python 3.x version 
 as of now. 
 Download the <a href="source.html">source code</a> , extract it. 
-Suppose you extracted it to ~/silpa. Then from the home folder , run this command to bootstrap the buildout system</p>
+Suppose you extracted it to ~/silpa. Then from the home folder , run this command to install the lirbary</p>
 <pre  class="code">
-$ python bootstrap.py
+$ sudo python setup.py install
 </pre>
-<p>
-This will create an executable file 'buildout'  in a newly created folder 'bin'
-</p>
-<p>Build the system
-<pre  class="code">
-$ bin/buildout setup . build
-</pre>
-</p>
-<p>Install the library.
-<pre  class="code">
-$sudo bin/buildout setup . install 
-</pre>
-This will install the silpa library. To run the silpa standalone server after installing , use the following
-command:
-<pre  class="code">
-$python -m silpa.__init__
-</pre>
-This will start the silpa server at port 8080(default port). You can 
-access the application by http://localhost:8080
-</p>
-
 <h3 id="install_in_windows">In Windows</h3>
 <p>
 You should have python 2.5 or later version installed in your machine.
@@ -142,31 +120,12 @@ as of now.
 Download the <a href="source.html">source code</a> , extract it. 
 Suppose you extracted it to c:\silpa. Then from the home folder , run this command to bootstrap the buildout system</p>
 <pre  class="code">
-c:\silpa>python bootstrap.py
+c:\silpa>python setup.py install
 </pre>
-<p>
-This will create an executable file 'buildout'  in a newly created folder 'bin'
-</p>
-<p>Build the system
-<pre  class="code">
-c:\silpa>bin\buildout setup . build
-</pre>
-</p>
-<p>Install the library.
-<pre  class="code">
-c:\silpa>bin\buildout setup . install 
-</pre>
-This will install the silpa library. To run the silpa standalone server after installing , use the following
-command:
-<pre  class="code">
-c:\silpa>python -m silpa.__init__
-</pre>
-This will start the silpa server at port 8080(default port). You can 
-access the application by http://localhost:8080
-</p>
 
 <h2 id="apache-mode_wsgi">Running in apache server with mod_wsgi</h2>
- <b>Caution: This section of the document is for advanced users for setting up silpa server on a public webserver using apache mod_wsgi module. </b>
+
+<b>Caution: This section of the document is for advanced users for setting up silpa server on a public webserver using apache mod_wsgi module. </b>
 <h4><a name="WSGI_Application_Script_File"/>WSGI Application Script File</a></h4>
 <p>WSGI is a specification of a generic API for mapping between an underlying web server and a Python web application. WSGI itself is described by Python <a href="http://www.python.org/dev/peps/pep-0333/" rel="nofollow">PEP 0333</a>. The purpose of the WSGI specification is to provide a common mechanism for hosting a Python web application on a range of different web servers supporting the Python programming language. </p>
 
@@ -293,11 +252,6 @@ WSGIProcessGroup example.com</pre><p>A complete virtual host configuration for t
 
 
 <h2>Debugging Any Problems</h2><p>To debug any problems one should take note of the type of error response being returned, but more importantly one should look at the Apache error logs for more detailed descriptions of a specific problem. </p><p>Being new to mod_wsgi it is highly recommended that the default Apache LogLevel be increased from &#x27;warn&#x27; to &#x27;info&#x27;. </p><pre class="code">LogLevel info</pre><p>When this is done mod_wsgi will output additional information regarding when daemon processes are created, when Python sub interpreters related to a group of WSGI applications are created and when WSGI application script files are loaded and/or reloaded. This information can be quite valuable in determining what problem may be occuring. </p><p>Note that where the LogLevel directive may have been defined both in and outside of a VirualHost directive, due to the VirtualHost declaring its own error logs, both instances of the LogLevel directive should be changed. </p><p>This is because although the virtual host may have its own error log, some information is still logged to the main Apache error log and the LogLevel directive outside of the virtual host context needs to be changed for that additional information to be recorded. </p><p>In other words, even if the VirtualHost has its own error log file, also look in the main Apache error log file for information as well. </p>
-
-
-
- 
-
 
             </div>
     <div id="footer">            

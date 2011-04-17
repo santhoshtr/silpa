@@ -397,7 +397,7 @@ line-height:0;
 #header {
 -moz-box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
 -webkit-box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
-box-shadow:0 0 1em #36F;
+box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
 margin:1px 0 5px;
 padding:0 0 8px;
 }
@@ -626,8 +626,8 @@ background:#f6f6f6;
 -moz-box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
 -webkit-box-shadow:0 0 8px rgba(82, 168, 236, 0.5);
 /*-moz-box-shadow:0 0 1em #36F;
--webkit-box-shadow:0 0 1em #36F;*/
-box-shadow:0 0 1em #36F;
+-webkit-box-shadow:0 0 1em #36F;
+box-shadow:0 0 1em #36F;*/
 margin:1em 1em 1.5em;
 padding:15px 20px 20px;
 }
