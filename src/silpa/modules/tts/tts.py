@@ -43,13 +43,19 @@ class TTS(SilpaModule):
         self.request = request
         self.speech = self.request.get('speech')
         self.text = self.request.get('text')
+        self.pitch = self.request.get('pitch')
+        self.tempo = self.request.get('tempo')
 
     def set_start_response(self,start_response):
         self.start_response = start_response
 
     def get_response(self):
+        if self.pitch == None:
+            self.pitch ="0"
+        if self.tempo == None:
+            self.tempo ="0"   
         if self.text != None:
-            speech_url =  self.text_to_speech(self.text)
+            speech_url =  self.text_to_speech(self.text, self.pitch, self.tempo)
             self.response.response_code = "303 see other" 
             self.response.header  = [('Location', speech_url)]
         return self.response
@@ -69,8 +75,8 @@ class TTS(SilpaModule):
             return codecs.open(os.path.join(self.tmp_folder,self.speech)),read()
         
     @ServiceMethod
-    def text_to_speech(self,text,pitch=0, speed=16000, format="ogg"):
-        self.dh.rate = c_int(int(speed))
+    def text_to_speech(self,text,pitch=0, tempo=0, format="ogg"):
+        self.dh.tempo = c_float(int(tempo))
         self.dh.pitch = c_float(float(pitch))
         if format == "ogg":
             self.dh.output_file_format = dhvani.DHVANI_OGG_FORMAT
