@@ -116,7 +116,7 @@ class Dictionary(SilpaModule):
         
     @ServiceMethod
     def getdef_image(self,word,dictionary,file_type='png', width=0, height=0,color="Black",fontsize=10):
-        return render.getInstance().render_text(self.getdef(word,dictionary),file_type,width,height,color,fontsize)
+        return render.getInstance().render_text(self.getdef(word,dictionary),file_type,width,height,color,font_size=fontsize)
 
     
     def get_module_name(self):
