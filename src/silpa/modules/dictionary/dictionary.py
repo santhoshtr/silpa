@@ -27,11 +27,18 @@ from utils import silpalogger
 import os
 from dictdlib import DictDB
 from jsonrpc import *
+from wiktionary import get_def
 
 try:
     from modules.render import render
 except:
     silpalogger.exception("Failed to import render module")
+
+# Have the render instance initiated only once
+renderer = render.getInstance()
+
+# One image for No image found
+no_meaning_found = renderer.render_text("No meanings found","png",400,400,"Red",font_size=10)
 
 class Dictionary(SilpaModule):
     
@@ -64,6 +71,10 @@ class Dictionary(SilpaModule):
                 image_url =  self.getdef_image(self.text,self.dictionaryname,"png",self.imagewidth,self.imageheight,"Black",self.fontsize)
                 self.response.response_code = "303 see other" 
                 self.response.header  = [('Location', image_url)]
+            elif self.imageyn.lower() == "w":
+                image_url = self.get_wiktionary_def_image(self.text,self.dictionaryname,"png",self.imageheight,self.imagewidth,"Black",self.fontsize)
+                self.response.response_code = "303 See other"
+                self.response.header = [('Location',image_url)]
             else:                
                 wordmeaning=self.getdef(self.text,self.dictionaryname)                
                 self.response.content = wordmeaning.decode("utf-8")
@@ -116,7 +127,31 @@ class Dictionary(SilpaModule):
         
     @ServiceMethod
     def getdef_image(self,word,dictionary,file_type='png', width=0, height=0,color="Black",fontsize=10):
-        return render.getInstance().render_text(self.getdef(word,dictionary),file_type,width,height,color,font_size=fontsize)
+        meaning = self.getdef(word,Dictionary)
+
+        if meaning == "No definition found":
+            return no_meaning_found
+        else:
+            return renderer.render_text(meaning,file_type,width,height,color,font_size=fontsize)
+
+    @ServiceMethod
+    def get_wiktionary_def_image(self,word,dictionary,file_type='png',width=0,height=0,color="Black",fontsize=10):
+        tmp = dictionary.split("-")
+        src_lang = tmp[0]
+        dest_lang = tmp[1]
+
+        meaning = get_def(word,src_lang,dest_lang)
+
+        no_of_lines = len(meaning.split("\n"))
+        
+        if (fontsize * no_of_lines) > height:
+            height = fontsize*no_of_lines
+
+        if meaning == None:
+            return no_meaning_found
+        else:
+            return renderer.render_text(meaning,file_type,0,0,color,font_size=fontsize)
+        
 
     
     def get_module_name(self):
