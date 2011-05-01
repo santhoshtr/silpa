@@ -38,7 +38,7 @@ except:
 renderer = render.getInstance()
 
 # One image for No image found
-no_meaning_found = renderer.render_text("No meanings found","png",400,400,"Red",font_size=10)
+no_meaning_found = renderer.render_text("No meanings found","png",0,0,"Red",font_size=10)
 
 class Dictionary(SilpaModule):
     
@@ -127,7 +127,7 @@ class Dictionary(SilpaModule):
         
     @ServiceMethod
     def getdef_image(self,word,dictionary,file_type='png', width=0, height=0,color="Black",fontsize=10):
-        meaning = self.getdef(word,Dictionary)
+        meaning = self.getdef(word,dictionary)
 
         if meaning == "No definition found":
             return no_meaning_found
@@ -141,11 +141,6 @@ class Dictionary(SilpaModule):
         dest_lang = tmp[1]
 
         meaning = get_def(word,src_lang,dest_lang)
-
-        no_of_lines = len(meaning.split("\n"))
-        
-        if (fontsize * no_of_lines) > height:
-            height = fontsize*no_of_lines
 
         if meaning == None:
             return no_meaning_found
