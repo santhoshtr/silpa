@@ -49,11 +49,12 @@ lang_codes = {'en':'en_US',
               'te':'te_IN'}
 
 class Wikiparser(HTMLParser):
-    def __init__(self, url, filename, verbose=0):
+    def __init__(self, url, filename, font='serif', verbose=0):
         "Initialise an object, passing 'verbose' to the superclass."
         HTMLParser.__init__(self)
         self.hyperlinks = []
         self.url = url
+        self.font = font
         self.language = detect_language(url)
         tmp_folder = os.path.join(os.path.dirname(__file__), "tmp")
         self.pdf = PDFWriter(os.path.join(tmp_folder, filename), StandardPaper.A4)
@@ -62,10 +63,10 @@ class Wikiparser(HTMLParser):
         header.set_text(urllib.unquote(self.url))
         self.pdf.set_header(header)
         self.pdf.move_context(0, 500)
-        h1 = Text(urllib.unquote(self.url.split("/")[-1]), font="serif", font_size=32) 
+        h1 = Text(urllib.unquote(self.url.split("/")[-1]), font=self.font, font_size=32) 
         h1.color = StandardColors.Blue
         self.pdf.add_text(h1)
-        h2 = Text(urllib.unquote(self.url), font="serif", font_size=16) 
+        h2 = Text(urllib.unquote(self.url), font=self.font, font_size=16) 
         h2.color = StandardColors.Blue
         self.pdf.add_text(h2)
         footer = Footer(text_align=pango.ALIGN_CENTER)
@@ -164,7 +165,7 @@ class Wikiparser(HTMLParser):
         
     def end_h1(self):
         self.h1 = False
-        h1 = Text(self.buffer, font="FreeSerif", font_size=16) 
+        h1 = Text(self.buffer, font=self.font, font_size=16) 
         h1.color = StandardColors.Blue
         self.pdf.add_text(h1)
         self.buffer = None
@@ -176,7 +177,7 @@ class Wikiparser(HTMLParser):
     def end_h2(self):
         self.h2 = False
         if self.buffer and self.buffer.strip() > "":
-            h2 = Text(self.buffer, font="FreeSerif", font_size=14) 
+            h2 = Text(self.buffer, font=self.font, font_size=14) 
             h2.color = StandardColors.Blue
             self.pdf.add_text(h2)
         self.buffer = None
@@ -190,12 +191,12 @@ class Wikiparser(HTMLParser):
 #        print self.buffer
         if self.buffer and self.buffer.strip() > "":
             if self.ul:
-                li = Text(markup = "• " + self.buffer,font="FreeSerif", font_size=10)
+                li = Text(markup = "• " + self.buffer,font = self.font, font_size=10)
             elif self.ol:
                 self.ref_counter+=1
-                li = Text(markup = str(self.ref_counter) + ". "+ self.buffer.replace("↑",""), font = "FreeSerif", font_size=10)
+                li = Text(markup = str(self.ref_counter) + ". "+ self.buffer.replace("↑",""), font = self.font, font_size=10)
             else:
-                li = Text(markup = self.buffer,font="FreeSerif", font_size=10)     
+                li = Text(markup = self.buffer,font = self.font, font_size=10)     
             self.pdf.add_text(li)
         self.buffer = None
                 
@@ -204,15 +205,6 @@ class Wikiparser(HTMLParser):
         
     def end_a(self):
         self.a = False
-    
-#    def start_sup(self, attrs):         
-#        self.sup = True
-#        self.buffer += "<sup>"
-#        
-#    def end_sup(self):
-#        print "test"
-#        self.buffer += "</sup>"
-
         
     def start_ol(self, attrs):
         self.ol = True
@@ -249,11 +241,11 @@ class Wikiparser(HTMLParser):
     def end_p(self) :
         self.p = False
         if self.sup:
-            para = Paragraph(markup=self.buffer,text = self.buffer, font="FreeSerif", font_size=10,)
+            para = Paragraph(markup=self.buffer,text = self.buffer,font =  self.font, font_size=10,)
             self.sup = False
         else:
             #print self.buffer
-            para = Paragraph(text=self.buffer, font="FreeSerif", font_size=10,)
+            para = Paragraph(text=self.buffer, font = self.font, font_size=10,)
            
         para.set_justify(True)
         if self.language:
@@ -263,10 +255,6 @@ class Wikiparser(HTMLParser):
             
         para.set_hyphenate(True)
         self.pdf.add_paragraph(para) 
-#        f= open("computer_para.txt","aw")
-#        f.write(self.buffer)
-#        f.write("\n")
-#        f.close()  
         self.buffer = None
     def set_header(self, text):
         self.header = text

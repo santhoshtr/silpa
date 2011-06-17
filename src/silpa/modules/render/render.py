@@ -22,7 +22,7 @@ import os
 from common import *
 from utils import *
 import cairo
-import uuid
+import hashlib
 import urllib
 import pango
 import pangocairo
@@ -66,16 +66,21 @@ class Render(SilpaModule):
             self.response.response_code = "303 see other" 
             self.response.header  = [('Location', image_url)]
         if self.wiki_url != None:    
-            pdf_url = self.wiki2pdf(self.wiki_url)
+            pdf_url = self.wiki2pdf(self.wiki_url, self.font)
             self.response.response_code = "303 see other" 
             self.response.header  = [('Location', pdf_url)]
         return self.response
         
     @ServiceMethod  
-    def wiki2pdf(self, url):
-        filename =  str(uuid.uuid1())[0:5] +".pdf"
-        parser = Wikiparser(url,filename) #"http://ml.wikipedia.org/wiki/Computer"
-        parser.parse()
+    def wiki2pdf(self, url, font='Serif'):
+        m = hashlib.md5()
+        m.update(url.encode("utf-8"))
+        filename =  m.hexdigest()[0:5]+".pdf"
+        if not os.path.exists(os.path.join(os.path.dirname(__file__), "tmp",filename)):
+            parser = Wikiparser(url,filename, font) 
+            parser.parse()
+        else:
+			print ("File already exists.")    
         return ("modules/render/tmp/"+filename)
         
     @ServiceMethod  
@@ -85,7 +90,9 @@ class Render(SilpaModule):
         height=int(height)
         font_size=int(font_size)
         text= text.decode("utf-8")
-        filename = str(uuid.uuid1())[0:5]+"."+file_type
+        m = hashlib.md5()
+        m.update(text.encode("utf-8"))
+        filename =  m.hexdigest()[0:5]+"."+file_type
         outputfile = os.path.join(self.tmp_folder, filename )
         if file_type == 'png':
             surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
@@ -101,6 +108,7 @@ class Render(SilpaModule):
         width  = int(width)
         left_margin = 10
         top_margin = 20
+        bottom_margin = 50
         position_x = left_margin
         position_y = top_margin
         rgba = get_color(color)
@@ -146,7 +154,7 @@ class Render(SilpaModule):
             if width==0:
                 width = line_width
             if height==0:    
-                height = position_y                
+                height = position_y
             return self.render_text(text,file_type, width + 2.5*left_margin, height,color,font, font_size)
         if file_type == 'png':
             surface.write_to_png(str(outputfile))
