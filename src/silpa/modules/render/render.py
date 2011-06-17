@@ -76,11 +76,11 @@ class Render(SilpaModule):
         m = hashlib.md5()
         m.update(url.encode("utf-8"))
         filename =  m.hexdigest()[0:5]+".pdf"
-        if not os.path.exists(os.path.join(os.path.dirname(__file__), "tmp",filename)):
-            parser = Wikiparser(url,filename, font) 
-            parser.parse()
-        else:
-			print ("File already exists.")    
+        #if not os.path.exists(os.path.join(os.path.dirname(__file__), "tmp",filename)):
+        parser = Wikiparser(url,filename, font) 
+        parser.parse()
+        #else:
+		#	print ("File already exists.")    
         return ("modules/render/tmp/"+filename)
         
     @ServiceMethod  
