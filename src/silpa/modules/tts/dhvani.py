@@ -28,8 +28,11 @@ from ctypes import CDLL
 from ctypes import Structure,CFUNCTYPE,POINTER,byref
 from ctypes import c_int,c_short,c_float,c_char_p,c_void_p
 
-dhvani = CDLL("libdhvani.so.0")
-
+dhvani = None
+try:
+    dhvani = CDLL("libdhvani1.so.0")
+except:
+    print("Dhvani not available in the system. Disabling TTS Module.")
 
 # Define required enums
 
@@ -66,24 +69,26 @@ class dhvani_options(Structure):
                 ("synth_callback_fn",POINTER(t_dhvani_synth_callback)),
                 ("audio_callback_fn",(t_dhvani_audio_callback))]
 
+if dhvani:
+    # Define dhvani speech function
+    dhvani_say = dhvani.dhvani_say
+    dhvani_say.restype = c_int
+    dhvani_say.argtypes = [c_char_p,POINTER(dhvani_options)]
 
-# Define dhvani speech function
-dhvani_say = dhvani.dhvani_say
-dhvani_say.restype = c_int
-dhvani_say.argtypes = [c_char_p,POINTER(dhvani_options)]
+    # dhvani_speak_file function
+    dhvani_speak_file = dhvani.dhvani_speak_file
+    dhvani_speak_file.restype = c_int
+    dhvani_speak_file.argtypes = [c_void_p,POINTER(dhvani_options)]
 
-# dhvani_speak_file function
-dhvani_speak_file = dhvani.dhvani_speak_file
-dhvani_speak_file.restype = c_int
-dhvani_speak_file.argtypes = [c_void_p,POINTER(dhvani_options)]
-
-# fdopen function not related to dhvani but a C library function
-# in stdio.h this is used to
-fileopen = dhvani.fdopen
-fileopen.restype = c_void_p
-fileopen.argtypes = [c_int,c_char_p]
+    # fdopen function not related to dhvani but a C library function
+    # in stdio.h this is used to
+    fileopen = dhvani.fdopen
+    fileopen.restype = c_void_p
+    fileopen.argtypes = [c_int,c_char_p]
 
 def dhvani_init():
+    if dhvani == None:
+        return None
     option = dhvani_options()
     option.language = -1
     option.isPhonetic = 0
@@ -146,7 +151,7 @@ def callback(data, length):
         if (data != None):
             print("callback!", length)
             for i in range(length):
-				print data[i]
+                print data[i]
             outputfile_fd.write(d)
     return 0
 
