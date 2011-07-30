@@ -30,7 +30,7 @@ from ctypes import c_int,c_short,c_float,c_char_p,c_void_p
 
 dhvani = None
 try:
-    dhvani = CDLL("libdhvani1.so.0")
+    dhvani = CDLL("libdhvani.so.0")
 except:
     print("Dhvani not available in the system. Disabling TTS Module.")
 
