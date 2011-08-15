@@ -205,7 +205,19 @@ fonts = {
                     "Scripts":"English,Odia", 
                     "Language":"Oriya", 
                     "Glyphs":"2817:2929"
-                  }, 
+                  },
+           "SamyakOriya":{
+                    "Name": u"Samyak Oriya", 
+                    "License":"GPL v3", 
+                    "Author":"Rahul Bhalerao, Sandeep Shedmake, Bageshri Salvi, Pravin Satpute", 
+                    "ttf":"Samyak-Oriya.ttf", 
+                    "eot":"Samyak-Oriya.eot", 
+                    "woff":"Samyak-Oriya.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Odia", 
+                    "Language":"Oriya", 
+                    "Glyphs":"2817:2929"
+                  },        
            "LohitHindi":{
                     "Name": u"लौहित हिंदी", 
                     "License":"GPL v2", 
