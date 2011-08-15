@@ -181,7 +181,19 @@ fonts = {
                     "Scripts":"English,Tamil", 
                     "Language":"Tamil", 
                     "Glyphs":"2946:3066"
-                  }, 
+                  },
+          "SamyakTamil":{
+                    "Name": "Samyak Tamil", 
+                    "License":"GPL v3", 
+                    "Author":"Rahul Bhalerao, Sandeep Shedmake, Bageshri Salvi, Pravin Satpute", 
+                    "ttf":"Samyak-Tamil.ttf", 
+                    "eot":"Samyak-Tamil.eot", 
+                    "woff":"Samyak-Tamil.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Tamil", 
+                    "Language":"Tamil", 
+                    "Glyphs":"2946:3066"
+                  },         
           "LohitOriya":{
                     "Name": u"Lohit Oriya", 
                     "License":"GPL v2", 
