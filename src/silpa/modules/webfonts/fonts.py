@@ -366,5 +366,18 @@ fonts = {
                     "Language":"Sourashtra", 
                     "Glyphs":"43136:43225"
         
-                 }
+                 },
+	"Eeyek":{
+                    "Name":"Eeyek", 
+                    "License":"GPLV2", 
+                    "Author":"Pravabati Chingangbam and Tabish", 
+                    "ttf":"Eeyek.ttf", 
+                    "eot":"Eeyek.eot", 
+                    "woff":"Eeyek.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"Meetei Mayek", 
+                    "Language":"Manipuri", 
+                    "Glyphs":"43968:44031"
+        
+                 }                 
         }
