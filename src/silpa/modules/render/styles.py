@@ -21,18 +21,39 @@
 #
 
 class Color(object):
-	def __init__ (self,red, green, blue, alpha=1.0):
-            	self.red = red
-		self.green = green
-		self.blue = blue
-		self.alpha = alpha
+    def __init__ (self,red, green, blue, alpha=1.0):
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
 __colors = {
     "Black": Color(0,0,0),
-    "Blue": Color(0,0,255),
-    "Red": Color(255,0,0),
-    "Green": Color(0,255,0),
-    "Yellow": Color(255,255,0)
+    "Blue": Color(0,0,1),
+    "Red": Color(1,0,0),
+    "Green": Color(0,1,0),
+    "Yellow": Color(1,1,0)
     }
 
+def hex_to_rgb(hex_value):
+    hex_value = hex_value.lstrip('#')
+    hex_len = len(hex_value)
+    if hex_len != 6 and hex_len != 8:
+        return __colors.get("Black")
+    else:
+        r, g, b = hex_value[:2], hex_value[2:4], hex_value[4:6]
+        if hex_len == 8:
+            a = hex_value[6:8]
+        else:
+            a = 'ff'
+        try:
+            r, g, b, a = [int(n, 16) for n in (r, g, b, a)]
+            return Color(round(float(r)/255, 2),round(float(g)/255, 2),round(float(b)/255, 2), round(float(a)/255, 2))
+        except:
+            return __colors.get("Black")
+
 def get_color(name="Black"):
-    return __colors.get(name,"Black")
+    if name.startswith('#'):
+        return hex_to_rgb(name)
+    else:
+        return __colors.get(name,__colors.get("Black"))
+

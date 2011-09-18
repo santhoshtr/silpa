@@ -28,7 +28,7 @@ import pango
 import pangocairo
 from wiki2pdf  import Wikiparser
 from modules.hyphenator import hyphenator
-from styles import get_color
+from styles import *
 from common.silparesponse import SilpaResponse
 
 class Render(SilpaModule):
@@ -112,7 +112,7 @@ class Render(SilpaModule):
         position_x = left_margin
         position_y = top_margin
         rgba = get_color(color)
-        context.set_source_rgba (rgba.red,rgba.green,rgba.blue,rgba.alpha)
+        context.set_source_rgba (float(rgba.red),float(rgba.green),float(rgba.blue),float(rgba.alpha))
         pc = pangocairo.CairoContext(context)
         paragraph_layout = pc.create_layout()
         paragraph_font_description = pango.FontDescription()
