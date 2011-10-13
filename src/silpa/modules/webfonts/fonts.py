@@ -206,6 +206,18 @@ fonts = {
                     "Language":"Oriya", 
                     "Glyphs":"2817:2929"
                   },
+           "Utkal":{
+                    "Name": u"Utkal", 
+                    "License":"GPL", 
+                    "Author":"Andy White, Rajesh Pradhan", 
+                    "ttf":"utkal.ttf", 
+                    "eot":"utkal.eot", 
+                    "woff":"utkal.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Odia", 
+                    "Language":"Oriya", 
+                    "Glyphs":"2817:2929"
+                  },       
            "SamyakOriya":{
                     "Name": u"Samyak Oriya", 
                     "License":"GPL v3", 
