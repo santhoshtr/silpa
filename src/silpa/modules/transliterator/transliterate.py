@@ -328,11 +328,13 @@ class Transliterator(SilpaModule):
                     tx_str += self.transliterate_indic_indic(word,\
                                                                  src_lang_code,\
                                                                target_lang_code)
-                    tx_str = tx_str   + " "
+                    if len(lines)>1:
+                        tx_str += " "        
 
                 else:
                     tx_str = tx_str   +  word
-            tx_str = tx_str   +  "\n"
+            if len(lines)>1:        
+                tx_str += "\n"
         # Language specific fixes
         if target_lang_code == "ml_IN":
             tx_str = self._malayalam_fixes(tx_str)      

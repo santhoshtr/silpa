@@ -193,7 +193,43 @@ fonts = {
                     "Scripts":"English,Tamil", 
                     "Language":"Tamil", 
                     "Glyphs":"2946:3066"
-                  },         
+                  }, 
+           "Thenee":{
+                    "Name": "Thenee", 
+                    "License":"GPL v2", 
+                    "Author":"Umar Thamby", 
+                    "ttf":"TheneeUni.ttf", 
+                    "eot":"TheneeUni.eot", 
+                    "woff":"TheneeUni.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Tamil", 
+                    "Language":"Tamil", 
+                    "Glyphs":"2946:3066"
+                  },  
+           "Thendral":{
+                    "Name": "Thendral", 
+                    "License":"GPL v2", 
+                    "Author":"Umar Thamby", 
+                    "ttf":"ThendralUni.ttf", 
+                    "eot":"ThendralUni.eot", 
+                    "woff":"ThendralUni.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Tamil", 
+                    "Language":"Tamil", 
+                    "Glyphs":"2946:3066"
+                  },   
+             "Vaigai":{
+                    "Name": "Vaigai", 
+                    "License":"GPL v2", 
+                    "Author":"Umar Thamby", 
+                    "ttf":"VaigaiUni.ttf", 
+                    "eot":"VaigaiUni.eot", 
+                    "woff":"VaigaiUni.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Tamil", 
+                    "Language":"Tamil", 
+                    "Glyphs":"2946:3066"
+                  },                                  
           "LohitOriya":{
                     "Name": u"Lohit Oriya", 
                     "License":"GPL v2", 
@@ -206,6 +242,18 @@ fonts = {
                     "Language":"Oriya", 
                     "Glyphs":"2817:2929"
                   },
+           "Utkal":{
+                    "Name": u"Utkal", 
+                    "License":"GPL", 
+                    "Author":"Andy White, Rajesh Pradhan", 
+                    "ttf":"utkal.ttf", 
+                    "eot":"utkal.eot", 
+                    "woff":"utkal.woff", 
+                    "Variants":"Regular", 
+                    "Scripts":"English,Odia", 
+                    "Language":"Oriya", 
+                    "Glyphs":"2817:2929"
+                  },       
            "SamyakOriya":{
                     "Name": u"Samyak Oriya", 
                     "License":"GPL v3", 
@@ -378,6 +426,5 @@ fonts = {
                     "Scripts":"Meetei Mayek", 
                     "Language":"Manipuri", 
                     "Glyphs":"43968:44031"
-        
                  }                 
         }

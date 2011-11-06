@@ -48,4 +48,15 @@ SILPA has currently provides following indic language modules
 14. Katapayyadi Numbers
 15. Webfonts
 16. Stemmer
-17. Charachter Details
+17. Character Details
+
+Dependencies
+------------
+pango
+cairo
+python-cairo
+pypdflib
+python-imaging
+python-lxml
+python-beautifulsoup
+

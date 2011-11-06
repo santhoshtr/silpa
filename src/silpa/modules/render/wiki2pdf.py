@@ -231,7 +231,7 @@ class Wikiparser(HTMLParser):
             self.buffer = ""  
         
     def end_span(self):
-        self.buffer += " "
+        self.buffer += ""
         self.span = False
             
     def start_p(self, attrs):
@@ -265,7 +265,7 @@ class Wikiparser(HTMLParser):
         """
         output_filename = None
         try:
-            link= imageurl.strip()
+            link= "https:"+imageurl.strip()
             parts = link.split("/")
             filename = parts[len(parts)-1]
             output_filename = os.path.join(outputfolder , filename)
