@@ -100,7 +100,7 @@ class Payyans(SilpaModule):
         self.mapping_filename=os.path.join(os.path.dirname(__file__), 'maps' , font+".map")
         self.rulesDict = self.LoadRules()
         while index < len(ascii_text):
-            for charNo in [2,1]:
+            for charNo in [3,2,1]:
                 letter = ascii_text[index:index+charNo]
                 if letter in self.rulesDict:
                     unicode_letter = self.rulesDict[letter]
@@ -199,11 +199,13 @@ class Payyans(SilpaModule):
                   continue 
                   '''ലൈനൊന്നും ല്യാ, മോശം.. ങും പോട്ടെ. വേറെ ലൈന്‍ പിടിക്കാം'''
             if(len(line.split("=")) != 2):
-                    '''എന്തോ പ്രശ്നണ്ടു്. ന്നാ അതങ്ങടു തുറന്നു പറഞ്ഞേക്കാം'''
-                    print "Error: Syntax Error in the Ascii to Unicode Map in line number ",  line_number
-                    print "Line: "+ text
-                    '''പരിപാടി നിര്‍ത്താം '''
-                    return 2    # Error - Syntax error in Mapping file 
+                '''എന്തോ പ്രശ്നണ്ടു്. ന്നാ അതങ്ങടു തുറന്നു പറഞ്ഞേക്കാം'''
+                print "Error: Syntax Error in the Ascii to Unicode Map in line number ",  line_number
+                print "Line: "+ text
+                print self.mapping_filename
+                '''പരിപാടി നിര്‍ത്താം '''
+                return 2    # Error - Syntax error in Mapping file 
+
             '''ഇടതന്‍'''                    
             lhs = line.split("=") [ 0 ]  
             '''വലതന്‍'''
