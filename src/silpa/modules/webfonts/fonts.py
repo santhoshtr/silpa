@@ -428,7 +428,7 @@ fonts = {
         "Glyphs":"43968:44031"
         },
     "Gubbi":{
-        "Name":"Gubbi",
+        "Name":u"ಗುಬ್ಬಿ",
         "License": "OFL v1.1",
         "Author": "IISC Bangalore,Aravinda VK",
         "ttf":"Gubbi.ttf",
@@ -440,7 +440,7 @@ fonts = {
         "Glyphs":"3202:3311"
         },
     "Navilu":{
-        "Name":"Navilu",
+        "Name":u"ನವಿಲು",
         "License": "OFL v1.1",
         "Author": "IISC Bangalore,Aravinda VK",
         "ttf":"Navilu.ttf",
