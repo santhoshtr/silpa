@@ -64,7 +64,7 @@ class Webfonts(SilpaModule):
 
         silpalogger.debug("Request URI "+request_uri)
 
-        if request_uri != None:
+        if request_uri != None and request_uri.find(get_base_url) != -1:
             http_host += "/"+get_base_url()
 
         font_url = "http://"+http_host+"/modules/webfonts/font/"
