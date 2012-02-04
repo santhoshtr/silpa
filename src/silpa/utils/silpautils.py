@@ -42,6 +42,9 @@ def get_root_folder():
     else:
 		return os.path.join(os.path.dirname(__file__), root_folder )
 
+def get_base_url():
+    return load_configuration()["SILPA_BASE_URL"]
+
 def get_modules_list():
     conf_dict=load_configuration()
     action_dict={}
