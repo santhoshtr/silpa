@@ -1,112 +1,137 @@
 <html>
-  <head>
-    <title></title>
-    <script type="text/javascript">
-    function docheck(form)
-    {
-    $('#progress') .html("Checking. Please Wait..");
-    $('#result').html("");
-    var word= form.word.value;
-    var jsonRequest = {
-        "method" :  "modules.Spellchecker.check",
-         "params" : [word], 
-         "id" : ""
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: "JSONRPC",
-        data: $.toJSON(jsonRequest), 
-        dataType: "json",
-        success: function(msg) {
-          var resultobj =  msg.result;
-          $('#progress').html("");
-          if(resultobj)   {
-                 $('#result').html("<b>  Correct Spelling.</b>"); 
-          }
-          else {
-                  $('#result').html("<b> Wrong Spelling</b>");
-                  getSuggestions(word);
-          }
-        },
-        error: function(msg) { alert(msg); }
-    });
-    return false;
-    }
-    function getSuggestions(word)
-    {
-    $('#progress').html("Fetching suggestions. Please wait...");
-    $('#errormessage').html("");
-    var jsonRequest = {
-        "method" :  "modules.Spellchecker.suggest",
-         "params" : [word], 
-         "id" : ""
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: "JSONRPC",
-        data: $.toJSON(jsonRequest), 
-        dataType: "json",
-        success: function(msg) {
-          var resultobj=eval(msg.result);
-          $('#progress').html("");
-          $('#result').html("<b>Wrong Spelling. Suggestions :</b><ul id='list'></ul>");
-	  if(resultobj.length != 0)
-	  {
-            $.each(resultobj,function(index, item)
-            {
-               $('#list').append($( "<li>" + item +"</li>" ));
-            });
-	  }
-	  else {
-	  	$('#list').append($( " <li> No suggestions available </li>" ));
-	  }
-        },
-        error: function(msg) { alert(msg); }
-    });
-    return false;
-    }
-    </script>
-  </head>
-  <body>
-        <h2>Spellchecker</h2></hr>
-        <p>This is a demo of spellcheck service of silpa. In this page, you can enter a word for checking the spelling and just get the result.
-        </p>
-        <p>For using Silpa spellcheck service in your web or desktop applications, read the <a href="apis.html#spellcheck">API documentation</a>. This page itself is an example for using silpa spellcheck APIs in a webpage.
-        </p>
-        <form action="" method="post" onsubmit="return docheck(this); " >
-        <p align="center">
-        Word : <input type="text"  id="word" style="width:12em;"/>
-        <input  type="submit" id="spellcheck" value="Spellcheck"  style="width:12em;"/>
-        </br>
-        </p>
-        </form>
-        <hr/>
-        <div id="progress"></div>
-        <div id="successmessage"></div>
-        <div id="errormessage"></div>
-        <div id="result"></div>
-<h3>Python Spell Check and Spell Suggest  API</h3>
-<ul>
-<li>Method: modules.Spellchecker.check
+<head>
+<title></title>
+<script type="text/javascript">
+   
+	function docheck ( form ) {
+		$( '#progress' ).html( "Checking. Please Wait.." );
+		$( '#result' ).html( "" );
+		var word = form.word.value;
+		var language = form.lang.value;
+		var jsonRequest = {
+			"method": "modules.Spellchecker.check",
+			"params": [ word, language ],
+			"id": ""
+		};
+		$.ajax( {
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: "JSONRPC",
+			data: $.toJSON( jsonRequest ),
+			dataType: "json",
+			success: function ( msg ) {
+				var resultobj = msg.result;
+				$( '#progress' ).html( "" );
+				if ( resultobj ) {
+					$( '#result' ).html( "<b>  Correct Spelling.</b>" );
+				} else {
+					$( '#result' ).html( "<b> Wrong Spelling</b>" );
+					getSuggestions( word );
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert( thrownError );
+			}
+		} );
+		return false;
+	}
+	function getSuggestions ( word ) {
+		$( '#progress' ).html( "Fetching suggestions. Please wait..." );
+		$( '#errormessage' ).html( "" );
+		var language = form.lang.value;
+		var jsonRequest = {
+			"method": "modules.Spellchecker.suggest",
+			"params": [ word, language ],
+			"id": ""
+		};
+		$.ajax( {
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: "JSONRPC",
+			data: $.toJSON( jsonRequest ),
+			dataType: "json",
+			success: function ( msg ) {
+				var resultobj = eval( msg.result );
+				$( '#progress' ).html( "" );
+				$( '#result' ).html( "<b>Wrong Spelling. Suggestions :</b><ul id='list'></ul>" );
+				if ( resultobj.length != 0 ) {
+					$.each( resultobj, function ( index, item ) {
+						$( '#list' ).append( $( "<li>" + item + "</li>" ) );
+					} );
+				} else {
+					$( '#list' ).append( $( " <li> No suggestions available </li>" ) );
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert( thrownError );
+			}
+		} );
+		return false;
+	}
+</script>
+</head>
+<body>
+	<h2>Spellchecker</h2>
+	</hr>
+	<p>This is a demo of spellcheck service of silpa. In this page, you
+		can enter a word for checking the spelling and just get the result.</p>
+	<p>
+		For using Silpa spellcheck service in your web or desktop
+		applications, read the <a href="apis.html#spellcheck">API
+			documentation</a>. This page itself is an example for using silpa
+		spellcheck APIs in a webpage.
+	</p>
+	<form action="" method="post" onsubmit="return docheck(this); ">
+		<p align="center">
+			<span>Word : </span> <input type="text" id="word"
+				style="width: 12em;" /> <select id="lang" name="lang"
+				style="width: 12em;">
+				<option value=''>Auto detect</option>
+				<option value="hi_IN">Hindi</option>
+				<option value="mr_IN">Marathi</option>
+				<option value="ml_IN">Malayalam</option>
+				<option value="bn_IN">Bengali</option>
+				<option value="ta_IN">Tamil</option>
+				<option value="te_IN">Telugu</option>
+				<option value="or_IN">Oriya</option>
+				<option value="gu_IN">Gujarati</option>
+				<option value="pa_IN">Punjabi</option>
+				<option value="kn_IN">Kannada</option>
+				<option value="en_US">English</option>
+				<option value="ISO15919">ISO 15919:2001</option>
+				<option value="IPA">International Phonetical Alphabet(IPA)</option>
+			</select> <input type="submit" id="spellcheck" value="Spellcheck"
+				style="width: 12em;" /> </br>
+		</p>
+	</form>
+	<hr />
+	<div id="progress"></div>
+	<div id="successmessage"></div>
+	<div id="errormessage"></div>
+	<div id="result"></div>
+	<h3>Python Spell Check and Spell Suggest API</h3>
+	<ul>
+		<li>Method: modules.Spellchecker.check
 
-<ul>
-	<li>arg1 : the word</li>
-	<li>arg2 : the language for the word(optional)</li>
-	<li>Return : True or False. True means the word is with correct spelling. Otherwise false.</li>
-</ul></li>
+			<ul>
+				<li>arg1 : the word</li>
+				<li>arg2 : the language for the word(optional)</li>
+				<li>Return : True or False. True means the word is with correct
+					spelling. Otherwise false.</li>
+			</ul>
+		</li>
 
 
-<li>Method: modules.Spellchecker.suggest
-<ul>
-	<li>arg1 : the word</li>
-	<li>arg2 : the language for the word(optional)</li>
-	<li>Return : List of string containing spelling suggestions</li>
-</ul></li>
-</ul>
-Sample usage is given below.
-<pre class="code">
+		<li>Method: modules.Spellchecker.suggest
+			<ul>
+				<li>arg1 : the word</li>
+				<li>arg2 : the language for the word(optional)</li>
+				<li>Return : List of string containing spelling suggestions</li>
+			</ul>
+		</li>
+	</ul>
+	Sample usage is given below.
+	<pre class="code">
 # -*- coding: utf-8 -*-
 >>>from jsonrpc import ServiceProxy
 >>>silpaService = ServiceProxy("http://smc.org.in/silpa/JSONRPC")
@@ -117,6 +142,6 @@ False
 >>>print silpaService.modules.Spellchecker.suggest("speling")
 ["spelling","spieling","spewing"]
 </pre>
-  </body>
+</body>
 </html>
 
