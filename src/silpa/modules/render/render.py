@@ -48,7 +48,9 @@ class Render(SilpaModule):
         self.font_size = self.request.get('font_size')
         self.color = self.request.get('color')
         self.file_type = self.request.get('file_type')
-         
+        self.width = self.request.get('width')
+        self.height = self.request.get('height')
+        
     def set_start_response(self,start_response):
         self.start_response = start_response
     
@@ -57,12 +59,16 @@ class Render(SilpaModule):
             if self.file_type==None:
                 self.file_type = "png"
             if self.font==None:
-                self.font = "Serif"   
+                self.font = "Serif"
             if self.font_size==None:
-                self.font_size = 12      
+                self.font_size = 12
             if self.color==None:
-                self.color = "Black"          
-            image_url =  self.render_text(self.text, self.file_type, 0, 0 ,self.color, self.font, self.font_size)
+                self.color = "Black"
+            if self.width==None:
+                self.width = 0
+            if self.height==None:
+                self.height = 0
+            image_url =  self.render_text(self.text, self.file_type, self.width, self.height ,self.color, self.font, self.font_size)
             self.response.response_code = "303 see other" 
             self.response.header  = [('Location', image_url)]
         if self.wiki_url != None:    
